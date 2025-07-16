@@ -1,1 +1,0 @@
-# gummely.github.io
