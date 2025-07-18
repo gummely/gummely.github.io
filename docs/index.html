@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gummely - Master Languages Through Conversation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -21,18 +24,28 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--delft-blue) 0%, var(--royal-purple) 100%);
+            background-color: var(--delft-blue);
             color: white;
             overflow-x: hidden;
+        }
+        
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
         
-        /* Language Switcher Styles */
         .lang-switcher {
             display: flex;
             gap: 10px;
@@ -43,27 +56,34 @@
             border: 1px solid var(--soft-lilac);
             color: white;
             padding: 5px 10px;
-            border-radius: 5px;
+            border-radius: 15px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             font-weight: bold;
         }
 
         .lang-switcher button:hover {
             background: var(--golden-amber);
             border-color: var(--golden-amber);
+            transform: scale(1.05);
         }
         
         .lang-switcher button.active {
             background: var(--burnt-sienna);
             border-color: var(--burnt-sienna);
-            transform: scale(1.05);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(244, 162, 97, 0.5);
         }
 
         header {
-            padding: 20px 0;
-            position: relative;
+            padding: 25px 0;
+            position: fixed;
+            width: 100%;
             z-index: 1000;
+            background: rgba(59, 54, 116, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         nav {
@@ -73,61 +93,40 @@
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: bold;
             background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 0 0 20px rgba(244, 162, 97, 0.3);
         }
 
         .hero {
             text-align: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
             padding: 100px 0;
             position: relative;
         }
 
-        .hero::before, .hero::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-            opacity: 0.3;
-        }
-        .hero::before {
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, var(--soft-lilac), transparent);
-            top: 10%; left: 10%;
-        }
-        .hero::after {
-            width: 150px; height: 150px;
-            background: radial-gradient(circle, var(--golden-amber), transparent);
-            bottom: 20%; right: 15%;
-            animation-duration: 4s;
-            animation-direction: reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
         .hero h1 {
-            font-size: 4rem;
+            font-size: 5rem;
             margin-bottom: 20px;
-            animation: slideUp 1s ease-out;
+            line-height: 1.1;
+            font-weight: 800;
+            text-shadow: 0 5px 25px rgba(0,0,0,0.3);
         }
 
         .hero p {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin-bottom: 40px;
             color: var(--soft-lilac);
-            animation: slideUp 1s ease-out 0.2s both;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            max-width: 800px;
+            text-shadow: 0 3px 15px rgba(0,0,0,0.2);
         }
 
         .download-buttons {
@@ -135,68 +134,94 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 60px;
-            animation: slideUp 1s ease-out 0.4s both;
         }
 
         .download-btn {
-            display: flex; align-items: center; gap: 10px;
-            padding: 15px 30px;
+            display: flex; align-items: center; gap: 15px;
+            padding: 18px 35px;
             background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber));
             color: white; text-decoration: none; border-radius: 50px;
-            font-weight: bold; transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            font-weight: bold; font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid transparent;
         }
 
         .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.4);
+            border-color: var(--golden-amber);
         }
-        .download-btn svg { width: 24px; height: 24px; }
+        .download-btn svg { width: 28px; height: 28px; }
 
-        .social-proof { padding: 60px 0; text-align: center; }
-        .social-proof h2 { font-size: 2rem; margin-bottom: 40px; color: var(--golden-amber); }
-        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
-        .testimonial-card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .testimonial-card p { font-style: italic; margin-bottom: 20px; color: var(--soft-lilac); }
+        .section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3.5rem;
+            margin-bottom: 60px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 40px;
+            border-radius: 25px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .testimonial-card p { font-style: italic; font-size: 1.1rem; margin-bottom: 25px; color: var(--soft-lilac); }
         .testimonial-author { display: flex; align-items: center; gap: 15px; }
-        .testimonial-author img { width: 50px; height: 50px; border-radius: 50%; }
-        .testimonial-author-info h4 { font-size: 1.2rem; color: white; }
+        .testimonial-author img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--golden-amber); }
+        .testimonial-author-info h4 { font-size: 1.3rem; color: white; }
 
-        .science-section { padding: 80px 0; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); }
-        .science-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px; background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .science-item { display: flex; gap: 30px; align-items: center; margin-bottom: 40px; }
+        .science-section .container {
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+        }
+
+        .science-item { display: flex; gap: 50px; align-items: center; }
         .science-item:nth-child(even) { flex-direction: row-reverse; }
-        .science-text h3 { font-size: 1.8rem; color: var(--golden-amber); margin-bottom: 15px; }
-        .science-text p { color: var(--soft-lilac); line-height: 1.6; }
+        .science-text { flex: 1; }
+        .science-text h3 { font-size: 2.2rem; color: var(--golden-amber); margin-bottom: 20px; }
+        .science-text p { color: var(--soft-lilac); line-height: 1.7; font-size: 1.1rem; }
 
-        .how-it-works { padding: 100px 0; text-align: center; }
-        .how-it-works h2 { font-size: 3rem; margin-bottom: 60px; }
-        .how-it-works-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
-        .how-it-works-step .step-number { font-size: 3rem; font-weight: bold; color: var(--golden-amber); margin-bottom: 10px; }
-        .how-it-works-step h3 { font-size: 1.5rem; margin-bottom: 15px; color: white; }
+        .how-it-works-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; }
+        .how-it-works-step { text-align: center; }
+        .how-it-works-step .step-number { font-size: 4rem; font-weight: bold; color: var(--golden-amber); margin-bottom: 15px; line-height: 1; text-shadow: 0 0 20px rgba(244, 162, 97, 0.4); }
+        .how-it-works-step h3 { font-size: 1.8rem; margin-bottom: 15px; color: white; }
         .how-it-works-step p { color: var(--soft-lilac); line-height: 1.6; }
 
-        .interactive-demo-section { padding: 100px 0; text-align: center; background: rgba(0, 0, 0, 0.1); }
-        .interactive-demo-container { max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 50px 40px; backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-        .interactive-demo-container h2 { font-size: 2.5rem; margin-bottom: 20px; background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .interactive-demo-container p { font-size: 1.2rem; color: var(--soft-lilac); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .demo-btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 30px; background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber)); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-        .demo-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
-        .demo-btn svg { width: 24px; height: 24px; }
-
-        .languages-section { padding: 80px 0; text-align: center; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); }
-        .languages-section h2 { font-size: 2.5rem; margin-bottom: 40px; background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .languages-container { overflow: hidden; padding: 20px 0; }
-        .languages-scroll { display: flex; gap: 30px; animation: scroll 30s linear infinite; width: max-content; }
-        .language-item { display: flex; flex-direction: column; align-items: center; gap: 15px; min-width: 100px; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s ease; }
-        .language-item:hover { transform: translateY(-5px); animation-play-state: paused; }
+        .interactive-demo-container { text-align: center; }
+        .interactive-demo-container h2 { font-size: 3.5rem; }
+        .interactive-demo-container p { font-size: 1.3rem; color: var(--soft-lilac); margin-bottom: 50px; max-width: 650px; margin-left: auto; margin-right: auto; line-height: 1.6; }
         
-        /* Updated Flag CSS */
-        .flag { width: 60px; height: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); background: #f0f0f0; overflow: hidden; }
+        .languages-section { background: rgba(0, 0, 0, 0.1); }
+        .languages-container { overflow: hidden; padding: 30px 0; }
+        .languages-scroll { display: flex; gap: 40px; animation: scroll 40s linear infinite; width: max-content; }
+        .language-item { display: flex; flex-direction: column; align-items: center; gap: 15px; min-width: 120px; padding: 25px; background: rgba(255, 255, 255, 0.1); border-radius: 20px; transition: transform 0.3s ease; }
+        .language-item:hover { transform: translateY(-10px) scale(1.05); animation-play-state: paused; }
+        .flag { width: 80px; height: 54px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.4); overflow: hidden; }
         .flag img { width: 100%; height: 100%; object-fit: cover; }
-
-        .language-name { font-size: 1rem; font-weight: 600; color: var(--soft-lilac); text-align: center; }
+        .language-name { font-size: 1.1rem; font-weight: 600; color: white; text-align: center; }
 
         @keyframes scroll {
             0% { transform: translateX(0); }
@@ -204,52 +229,56 @@
         }
         .languages-scroll:hover { animation-play-state: paused; }
 
-        .features { padding: 100px 0; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
-        .features h2 { text-align: center; font-size: 3rem; margin-bottom: 60px; background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-bottom: 60px; }
-        .feature-card { background: rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; text-align: center; transition: transform 0.3s ease; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .feature-card:hover { transform: translateY(-10px); }
-        .feature-icon { width: 60px; height: 60px; margin: 0 auto 20px; background: linear-gradient(45deg, var(--soft-lilac), var(--royal-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .feature-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--golden-amber); }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .feature-card { text-align: center; }
+        .feature-icon { width: 70px; height: 70px; margin: 0 auto 25px; background: linear-gradient(45deg, var(--soft-lilac), var(--royal-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 25px rgba(166, 139, 199, 0.5); }
+        .feature-card h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--golden-amber); }
         .feature-card p { color: var(--soft-lilac); line-height: 1.6; }
 
-        .pricing-section { padding: 80px 0; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); text-align: center; }
-        .pricing-section h2 { font-size: 2.5rem; margin-bottom: 20px; color: var(--golden-amber); }
-        .pricing-section p { font-size: 1.2rem; margin-bottom: 40px; color: var(--soft-lilac); }
-        .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 600px; margin: 0 auto; }
-        .pricing-card { position: relative; background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); transition: transform 0.3s ease; }
-        .pricing-card:hover { transform: translateY(-5px); }
-        .pricing-card.recommended { border: 2px solid var(--golden-amber); transform: scale(1.05); }
-        .pricing-card.recommended::before { content: "BEST VALUE"; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--golden-amber); color: var(--delft-blue); padding: 5px 20px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
-        .pricing-card h3 { font-size: 1.5rem; margin-bottom: 10px; color: var(--golden-amber); }
-        .pricing-card .price { font-size: 2.5rem; font-weight: bold; color: white; margin-bottom: 5px; }
-        .pricing-card .period { color: var(--soft-lilac); margin-bottom: 20px; }
-        .pricing-card .savings { color: var(--burnt-sienna); font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
+        .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; max-width: 650px; margin: 0 auto; }
+        .pricing-card { position: relative; text-align: center; transition: transform 0.3s ease; }
+        .pricing-card.recommended { transform: scale(1.08); }
+        .pricing-card.recommended::before { content: attr(data-best-value-text); position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--golden-amber); color: var(--delft-blue); padding: 8px 25px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; box-shadow: 0 5px 15px rgba(244, 162, 97, 0.4); }
+        .pricing-card h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--golden-amber); }
+        .pricing-card .price { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 5px; }
+        .pricing-card .period { color: var(--soft-lilac); margin-bottom: 25px; }
+        .pricing-card .savings { color: var(--burnt-sienna); font-weight: bold; font-size: 1rem; margin-bottom: 20px; }
 
-        .demo-section { padding: 100px 0; text-align: center; }
-        .demo-section h2 { font-size: 3rem; margin-bottom: 40px; }
-        .demo-video { max-width: 300px; width: 100%; height: auto; border-radius: 30px; margin: 0 auto 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: block; }
-        
-        .cta-section { padding: 100px 0; background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber)); text-align: center; }
-        .cta-section h2 { font-size: 3rem; margin-bottom: 20px; }
-        .cta-section p { font-size: 1.3rem; margin-bottom: 40px; }
+        .demo-video { max-width: 320px; width: 100%; height: auto; border-radius: 35px; margin: 0 auto 40px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); display: block; border: 3px solid rgba(255, 255, 255, 0.2); }
 
-        footer { background: var(--delft-blue); padding: 40px 0; text-align: center; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 20px; }
-        .footer-section h3 { color: var(--golden-amber); margin-bottom: 15px; }
-        .footer-section p, .footer-section a { color: var(--soft-lilac); text-decoration: none; line-height: 1.6; }
-        .footer-section a:hover { color: var(--golden-amber); }
+        .cta-section { padding: 120px 0; background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber)); text-align: center; }
+        .cta-section h2 { font-size: 3.5rem; margin-bottom: 20px; text-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .cta-section p { font-size: 1.5rem; margin-bottom: 50px; }
+
+        footer { background: #2a265a; padding: 60px 0; text-align: center; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { color: var(--golden-amber); margin-bottom: 20px; font-size: 1.5rem; }
+        .footer-section p, .footer-section a { color: var(--soft-lilac); text-decoration: none; line-height: 1.8; font-size: 1.1rem; }
+        .footer-section a:hover { color: var(--golden-amber); text-decoration: underline; }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.2rem; }
-            .download-buttons { flex-direction: column; align-items: center; }
-            .features h2, .demo-section h2, .cta-section h2, .interactive-demo-container h2 { font-size: 2rem; }
-            .science-item, .science-item:nth-child(even) { flex-direction: column; }
+            .hero h1 { font-size: 3rem; }
+            .hero p { font-size: 1.3rem; }
+            .section-title, .cta-section h2, .interactive-demo-container h2 { font-size: 2.5rem; }
+            .science-item, .science-item:nth-child(even) { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
 <body>
+    <div id="bg-canvas"></div>
+
     <header>
         <nav class="container">
             <div class="logo">Gummely</div>
@@ -260,91 +289,92 @@
         </nav>
     </header>
 
-    <section class="hero">
-        <div class="container">
-            <h1 data-translate-key="heroTitle">Learn Languages the Way You Learned Your First</h1>
-            <p data-translate-key="heroSubtitle">Master any language naturally with AI-powered comprehensible input—no grammar drills, no memorization. Start speaking with confidence.</p>
-            <div class="download-buttons">
-                <a href="[APP_STORE_URL]" class="download-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                    <span data-translate-key="downloadIos">Download for iOS</span>
-                </a>
-                <a href="[GOOGLE_PLAY_URL]" class="download-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
-                    <span data-translate-key="downloadAndroid">Download for Android</span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section class="social-proof">
-        <div class="container">
-            <h2 data-translate-key="socialProofTitle">Trusted by Language Learners Worldwide</h2>
-            <div class="testimonials">
-                <div class="testimonial-card">
-                    <p data-translate-key="testimonial1">"I’ve tried countless apps, but Gummely made learning Spanish feel effortless. The personalized texts kept me engaged, and I’m amazed at how quickly my vocabulary grew!"</p>
-                    <div class="testimonial-author"><img src="https://i.pravatar.cc/50?u=a" alt="User 1"><div class="testimonial-author-info"><h4 data-translate-key="user1">Jamie L.</h4></div></div>
-                </div>
-                <div class="testimonial-card">
-                    <p data-translate-key="testimonial2">"The color-coding and audio features helped me focus on new words while enjoying the content. I feel more confident reading French now!"</p>
-                    <div class="testimonial-author"><img src="https://i.pravatar.cc/50?u=b" alt="User 2"><div class="testimonial-author-info"><h4 data-translate-key="user2">Alex M.</h4></div></div>
-                </div>
-                <div class="testimonial-card">
-                    <p data-translate-key="testimonial3">"As someone who is easily intimidated by grammar rules, Gummely was a game-changer. I'm learning German in a way that feels natural and fun."</p>
-                    <div class="testimonial-author"><img src="https://i.pravatar.cc/50?u=c" alt="User 3"><div class="testimonial-author-info"><h4 data-translate-key="user3">Sam K.</h4></div></div>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1 data-translate-key="heroTitle">Learn Languages the Way You Learned Your First</h1>
+                <p data-translate-key="heroSubtitle">Master any language naturally with AI-powered comprehensible input—no grammar drills, no memorization. Start speaking with confidence.</p>
+                <div class="download-buttons">
+                    <a href="#" class="download-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                        <span data-translate-key="downloadIos">Download for iOS</span>
+                    </a>
+                    <a href="#" class="download-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
+                        <span data-translate-key="downloadAndroid">Download for Android</span>
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="science-section">
-        <div class="container">
-            <h2 data-translate-key="scienceTitle">The Science of Natural Language Acquisition</h2>
-            <div class="science-item">
-                <div class="science-text">
-                    <h3 data-translate-key="science1Title">Krashen's Input Hypothesis: Your "i+1"</h3>
-                    <p data-translate-key="science1Desc">Our method is built on linguist Stephen Krashen's theory that we acquire language best when we receive "comprehensible input" that is just one step beyond our current level (i+1). Gummely’s AI ensures you’re always in this optimal learning zone—challenged, but never overwhelmed.</p>
+        <section class="section social-proof">
+            <div class="container">
+                <h2 class="section-title fade-in" data-translate-key="socialProofTitle">Trusted by Language Learners Worldwide</h2>
+                <div class="testimonials">
+                    <div class="testimonial-card glass-card fade-in">
+                        <p data-translate-key="testimonial1">"I’ve tried countless apps, but Gummely made learning Spanish feel effortless. The personalized texts kept me engaged, and I’m amazed at how quickly my vocabulary grew!"</p>
+                        <div class="testimonial-author"><img src="https://i.pravatar.cc/60?u=a" alt="User 1"><div class="testimonial-author-info"><h4 data-translate-key="user1">Jamie L.</h4></div></div>
+                    </div>
+                    <div class="testimonial-card glass-card fade-in">
+                        <p data-translate-key="testimonial2">"The color-coding and audio features helped me focus on new words while enjoying the content. I feel more confident reading French now!"</p>
+                        <div class="testimonial-author"><img src="https://i.pravatar.cc/60?u=b" alt="User 2"><div class="testimonial-author-info"><h4 data-translate-key="user2">Alex M.</h4></div></div>
+                    </div>
+                    <div class="testimonial-card glass-card fade-in">
+                        <p data-translate-key="testimonial3">"As someone who is easily intimidated by grammar rules, Gummely was a game-changer. I'm learning German in a way that feels natural and fun."</p>
+                        <div class="testimonial-author"><img src="https://i.pravatar.cc/60?u=c" alt="User 3"><div class="testimonial-author-info"><h4 data-translate-key="user3">Sam K.</h4></div></div>
+                    </div>
                 </div>
             </div>
-            <div class="science-item">
-                <div class="science-text">
-                    <h3 data-translate-key="science2Title">Optimal Lexical Coverage for Reading</h3>
-                    <p data-translate-key="science2Desc">Research shows that to comfortably read and understand a text, you need to know about 95-98% of the words. Our AI personalizes content to meet this threshold, allowing you to infer the meaning of new words from context, which dramatically improves retention.</p>
+        </section>
+
+        <section class="section science-section">
+            <div class="container">
+                <div class="science-item fade-in">
+                    <div class="science-text">
+                        <h2 class="section-title" data-translate-key="scienceTitle">The Science of Natural Language Acquisition</h2>
+                        <h3 data-translate-key="science1Title">Krashen's Input Hypothesis: Your "i+1"</h3>
+                        <p data-translate-key="science1Desc">Our method is built on linguist Stephen Krashen's theory that we acquire language best when we receive "comprehensible input" that is just one step beyond our current level (i+1). Gummely’s AI ensures you’re always in this optimal learning zone—challenged, but never overwhelmed.</p>
+                    </div>
+                </div>
+                <div class="science-item fade-in">
+                    <div class="science-text">
+                        <h3 data-translate-key="science2Title">Optimal Lexical Coverage for Reading</h3>
+                        <p data-translate-key="science2Desc">Research shows that to comfortably read and understand a text, you need to know about 95-98% of the words. Our AI personalizes content to meet this threshold, allowing you to infer the meaning of new words from context, which dramatically improves retention.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="how-it-works">
-        <div class="container">
-            <h2 data-translate-key="howTitle">How Gummely Works for You</h2>
-            <div class="how-it-works-grid">
-                <div class="how-it-works-step"><div class="step-number">1</div><h3 data-translate-key="how1Title">Personalized Content</h3><p data-translate-key="how1Desc">Our AI analyzes your vocabulary and delivers texts and chats with 90-98% of words you already know, creating the perfect learning environment.</p></div>
-                <div class="how-it-works-step"><div class="step-number">2</div><h3 data-translate-key="how2Title">Interactive Learning</h3><p data-translate-key="how2Desc">See a word in purple (unknown) or orange (learning)? Just tap on it for an instant translation and add it to your personal flashcard deck.</p></div>
-                <div class="how-it-works-step"><div class="step-number">3</div><h3 data-translate-key="how3Title">Multimodal Practice</h3><p data-translate-key="how3Desc">Reinforce what you've learned by listening to the text with our integrated text-to-speech feature, improving your pronunciation and listening skills simultaneously.</p></div>
+        <section class="section how-it-works">
+            <div class="container">
+                <h2 class="section-title fade-in" data-translate-key="howTitle">How Gummely Works for You</h2>
+                <div class="how-it-works-grid">
+                    <div class="how-it-works-step glass-card fade-in"><div class="step-number">1</div><h3 data-translate-key="how1Title">Personalized Content</h3><p data-translate-key="how1Desc">Our AI analyzes your vocabulary and delivers texts and chats with 90-98% of words you already know, creating the perfect learning environment.</p></div>
+                    <div class="how-it-works-step glass-card fade-in"><div class="step-number">2</div><h3 data-translate-key="how2Title">Interactive Learning</h3><p data-translate-key="how2Desc">See a word in purple (unknown) or orange (learning)? Just tap on it for an instant translation and add it to your personal flashcard deck.</p></div>
+                    <div class="how-it-works-step glass-card fade-in"><div class="step-number">3</div><h3 data-translate-key="how3Title">Multimodal Practice</h3><p data-translate-key="how3Desc">Reinforce what you've learned by listening to the text with our integrated text-to-speech feature, improving your pronunciation and listening skills simultaneously.</p></div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="interactive-demo-section">
-        <div class="container">
-            <div class="interactive-demo-container">
-                <h2 data-translate-key="demoTitle">Experience the Gummely Magic</h2>
-                <p data-translate-key="demoDesc">Curious how it feels? Take a 1-minute vocabulary quiz to find your level, then have a short chat with our AI. See how it adapts to you in real-time—no download required.</p>
-                <a href="#quiz-and-chat-implementation" class="demo-btn">
-                    <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
-                    <span data-translate-key="demoButton">Start the 1-Minute Demo</span>
-                </a>
+        <section class="section interactive-demo-section">
+            <div class="container">
+                <div class="interactive-demo-container glass-card fade-in">
+                    <h2 class="section-title" data-translate-key="demoTitle">Experience the Gummely Magic</h2>
+                    <p data-translate-key="demoDesc">Curious how it feels? Take a 1-minute vocabulary quiz to find your level, then have a short chat with our AI. See how it adapts to you in real-time—no download required.</p>
+                    <a href="#" class="download-btn" style="display: inline-flex; margin: 0 auto;">
+                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                        <span data-translate-key="demoButton">Start the 1-Minute Demo</span>
+                    </a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="languages-section">
-        <div class="container">
-            <h2 data-translate-key="languagesTitle">Learn 11 Languages and Counting</h2>
+        <section class="section languages-section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-translate-key="languagesTitle">Learn 11 Languages and Counting</h2>
+            </div>
             <div class="languages-container">
                 <div class="languages-scroll">
-                    <!-- Using IMG tags now for flags -->
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/us.svg" alt="USA Flag"></div><div class="language-name" data-translate-key="langEnglish">English</div></div>
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/de.svg" alt="German Flag"></div><div class="language-name" data-translate-key="langGerman">German</div></div>
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/fr.svg" alt="French Flag"></div><div class="language-name" data-translate-key="langFrench">French</div></div>
@@ -362,95 +392,95 @@
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/fr.svg" alt="French Flag"></div><div class="language-name" data-translate-key="langFrench">French</div></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="features">
-        <div class="container">
-            <h2 data-translate-key="whyTitle">Why Choose Gummely?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
-                    <h3 data-translate-key="feature1Title">Science-Backed Method</h3>
-                    <p data-translate-key="feature1Desc">Based on Krashen's Input Hypothesis. Content with 90-98% known words keeps you in the optimal learning zone—challenging but never overwhelming.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-                    <h3 data-translate-key="feature2Title">Color-Coded Learning</h3>
-                    <p data-translate-key="feature2Desc">Unknown words appear in purple, learning words in orange. Click any word for instant translation and add to your personalized flashcard deck.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
-                    <h3 data-translate-key="feature3Title">Immersive Content</h3>
-                    <p data-translate-key="feature3Desc">Read tailored texts and chat with AI bots. Integrated text-to-speech improves pronunciation while you build vocabulary naturally through context.</p>
+        <section class="section features">
+            <div class="container">
+                <h2 class="section-title fade-in" data-translate-key="whyTitle">Why Choose Gummely?</h2>
+                <div class="features-grid">
+                    <div class="feature-card glass-card fade-in">
+                        <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+                        <h3 data-translate-key="feature1Title">Science-Backed Method</h3>
+                        <p data-translate-key="feature1Desc">Based on Krashen's Input Hypothesis. Content with 90-98% known words keeps you in the optimal learning zone—challenging but never overwhelming.</p>
+                    </div>
+                    <div class="feature-card glass-card fade-in">
+                        <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="white"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+                        <h3 data-translate-key="feature2Title">Color-Coded Learning</h3>
+                        <p data-translate-key="feature2Desc">Unknown words appear in purple, learning words in orange. Click any word for instant translation and add to your personalized flashcard deck.</p>
+                    </div>
+                    <div class="feature-card glass-card fade-in">
+                        <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+                        <h3 data-translate-key="feature3Title">Immersive Content</h3>
+                        <p data-translate-key="feature3Desc">Read tailored texts and chat with AI bots. Integrated text-to-speech improves pronunciation while you build vocabulary naturally through context.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="pricing-section">
-        <div class="container">
-            <h2 data-translate-key="pricingTitle">Simple, Transparent Pricing</h2>
-            <p data-translate-key="pricingSubtitle">Start your language learning journey today</p>
-            <div class="pricing-cards">
-                <div class="pricing-card">
-                    <h3 data-translate-key="pricingWeekly">Weekly</h3>
-                    <div class="price">$4.99</div>
-                    <div class="period" data-translate-key="pricingPerWeek">per week</div>
-                </div>
-                <div class="pricing-card recommended" data-best-value-text="BEST VALUE">
-                    <h3 data-translate-key="pricingMonthly">Monthly</h3>
-                    <div class="price">$14.99</div>
-                    <div class="period" data-translate-key="pricingPerMonth">per month</div>
-                    <div class="savings" data-translate-key="pricingSave">Save 25%</div>
+        <section class="section pricing-section">
+            <div class="container">
+                <h2 class="section-title fade-in" data-translate-key="pricingTitle">Simple, Transparent Pricing</h2>
+                <p style="text-align: center; font-size: 1.3rem; color: var(--soft-lilac); margin-top: -40px; margin-bottom: 60px;" data-translate-key="pricingSubtitle">Start your language learning journey today</p>
+                <div class="pricing-cards">
+                    <div class="pricing-card glass-card fade-in">
+                        <h3 data-translate-key="pricingWeekly">Weekly</h3>
+                        <div class="price">$4.99</div>
+                        <div class="period" data-translate-key="pricingPerWeek">per week</div>
+                    </div>
+                    <div class="pricing-card glass-card recommended fade-in" data-best-value-text="BEST VALUE">
+                        <h3 data-translate-key="pricingMonthly">Monthly</h3>
+                        <div class="price">$14.99</div>
+                        <div class="period" data-translate-key="pricingPerMonth">per month</div>
+                        <div class="savings" data-translate-key="pricingSave">Save 25%</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="demo-section">
-        <div class="container">
-            <h2 data-translate-key="experienceTitle">Experience Gummely</h2>
-            <video class="demo-video" controls autoplay muted loop playsinline><source src="[YOUR_VIDEO_FILE.mp4]" type="video/mp4"></video>
-            <p style="color: var(--soft-lilac); font-size: 1.2rem;" data-translate-key="experienceDesc">Experience comprehensible input that adapts to your level—just like how you learned your first language</p>
-        </div>
-    </section>
-
-    <section class="cta-section">
-        <div class="container">
-            <h2 data-translate-key="ctaTitle">Ready to Learn Naturally?</h2>
-            <p data-translate-key="ctaDesc">Join thousands discovering the power of comprehensible input with Gummely</p>
-            <div class="download-buttons">
-                 <a href="[APP_STORE_URL]" class="download-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                    <span data-translate-key="downloadIos">Download for iOS</span>
-                </a>
-                <a href="[GOOGLE_PLAY_URL]" class="download-btn">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
-                    <span data-translate-key="downloadAndroid">Download for Android</span>
-                </a>
+        <section class="section demo-section">
+            <div class="container fade-in" style="text-align:center;">
+                <h2 class="section-title" data-translate-key="experienceTitle">Experience Gummely</h2>
+                <video class="demo-video" controls autoplay muted loop playsinline><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video>
+                <p style="color: var(--soft-lilac); font-size: 1.3rem; max-width: 700px; margin: 0 auto;" data-translate-key="experienceDesc">Experience comprehensible input that adapts to your level—just like how you learned your first language.</p>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <section class="cta-section">
+            <div class="container fade-in">
+                <h2 data-translate-key="ctaTitle">Ready to Learn Naturally?</h2>
+                <p data-translate-key="ctaDesc">Join thousands discovering the power of comprehensible input with Gummely</p>
+                <div class="download-buttons">
+                     <a href="#" class="download-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                        <span data-translate-key="downloadIos">Download for iOS</span>
+                    </a>
+                    <a href="#" class="download-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
+                        <span data-translate-key="downloadAndroid">Download for Android</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <h3 data-translate-key="footerContact">Contact</h3>
-                    <p>Email: [YOUR_EMAIL]</p>
-                    <p>Support: [SUPPORT_EMAIL]</p>
+                    <p>Email: contact@gummely.com</p>
+                    <p>Support: support@gummely.com</p>
                 </div>
                 <div class="footer-section">
                     <h3 data-translate-key="footerLegal">Legal</h3>
-                    <p><a href="[PRIVACY_POLICY_URL]" data-translate-key="footerPrivacy">Privacy Policy</a></p>
-                    <p><a href="[TERMS_URL]" data-translate-key="footerTerms">Terms of Service</a></p>
+                    <p><a href="#" data-translate-key="footerPrivacy">Privacy Policy</a></p>
+                    <p><a href="#" data-translate-key="footerTerms">Terms of Service</a></p>
                 </div>
                 <div class="footer-section">
                     <h3 data-translate-key="footerFollow">Follow Us</h3>
-                    <p><a href="[TWITTER_URL]">Twitter</a></p>
-                    <p><a href="[INSTAGRAM_URL]">Instagram</a></p>
-                    <p><a href="[FACEBOOK_URL]">Facebook</a></p>
+                    <p><a href="#">Twitter</a></p>
+                    <p><a href="#">Instagram</a></p>
+                    <p><a href="#">Facebook</a></p>
                 </div>
             </div>
             <p>© 2025 Gummely. <span data-translate-key="footerRights">All rights reserved.</span></p>
@@ -458,6 +488,116 @@
     </footer>
 
     <script>
+        // 3D Background Scene
+        let scene, camera, renderer, particles, particleSystem;
+        const particleCount = 2000;
+        const mouse = new THREE.Vector2();
+
+        function init3D() {
+            const canvas = document.getElementById('bg-canvas');
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 50;
+            
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const particleGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            const color1 = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--golden-amber'));
+            const color2 = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--soft-lilac'));
+            
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                positions[i3] = (Math.random() - 0.5) * 200;
+                positions[i3 + 1] = (Math.random() - 0.5) * 200;
+                positions[i3 + 2] = (Math.random() - 0.5) * 200;
+
+                const mixedColor = color1.clone().lerp(color2, Math.random());
+                colors[i3] = mixedColor.r;
+                colors[i3 + 1] = mixedColor.g;
+                colors[i3 + 2] = mixedColor.b;
+            }
+
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.15,
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.8,
+                depthWrite: false,
+            });
+
+            particleSystem = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particleSystem);
+            
+            window.addEventListener('resize', onWindowResize, false);
+            document.addEventListener('mousemove', onMouseMove, false);
+
+            animate();
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        }
+
+        function onMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsedTime = Date.now() * 0.0001;
+            particleSystem.rotation.y = elapsedTime;
+            
+            // Mouse interaction
+            gsap.to(camera.position, {
+                x: mouse.x * 5,
+                y: mouse.y * 5,
+                duration: 2,
+                ease: "power3.out"
+            });
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+        
+        init3D();
+
+        // GSAP Scroll Animations
+        gsap.registerPlugin(ScrollTrigger);
+        const fadeInElements = document.querySelectorAll('.fade-in');
+        fadeInElements.forEach((el, index) => {
+            gsap.fromTo(el, {
+                opacity: 0,
+                y: 50
+            }, {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 85%',
+                    end: 'bottom 20%',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Translation Logic
         const translations = {
             en: {
                 heroTitle: "Learn Languages the Way You Learned Your First",
@@ -597,7 +737,7 @@
                 const key = element.getAttribute('data-translate-key');
                 const translation = translations[language]?.[key];
                 if (translation) {
-                    element.textContent = translation;
+                    element.innerHTML = translation;
                 }
             });
 
@@ -605,7 +745,6 @@
             if (recommendedCard) {
                 const bestValueText = translations[language]?.bestValue || 'BEST VALUE';
                 recommendedCard.setAttribute('data-best-value-text', bestValueText);
-                recommendedCard.style.setProperty('--best-value-content', `"${bestValueText}"`);
             }
             
             document.getElementById('lang-en').classList.toggle('active', language === 'en');
