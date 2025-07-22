@@ -17,11 +17,18 @@
             --soft-lilac: #A68BC7;
             --burnt-sienna: #D9774F;
             --golden-amber: #F4A261;
+            --bg-color: #312c62;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, var(--delft-blue) 0%, var(--royal-purple) 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-color);
             color: white;
             overflow-x: hidden;
         }
@@ -30,269 +37,340 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-        }
-        
-        /* Language Switcher Styles */
-        .lang-switcher {
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            max-width: 400px; /* Adjust as needed */
+            position: relative;
+            z-index: 2;
         }
 
-        .lang-switcher button {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--soft-lilac);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        .lang-switcher button:hover {
-            background: var(--golden-amber);
-            border-color: var(--golden-amber);
-        }
-        
-        .lang-switcher button.active {
-            background: var(--burnt-sienna);
-            border-color: var(--burnt-sienna);
-            transform: scale(1.05);
-        }
-
+        /* --- Header --- */
         header {
             padding: 20px 0;
-            position: relative;
+            position: fixed;
+            width: 100%;
             z-index: 1000;
+            transition: background-color 0.3s ease;
+            background: transparent;
+        }
+
+        header.scrolled {
+            background: rgba(49, 44, 98, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: bold;
             background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna));
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(244, 162, 97, 0.2);
         }
-
-        .hero {
-            text-align: center;
-            padding: 100px 0;
+        
+        /* --- New Dropdown Styles --- */
+        .lang-dropdown {
             position: relative;
+            display: inline-block;
         }
 
-        .hero::before, .hero::after {
+        .lang-select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--soft-lilac);
+            color: white;
+            padding: 8px 30px 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .lang-dropdown::after {
+            content: '▾';
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            color: white;
+            pointer-events: none;
+            font-size: 1.2rem;
+        }
+
+        .lang-select:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--golden-amber);
+        }
+
+        .lang-select option {
+            background: var(--delft-blue);
+            color: white;
+            font-weight: bold;
+        }
+
+        /* --- Hero Section with CSS Parallax --- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--delft-blue) 0%, var(--royal-purple) 100%);
+        }
+
+        .parallax-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
+        .parallax-bg::before,
+        .parallax-bg::after {
             content: '';
             position: absolute;
             border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-            opacity: 0.3;
+            background: radial-gradient(circle, var(--soft-lilac), transparent 60%);
+            animation: float 12s ease-in-out infinite, scale-anim 12s ease-in-out infinite;
+            opacity: 0.15;
         }
-        .hero::before {
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, var(--soft-lilac), transparent);
-            top: 10%; left: 10%;
+
+        .parallax-bg::before {
+            width: 400px; height: 400px;
+            top: 10%; left: 5%;
+            animation-duration: 12s;
         }
-        .hero::after {
-            width: 150px; height: 150px;
-            background: radial-gradient(circle, var(--golden-amber), transparent);
-            bottom: 20%; right: 15%;
-            animation-duration: 4s;
+
+        .parallax-bg::after {
+            width: 300px; height: 300px;
+            bottom: 15%; right: 10%;
+            background: radial-gradient(circle, var(--golden-amber), transparent 60%);
+            animation-duration: 9s;
             animation-direction: reverse;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-30px); }
+        }
+        @keyframes scale-anim {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: slideUp 1s ease-out;
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fade-in-up 1s ease-out;
         }
 
-        .hero p {
-            font-size: 1.5rem;
-            margin-bottom: 40px;
-            color: var(--soft-lilac);
-            animation: slideUp 1s ease-out 0.2s both;
-        }
-
-        @keyframes slideUp {
+        @keyframes fade-in-up {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            text-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: var(--soft-lilac);
+        }
+        
         .download-buttons {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 60px;
-            animation: slideUp 1s ease-out 0.4s both;
         }
 
         .download-btn {
-            display: flex; align-items: center; gap: 10px;
-            padding: 15px 30px;
+            display: inline-flex; align-items: center; gap: 15px;
+            padding: 16px 32px;
             background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber));
             color: white; text-decoration: none; border-radius: 50px;
-            font-weight: bold; transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            font-weight: bold; font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid transparent;
         }
-
         .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            border-color: var(--golden-amber);
         }
-        .download-btn svg { width: 24px; height: 24px; }
+        .download-btn svg { width: 26px; height: 26px; }
 
-        .social-proof { padding: 60px 0; text-align: center; }
-        .social-proof h2 { font-size: 2rem; margin-bottom: 40px; color: var(--golden-amber); }
-        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
-        .testimonial-card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .testimonial-card p { font-style: italic; margin-bottom: 20px; color: var(--soft-lilac); }
-        .testimonial-author { display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .testimonial-author img { width: 50px; height: 50px; border-radius: 50%; }
+        /* --- General Section Styling --- */
+        .section {
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 60px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* --- Glass Card Effect --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            height: 100%; /* For grid layouts */
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* --- On-Scroll Animations --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        /* --- Testimonials --- */
+        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .testimonial-card p { font-style: italic; font-size: 1.1rem; margin-bottom: 25px; color: var(--soft-lilac); }
+        .testimonial-author { display: flex; align-items: center; gap: 15px; }
+        .testimonial-author img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--golden-amber); }
         .testimonial-author-info h4 { font-size: 1.2rem; color: white; }
 
-        .science-section { padding: 80px 0; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); }
-        .science-section h2 { text-align: center; font-size: 2.5rem; margin-bottom: 40px; background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .science-item { display: flex; gap: 30px; align-items: center; margin-bottom: 40px; }
-        .science-item:nth-child(even) { flex-direction: row-reverse; }
-        .science-text h3 { font-size: 1.8rem; color: var(--golden-amber); margin-bottom: 15px; }
-        .science-text p { color: var(--soft-lilac); line-height: 1.6; }
+        /* --- Features Section --- */
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .feature-card { text-align: center; }
+        .feature-icon { width: 60px; height: 60px; margin: 0 auto 25px; background: linear-gradient(45deg, var(--soft-lilac), var(--royal-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .feature-card h3 { font-size: 1.6rem; margin-bottom: 15px; color: white; }
+        .feature-card p { color: var(--soft-lilac); line-height: 1.6; }
 
-        .how-it-works { padding: 100px 0; text-align: center; }
-        .how-it-works h2 { font-size: 3rem; margin-bottom: 60px; }
-        .how-it-works-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
-        .how-it-works-step .step-number { font-size: 3rem; font-weight: bold; color: var(--golden-amber); margin-bottom: 10px; }
-        .how-it-works-step h3 { font-size: 1.5rem; margin-bottom: 15px; color: white; }
-        .how-it-works-step p { color: var(--soft-lilac); line-height: 1.6; }
-
-        .interactive-demo-section { padding: 100px 0; text-align: center; background: rgba(0, 0, 0, 0.1); }
-        .interactive-demo-container { max-width: 800px; margin: 0 auto; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 50px 40px; backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-        .interactive-demo-container h2 { font-size: 2.5rem; margin-bottom: 20px; background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .interactive-demo-container p { font-size: 1.2rem; color: var(--soft-lilac); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .demo-btn { display: inline-flex; align-items: center; gap: 10px; padding: 15px 30px; background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber)); color: white; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
-        .demo-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
-        .demo-btn svg { width: 24px; height: 24px; }
-
-        .languages-section { padding: 80px 0; text-align: center; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); }
-        .languages-section h2 { font-size: 2.5rem; margin-bottom: 40px; background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .languages-container { overflow: hidden; padding: 20px 0; }
-        .languages-scroll { display: flex; gap: 30px; animation: scroll 30s linear infinite; width: max-content; }
-        .language-item { display: flex; flex-direction: column; align-items: center; gap: 15px; min-width: 100px; padding: 20px; background: rgba(255, 255, 255, 0.1); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s ease; }
-        .language-item:hover { transform: translateY(-5px); animation-play-state: paused; }
+        /* --- Science Section --- */
+        .science-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+        .science-card h3 { font-size: 1.8rem; color: var(--golden-amber); margin-bottom: 15px; }
+        .science-card p { color: var(--soft-lilac); line-height: 1.7; }
         
-        .flag { width: 60px; height: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); background: #f0f0f0; overflow: hidden; }
+        /* --- How It Works --- */
+        .how-it-works-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .how-it-works-step { text-align: center; }
+        .step-number { font-size: 3.5rem; font-weight: bold; color: var(--golden-amber); margin-bottom: 10px; line-height: 1; text-shadow: 0 0 20px rgba(244, 162, 97, 0.4); }
+        .how-it-works-step h3 { font-size: 1.6rem; margin-bottom: 15px; color: white; }
+        .how-it-works-step p { color: var(--soft-lilac); line-height: 1.6; }
+        
+        /* --- Languages --- */
+        .languages-section { background: rgba(0, 0, 0, 0.15); }
+        .languages-container { overflow: hidden; padding: 30px 0; -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); }
+        .languages-scroll { display: flex; gap: 40px; animation: scroll 40s linear infinite; width: max-content; }
+        .language-item { display: flex; flex-direction: column; align-items: center; gap: 15px; min-width: 120px; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 20px; transition: transform 0.3s ease, background-color 0.3s ease; }
+        .language-item:hover { transform: translateY(-8px) scale(1.05); background: rgba(255, 255, 255, 0.1); animation-play-state: paused; }
+        .flag { width: 70px; height: 46px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; }
         .flag img { width: 100%; height: 100%; object-fit: cover; }
-
-        .language-name { font-size: 1rem; font-weight: 600; color: var(--soft-lilac); text-align: center; }
+        .language-name { font-size: 1rem; font-weight: 600; color: white; text-align: center; }
 
         @keyframes scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        .languages-scroll:hover { animation-play-state: paused; }
-
-        .features { padding: 100px 0; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
-        .features h2 { text-align: center; font-size: 3rem; margin-bottom: 60px; background: linear-gradient(45deg, var(--golden-amber), var(--burnt-sienna)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-bottom: 60px; }
-        .feature-card { background: rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; text-align: center; transition: transform 0.3s ease; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .feature-card:hover { transform: translateY(-10px); }
-        .feature-icon { width: 60px; height: 60px; margin: 0 auto 20px; background: linear-gradient(45deg, var(--soft-lilac), var(--royal-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .feature-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--golden-amber); }
-        .feature-card p { color: var(--soft-lilac); line-height: 1.6; }
-
-        .pricing-section { padding: 80px 0; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); text-align: center; }
-        .pricing-section h2 { font-size: 2.5rem; margin-bottom: 20px; color: var(--golden-amber); }
-        .pricing-section p { font-size: 1.2rem; margin-bottom: 40px; color: var(--soft-lilac); }
-        .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 600px; margin: 0 auto; }
-        .pricing-card { position: relative; background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); transition: transform 0.3s ease; }
-        .pricing-card:hover { transform: translateY(-5px); }
+        
+        /* --- Pricing Section --- */
+        .pricing-section { background: rgba(0,0,0,0.1); }
+        .pricing-subtitle { text-align: center; font-size: 1.3rem; margin-top: -40px; margin-bottom: 60px; color: var(--soft-lilac); }
+        .pricing-cards { display: grid; grid-template-columns: 1fr; gap: 30px; max-width: 400px; margin: 0 auto; }
+        .pricing-card { position: relative; text-align: center; }
         .pricing-card.recommended { border: 2px solid var(--golden-amber); transform: scale(1.05); }
-        .pricing-card.recommended::before { 
-            content: attr(data-best-value-text); 
-            position: absolute; 
-            top: -15px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: var(--golden-amber); 
-            color: var(--delft-blue); 
-            padding: 5px 20px; 
-            border-radius: 15px; 
-            font-size: 0.8rem; 
-            font-weight: bold; 
+        .pricing-card.recommended::before {
+            content: attr(data-best-value-text); /* Use attribute for translation */
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            background: var(--golden-amber); color: var(--delft-blue);
+            padding: 5px 20px; border-radius: 15px; font-size: 0.9rem; font-weight: bold;
         }
         .pricing-card h3 { font-size: 1.5rem; margin-bottom: 10px; color: var(--golden-amber); }
-        .pricing-card .price { font-size: 2.5rem; font-weight: bold; color: white; margin-bottom: 5px; }
+        .pricing-card .price { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 5px; }
         .pricing-card .period { color: var(--soft-lilac); margin-bottom: 20px; }
-        .pricing-card .savings { color: var(--burnt-sienna); font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
-
-        .demo-section { padding: 100px 0; text-align: center; }
-        .demo-section h2 { font-size: 3rem; margin-bottom: 40px; }
-        .demo-video { max-width: 300px; width: 100%; height: auto; border-radius: 30px; margin: 0 auto 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: block; }
-        
-        .cta-section { padding: 100px 0; background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber)); text-align: center; }
-        .cta-section h2 { font-size: 3rem; margin-bottom: 20px; }
-        .cta-section p { font-size: 1.3rem; margin-bottom: 40px; }
-
-        footer { background: var(--delft-blue); padding: 40px 0; text-align: center; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 20px; }
-        .footer-section h3 { color: var(--golden-amber); margin-bottom: 15px; }
-        .footer-section p, .footer-section a { color: var(--soft-lilac); text-decoration: none; line-height: 1.6; }
-        .footer-section a:hover { color: var(--golden-amber); }
-
-        @media (max-width: 992px) {
-            nav { justify-content: center; }
+        .pricing-card .savings { color: var(--burnt-sienna); font-weight: bold; font-size: 1rem; margin-top: 15px; }
+        @media (min-width: 768px) {
+            .pricing-cards { grid-template-columns: 1fr 1fr; max-width: 700px; }
         }
 
+        /* --- CTA Section --- */
+        .cta-section { padding: 100px 0; background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber)); text-align: center; }
+        .cta-section h2 { font-size: 3rem; margin-bottom: 20px; text-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+        .cta-section p { font-size: 1.3rem; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        /* --- Footer --- */
+        footer { background: #2a265a; padding: 60px 0; text-align: center; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { color: var(--golden-amber); margin-bottom: 20px; font-size: 1.4rem; }
+        .footer-section p, .footer-section a { color: var(--soft-lilac); text-decoration: none; line-height: 1.7; font-size: 1rem; }
+        .footer-section a:hover { color: var(--golden-amber); text-decoration: underline; }
+
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
+            .hero h1 { font-size: 3rem; }
             .hero p { font-size: 1.2rem; }
-            .download-buttons { flex-direction: column; align-items: center; }
-            .features h2, .demo-section h2, .cta-section h2, .interactive-demo-container h2 { font-size: 2rem; }
-            .science-item, .science-item:nth-child(even) { flex-direction: column; }
+            .section-title { font-size: 2.5rem; }
+            .cta-section h2 { font-size: 2.5rem; }
+            .science-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <header>
+
+    <header id="header">
         <nav class="container">
             <div class="logo">Gummely</div>
-            <div class="lang-switcher">
-                <button id="lang-en">English</button>
-                <button id="lang-de">Deutsch</button>
-                <button id="lang-es">Español</button>
-                <button id="lang-fr">Français</button>
-                <button id="lang-it">Italiano</button>
-                <button id="lang-pt">Português</button>
-                <button id="lang-ru">Русский</button>
-                <button id="lang-ja">日本語</button>
-                <button id="lang-ko">한국어</button>
-                <button id="lang-zh-CN">简体中文</button>
-                <button id="lang-zh-TW">繁體中文</button>
+            <div class="lang-dropdown">
+                <select id="language-switcher" class="lang-select">
+                    <option value="en">English</option>
+                    <option value="de">Deutsch</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="ru">Русский</option>
+                    <option value="ko">한국어</option>
+                    <option value="ja">日本語</option>
+                    <option value="zh-Hans">简体中文</option>
+                    <option value="zh-Hant">繁體中文</option>
+                </select>
             </div>
         </nav>
     </header>
 
     <main>
         <section class="hero">
-            <div class="container">
+            <div class="parallax-bg"></div>
+            <div class="hero-content">
                 <h1 data-translate-key="heroTitle">Learn Languages the Way You Learned Your First</h1>
                 <p data-translate-key="heroSubtitle">Master any language naturally with AI-powered comprehensible input—no grammar drills, no memorization. Start speaking with confidence.</p>
                 <div class="download-buttons">
@@ -300,7 +378,7 @@
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
                         <span data-translate-key="downloadIos">Download for iOS</span>
                     </a>
-                    <a href="#" class="download-btn">
+                     <a href="#" class="download-btn">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
                         <span data-translate-key="downloadAndroid">Download for Android</span>
                     </a>
@@ -308,19 +386,19 @@
             </div>
         </section>
 
-        <section class="social-proof">
+        <section class="section social-proof">
             <div class="container">
-                <h2 data-translate-key="socialProofTitle">Trusted by Language Learners Worldwide</h2>
+                <h2 class="section-title reveal" data-translate-key="socialProofTitle">Trusted by Language Learners Worldwide</h2>
                 <div class="testimonials">
-                    <div class="testimonial-card">
+                    <div class="testimonial-card glass-card reveal">
                         <p data-translate-key="testimonial1">"I’ve tried countless apps, but Gummely made learning Spanish feel effortless. The personalized texts kept me engaged, and I’m amazed at how quickly my vocabulary grew!"</p>
                         <div class="testimonial-author"><img src="https://i.pravatar.cc/50?u=a" alt="User 1"><div class="testimonial-author-info"><h4 data-translate-key="user1">Jamie L.</h4></div></div>
                     </div>
-                    <div class="testimonial-card">
+                    <div class="testimonial-card glass-card reveal">
                         <p data-translate-key="testimonial2">"The color-coding and audio features helped me focus on new words while enjoying the content. I feel more confident reading French now!"</p>
                         <div class="testimonial-author"><img src="https://i.pravatar.cc/50?u=b" alt="User 2"><div class="testimonial-author-info"><h4 data-translate-key="user2">Alex M.</h4></div></div>
                     </div>
-                    <div class="testimonial-card">
+                    <div class="testimonial-card glass-card reveal">
                         <p data-translate-key="testimonial3">"As someone who is easily intimidated by grammar rules, Gummely was a game-changer. I'm learning German in a way that feels natural and fun."</p>
                         <div class="testimonial-author"><img src="https://i.pravatar.cc/50?u=c" alt="User 3"><div class="testimonial-author-info"><h4 data-translate-key="user3">Sam K.</h4></div></div>
                     </div>
@@ -328,90 +406,21 @@
             </div>
         </section>
 
-        <section class="science-section">
+        <section class="section features">
             <div class="container">
-                <h2 data-translate-key="scienceTitle">The Science of Natural Language Acquisition</h2>
-                <div class="science-item">
-                    <div class="science-text">
-                        <h3 data-translate-key="science1Title">Krashen's Input Hypothesis: Your "i+1"</h3>
-                        <p data-translate-key="science1Desc">Our method is built on linguist Stephen Krashen's theory that we acquire language best when we receive "comprehensible input" that is just one step beyond our current level (i+1). Gummely’s AI ensures you’re always in this optimal learning zone—challenged, but never overwhelmed.</p>
-                    </div>
-                </div>
-                <div class="science-item">
-                    <div class="science-text">
-                        <h3 data-translate-key="science2Title">Optimal Lexical Coverage for Reading</h3>
-                        <p data-translate-key="science2Desc">Research shows that to comfortably read and understand a text, you need to know about 95-98% of the words. Our AI personalizes content to meet this threshold, allowing you to infer the meaning of new words from context, which dramatically improves retention.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="how-it-works">
-            <div class="container">
-                <h2 data-translate-key="howTitle">How Gummely Works for You</h2>
-                <div class="how-it-works-grid">
-                    <div class="how-it-works-step"><div class="step-number">1</div><h3 data-translate-key="how1Title">Personalized Content</h3><p data-translate-key="how1Desc">Our AI analyzes your vocabulary and delivers texts and chats with 90-98% of words you already know, creating the perfect learning environment.</p></div>
-                    <div class="how-it-works-step"><div class="step-number">2</div><h3 data-translate-key="how2Title">Interactive Learning</h3><p data-translate-key="how2Desc">See a word in purple (unknown) or orange (learning)? Just tap on it for an instant translation and add it to your personal flashcard deck.</p></div>
-                    <div class="how-it-works-step"><div class="step-number">3</div><h3 data-translate-key="how3Title">Multimodal Practice</h3><p data-translate-key="how3Desc">Reinforce what you've learned by listening to the text with our integrated text-to-speech feature, improving your pronunciation and listening skills simultaneously.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="interactive-demo-section">
-            <div class="container">
-                <div class="interactive-demo-container">
-                    <h2 data-translate-key="demoTitle">Experience the Gummely Magic</h2>
-                    <p data-translate-key="demoDesc">Curious how it feels? Take a 1-minute vocabulary quiz to find your level, then have a short chat with our AI. See how it adapts to you in real-time—no download required.</p>
-                    <a href="#" class="demo-btn">
-                        <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
-                        <span data-translate-key="demoButton">Start the 1-Minute Demo</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="languages-section">
-            <div class="container">
-                <h2 data-translate-key="languagesTitle">Learn 11 Languages and Counting</h2>
-                <div class="languages-container">
-                    <div class="languages-scroll">
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/us.svg" alt="USA Flag"></div><div class="language-name" data-translate-key="langEnglish">English</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/de.svg" alt="German Flag"></div><div class="language-name" data-translate-key="langGerman">German</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/fr.svg" alt="French Flag"></div><div class="language-name" data-translate-key="langFrench">French</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/es.svg" alt="Spanish Flag"></div><div class="language-name" data-translate-key="langSpanish">Spanish</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/it.svg" alt="Italian Flag"></div><div class="language-name" data-translate-key="langItalian">Italian</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/jp.svg" alt="Japanese Flag"></div><div class="language-name" data-translate-key="langJapanese">Japanese</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/kr.svg" alt="Korean Flag"></div><div class="language-name" data-translate-key="langKorean">Korean</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/pt.svg" alt="Portuguese Flag"></div><div class="language-name" data-translate-key="langPortuguese">Portuguese</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/ru.svg" alt="Russian Flag"></div><div class="language-name" data-translate-key="langRussian">Russian</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/cn.svg" alt="Chinese Flag"></div><div class="language-name" data-translate-key="langChineseSimp">Chinese (Simp)</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/tw.svg" alt="Taiwanese Flag"></div><div class="language-name" data-translate-key="langChineseTrad">Chinese (Trad)</div></div>
-                        <!-- Duplicate for seamless loop -->
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/us.svg" alt="USA Flag"></div><div class="language-name" data-translate-key="langEnglish">English</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/de.svg" alt="German Flag"></div><div class="language-name" data-translate-key="langGerman">German</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/fr.svg" alt="French Flag"></div><div class="language-name" data-translate-key="langFrench">French</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/es.svg" alt="Spanish Flag"></div><div class="language-name" data-translate-key="langSpanish">Spanish</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/it.svg" alt="Italian Flag"></div><div class="language-name" data-translate-key="langItalian">Italian</div></div>
-                        <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/jp.svg" alt="Japanese Flag"></div><div class="language-name" data-translate-key="langJapanese">Japanese</div></div>
-                    </div>
-                </div>
-            </section>
-
-        <section class="features">
-            <div class="container">
-                <h2 data-translate-key="whyTitle">Why Choose Gummely?</h2>
+                <h2 class="section-title reveal" data-translate-key="whyTitle">Why Choose Gummely?</h2>
                 <div class="features-grid">
-                    <div class="feature-card">
+                    <div class="feature-card glass-card reveal">
                         <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
                         <h3 data-translate-key="feature1Title">Science-Backed Method</h3>
                         <p data-translate-key="feature1Desc">Based on Krashen's Input Hypothesis. Content with 90-98% known words keeps you in the optimal learning zone—challenging but never overwhelming.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card glass-card reveal">
                         <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
                         <h3 data-translate-key="feature2Title">Color-Coded Learning</h3>
                         <p data-translate-key="feature2Desc">Unknown words appear in purple, learning words in orange. Click any word for instant translation and add to your personalized flashcard deck.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card glass-card reveal">
                         <div class="feature-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
                         <h3 data-translate-key="feature3Title">Immersive Content</h3>
                         <p data-translate-key="feature3Desc">Read tailored texts and chat with AI bots. Integrated text-to-speech improves pronunciation while you build vocabulary naturally through context.</p>
@@ -419,18 +428,79 @@
                 </div>
             </div>
         </section>
-
-        <section class="pricing-section">
+        
+        <section class="section">
+            <div class="container reveal">
+                <h2 class="section-title" data-translate-key="scienceTitle">The Science of Natural Language Acquisition</h2>
+                <div class="science-grid">
+                    <div class="science-card glass-card">
+                        <h3 data-translate-key="science1Title">Krashen's Input Hypothesis: Your "i+1"</h3>
+                        <p data-translate-key="science1Desc">Our method is built on linguist Stephen Krashen's theory that we acquire language best when we receive "comprehensible input" that is just one step beyond our current level (i+1). Gummely’s AI ensures you’re always in this optimal learning zone—challenged, but never overwhelmed.</p>
+                    </div>
+                     <div class="science-card glass-card">
+                        <h3 data-translate-key="science2Title">Optimal Lexical Coverage for Reading</h3>
+                        <p data-translate-key="science2Desc">Research shows that to comfortably read and understand a text, you need to know about 95-98% of the words. Our AI personalizes content to meet this threshold, allowing you to infer the meaning of new words from context, which dramatically improves retention.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section how-it-works">
             <div class="container">
-                <h2 data-translate-key="pricingTitle">Simple, Transparent Pricing</h2>
-                <p data-translate-key="pricingSubtitle">Start your language learning journey today</p>
+                <h2 class="section-title reveal" data-translate-key="howTitle">How Gummely Works for You</h2>
+                <div class="how-it-works-grid">
+                    <div class="how-it-works-step glass-card reveal"><div class="step-number">1</div><h3 data-translate-key="how1Title">Personalized Content</h3><p data-translate-key="how1Desc">Our AI analyzes your vocabulary and delivers texts and chats with 90-98% of words you already know, creating the perfect learning environment.</p></div>
+                    <div class="how-it-works-step glass-card reveal"><div class="step-number">2</div><h3 data-translate-key="how2Title">Interactive Learning</h3><p data-translate-key="how2Desc">See a word in purple (unknown) or orange (learning)? Just tap on it for an instant translation and add it to your personal flashcard deck.</p></div>
+                    <div class="how-it-works-step glass-card reveal"><div class="step-number">3</div><h3 data-translate-key="how3Title">Multimodal Practice</h3><p data-translate-key="how3Desc">Reinforce what you've learned by listening to the text with our integrated text-to-speech feature, improving your pronunciation and listening skills simultaneously.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section languages-section">
+            <div class="container">
+                <h2 class="section-title reveal" data-translate-key="languagesTitle">Learn 11+ Languages and Counting</h2>
+            </div>
+            <div class="languages-container">
+                <div class="languages-scroll">
+                    <!-- Items are duplicated for a seamless loop -->
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/us.svg" alt="USA Flag"></div><div class="language-name" data-translate-key="langEnglish">English</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/de.svg" alt="German Flag"></div><div class="language-name" data-translate-key="langGerman">German</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/es.svg" alt="Spanish Flag"></div><div class="language-name" data-translate-key="langSpanish">Spanish</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/fr.svg" alt="French Flag"></div><div class="language-name" data-translate-key="langFrench">French</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/it.svg" alt="Italian Flag"></div><div class="language-name" data-translate-key="langItalian">Italian</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/pt.svg" alt="Portuguese Flag"></div><div class="language-name" data-translate-key="langPortuguese">Portuguese</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/ru.svg" alt="Russian Flag"></div><div class="language-name" data-translate-key="langRussian">Russian</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/kr.svg" alt="Korean Flag"></div><div class="language-name" data-translate-key="langKorean">Korean</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/jp.svg" alt="Japanese Flag"></div><div class="language-name" data-translate-key="langJapanese">Japanese</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/cn.svg" alt="Chinese Flag"></div><div class="language-name" data-translate-key="langChineseSimp">Chinese (Simp)</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/tw.svg" alt="Taiwanese Flag"></div><div class="language-name" data-translate-key="langChineseTrad">Chinese (Trad)</div></div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/us.svg" alt="USA Flag"></div><div class="language-name" data-translate-key="langEnglish">English</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/de.svg" alt="German Flag"></div><div class="language-name" data-translate-key="langGerman">German</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/es.svg" alt="Spanish Flag"></div><div class="language-name" data-translate-key="langSpanish">Spanish</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/fr.svg" alt="French Flag"></div><div class="language-name" data-translate-key="langFrench">French</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/it.svg" alt="Italian Flag"></div><div class="language-name" data-translate-key="langItalian">Italian</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/pt.svg" alt="Portuguese Flag"></div><div class="language-name" data-translate-key="langPortuguese">Portuguese</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/ru.svg" alt="Russian Flag"></div><div class="language-name" data-translate-key="langRussian">Russian</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/kr.svg" alt="Korean Flag"></div><div class="language-name" data-translate-key="langKorean">Korean</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/jp.svg" alt="Japanese Flag"></div><div class="language-name" data-translate-key="langJapanese">Japanese</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/cn.svg" alt="Chinese Flag"></div><div class="language-name" data-translate-key="langChineseSimp">Chinese (Simp)</div></div>
+                    <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/tw.svg" alt="Taiwanese Flag"></div><div class="language-name" data-translate-key="langChineseTrad">Chinese (Trad)</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section pricing-section">
+            <div class="container">
+                <h2 class="section-title reveal" data-translate-key="pricingTitle">Simple, Transparent Pricing</h2>
+                <p class="pricing-subtitle reveal" data-translate-key="pricingSubtitle">Start your language learning journey today</p>
                 <div class="pricing-cards">
-                    <div class="pricing-card">
+                    <div class="pricing-card glass-card reveal">
                         <h3 data-translate-key="pricingWeekly">Weekly</h3>
                         <div class="price">$4.99</div>
                         <div class="period" data-translate-key="pricingPerWeek">per week</div>
                     </div>
-                    <div class="pricing-card recommended" data-best-value-text="BEST VALUE">
+                    <div class="pricing-card recommended glass-card reveal" data-best-value-text="BEST VALUE">
                         <h3 data-translate-key="pricingMonthly">Monthly</h3>
                         <div class="price">$14.99</div>
                         <div class="period" data-translate-key="pricingPerMonth">per month</div>
@@ -440,18 +510,10 @@
             </div>
         </section>
 
-        <section class="demo-section">
-            <div class="container">
-                <h2 data-translate-key="experienceTitle">Experience Gummely</h2>
-                <video class="demo-video" controls autoplay muted loop playsinline><source src="[YOUR_VIDEO_FILE.mp4]" type="video/mp4"></video>
-                <p style="color: var(--soft-lilac); font-size: 1.2rem;" data-translate-key="experienceDesc">Experience comprehensible input that adapts to your level—just like how you learned your first language</p>
-            </div>
-        </section>
-
-        <section class="cta-section">
-            <div class="container">
+        <section class="section cta-section">
+            <div class="container reveal">
                 <h2 data-translate-key="ctaTitle">Ready to Learn Naturally?</h2>
-                <p data-translate-key="ctaDesc">Join thousands discovering the power of comprehensible input with Gummely</p>
+                <p data-translate-key="ctaDesc">Join thousands discovering the power of comprehensible input with Gummely.</p>
                 <div class="download-buttons">
                      <a href="#" class="download-btn">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
@@ -464,15 +526,15 @@
                 </div>
             </div>
         </section>
+
     </main>
     
     <footer>
         <div class="container">
-            <div class="footer-content">
+            <div class="footer-content reveal">
                 <div class="footer-section">
                     <h3 data-translate-key="footerContact">Contact</h3>
-                    <p>Email: example@gummely.com</p>
-                    <p>Support: support@gummely.com</p>
+                    <p>Email: contact@gummely.com</p>
                 </div>
                 <div class="footer-section">
                     <h3 data-translate-key="footerLegal">Legal</h3>
@@ -481,788 +543,758 @@
                 </div>
                 <div class="footer-section">
                     <h3 data-translate-key="footerFollow">Follow Us</h3>
-                    <p><a href="#">Twitter</a></p>
-                    <p><a href="#">Instagram</a></p>
-                    <p><a href="#">Facebook</a></p>
+                    <p><a href="#">Twitter</a> • <a href="#">Instagram</a></p>
                 </div>
             </div>
-            <p>© 2025 Gummely. <span data-translate-key="footerRights">All rights reserved.</span></p>
+            <p class="reveal">© 2025 Gummely. <span data-translate-key="footerRights">All rights reserved.</span></p>
         </div>
     </footer>
 
     <script>
-        const translations = {
-            en: {
-                heroTitle: "Learn Languages the Way You Learned Your First",
-                heroSubtitle: "Master any language naturally with AI-powered comprehensible input—no grammar drills, no memorization. Start speaking with confidence.",
-                downloadIos: "Download for iOS",
-                downloadAndroid: "Download for Android",
-                socialProofTitle: "Trusted by Language Learners Worldwide",
-                testimonial1: "I’ve tried countless apps, but Gummely made learning Spanish feel effortless. The personalized texts kept me engaged, and I’m amazed at how quickly my vocabulary grew!",
-                user1: "Jamie L.",
-                testimonial2: "The color-coding and audio features helped me focus on new words while enjoying the content. I feel more confident reading French now!",
-                user2: "Alex M.",
-                testimonial3: "As someone who is easily intimidated by grammar rules, Gummely was a game-changer. I'm learning German in a way that feels natural and fun.",
-                user3: "Sam K.",
-                scienceTitle: "The Science of Natural Language Acquisition",
-                science1Title: "Krashen's Input Hypothesis: Your \"i+1\"",
-                science1Desc: "Our method is built on linguist Stephen Krashen's theory that we acquire language best when we receive \"comprehensible input\" that is just one step beyond our current level (i+1). Gummely’s AI ensures you’re always in this optimal learning zone—challenged, but never overwhelmed.",
-                science2Title: "Optimal Lexical Coverage for Reading",
-                science2Desc: "Research shows that to comfortably read and understand a text, you need to know about 95-98% of the words. Our AI personalizes content to meet this threshold, allowing you to infer the meaning of new words from context, which dramatically improves retention.",
-                howTitle: "How Gummely Works for You",
-                how1Title: "Personalized Content",
-                how1Desc: "Our AI analyzes your vocabulary and delivers texts and chats with 90-98% of words you already know, creating the perfect learning environment.",
-                how2Title: "Interactive Learning",
-                how2Desc: "See a word in purple (unknown) or orange (learning)? Just tap on it for an instant translation and add it to your personal flashcard deck.",
-                how3Title: "Multimodal Practice",
-                how3Desc: "Reinforce what you've learned by listening to the text with our integrated text-to-speech feature, improving your pronunciation and listening skills simultaneously.",
-                demoTitle: "Experience the Gummely Magic",
-                demoDesc: "Curious how it feels? Take a 1-minute vocabulary quiz to find your level, then have a short chat with our AI. See how it adapts to you in real-time—no download required.",
-                demoButton: "Start the 1-Minute Demo",
-                languagesTitle: "Learn 11 Languages and Counting",
-                langEnglish: "English",
-                langGerman: "German",
-                langFrench: "French",
-                langSpanish: "Spanish",
-                langItalian: "Italian",
-                langJapanese: "Japanese",
-                langKorean: "Korean",
-                langPortuguese: "Portuguese",
-                langRussian: "Russian",
-                langChineseSimp: "Chinese (Simp)",
-                langChineseTrad: "Chinese (Trad)",
-                whyTitle: "Why Choose Gummely?",
-                feature1Title: "Science-Backed Method",
-                feature1Desc: "Based on Krashen's Input Hypothesis. Content with 90-98% known words keeps you in the optimal learning zone—challenging but never overwhelming.",
-                feature2Title: "Color-Coded Learning",
-                feature2Desc: "Unknown words appear in purple, learning words in orange. Click any word for instant translation and add to your personalized flashcard deck.",
-                feature3Title: "Immersive Content",
-                feature3Desc: "Read tailored texts and chat with AI bots. Integrated text-to-speech improves pronunciation while you build vocabulary naturally through context.",
-                pricingTitle: "Simple, Transparent Pricing",
-                pricingSubtitle: "Start your language learning journey today",
-                pricingWeekly: "Weekly",
-                pricingPerWeek: "per week",
-                pricingMonthly: "Monthly",
-                pricingPerMonth: "per month",
-                pricingSave: "Save 25%",
-                bestValue: "BEST VALUE",
-                experienceTitle: "Experience Gummely",
-                experienceDesc: "Experience comprehensible input that adapts to your level—just like how you learned your first language",
-                ctaTitle: "Ready to Learn Naturally?",
-                ctaDesc: "Join thousands discovering the power of comprehensible input with Gummely",
-                footerContact: "Contact",
-                footerLegal: "Legal",
-                footerPrivacy: "Privacy Policy",
-                footerTerms: "Terms of Service",
-                footerFollow: "Follow Us",
-                footerRights: "All rights reserved."
-            },
-            de: {
-                heroTitle: "Lerne Sprachen, wie du deine erste gelernt hast",
-                heroSubtitle: "Meistere jede Sprache auf natürliche Weise mit KI-gestütztem „Comprehensible Input“ – ohne Grammatikübungen, ohne Auswendiglernen. Sprich mit Selbstvertrauen.",
-                downloadIos: "Für iOS herunterladen",
-                downloadAndroid: "Für Android herunterladen",
-                socialProofTitle: "Weltweites Vertrauen von Sprachlernern",
-                testimonial1: "Ich habe unzählige Apps ausprobiert, aber mit Gummely fühlte sich das Spanischlernen mühelos an. Die personalisierten Texte fesselten mich und ich bin erstaunt, wie schnell mein Wortschatz wuchs!",
-                user1: "Jamie L.",
-                testimonial2: "Die Farbcodierung und die Audio-Funktionen halfen mir, mich auf neue Wörter zu konzentrieren, während ich den Inhalt genoss. Ich fühle mich jetzt viel sicherer beim Lesen auf Französisch!",
-                user2: "Alex M.",
-                testimonial3: "Als jemand, der sich leicht von Grammatikregeln einschüchtern lässt, war Gummely ein Wendepunkt. Ich lerne Deutsch auf eine Weise, die sich natürlich und unterhaltsam anfühlt.",
-                user3: "Sam K.",
-                scienceTitle: "Die Wissenschaft des natürlichen Spracherwerbs",
-                science1Title: "Krashens Input-Hypothese: Dein „i+1“",
-                science1Desc: "Unsere Methode basiert auf der Theorie des Linguisten Stephen Krashen, dass wir Sprache am besten erwerben, wenn wir „verständlichen Input“ erhalten, der nur einen Schritt über unserem aktuellen Niveau liegt (i+1). Die KI von Gummely stellt sicher, dass Sie sich immer in dieser optimalen Lernzone befinden – gefordert, aber nie überfordert.",
-                science2Title: "Optimale lexikalische Abdeckung zum Lesen",
-                science2Desc: "Die Forschung zeigt, dass man etwa 95-98% der Wörter kennen muss, um einen Text bequem lesen und verstehen zu können. Unsere KI personalisiert Inhalte, um diesen Schwellenwert zu erreichen, sodass Sie die Bedeutung neuer Wörter aus dem Kontext ableiten können, was die Merkfähigkeit drastisch verbessert.",
-                howTitle: "So funktioniert Gummely für dich",
-                how1Title: "Personalisierte Inhalte",
-                how1Desc: "Unsere KI analysiert deinen Wortschatz und liefert Texte und Chats mit 90-98% bekannter Wörter, um die perfekte Lernumgebung zu schaffen.",
-                how2Title: "Interaktives Lernen",
-                how2Desc: "Siehst du ein Wort in Lila (unbekannt) oder Orange (im Lernprozess)? Tippe einfach darauf für eine sofortige Übersetzung und füge es zu deinem persönlichen Karteikartenset hinzu.",
-                how3Title: "Multimodales Üben",
-                how3Desc: "Verstärke das Gelernte, indem du den Text mit unserer integrierten Text-to-Speech-Funktion anhörst und so gleichzeitig deine Aussprache und dein Hörverständnis verbesserst.",
-                demoTitle: "Erlebe die Gummely-Magie",
-                demoDesc: "Neugierig, wie es sich anfühlt? Mache einen 1-minütigen Vokabeltest, um dein Niveau zu ermitteln, und führe dann einen kurzen Chat mit unserer KI. Erlebe in Echtzeit, wie sie sich an dich anpasst – kein Download erforderlich.",
-                demoButton: "Starte die 1-Minuten-Demo",
-                languagesTitle: "Lerne 11 Sprachen und mehr",
-                langEnglish: "Englisch",
-                langGerman: "Deutsch",
-                langFrench: "Französisch",
-                langSpanish: "Spanisch",
-                langItalian: "Italienisch",
-                langJapanese: "Japanisch",
-                langKorean: "Koreanisch",
-                langPortuguese: "Portugiesisch",
-                langRussian: "Russisch",
-                langChineseSimp: "Chinesisch (Ver.)",
-                langChineseTrad: "Chinesisch (Trad.)",
-                whyTitle: "Warum Gummely wählen?",
-                feature1Title: "Wissenschaftlich fundierte Methode",
-                feature1Desc: "Basierend auf Krashens Input-Hypothese. Inhalte mit 90-98 % bekannten Wörtern halten Sie in der optimalen Lernzone – herausfordernd, aber niemals überfordernd.",
-                feature2Title: "Lernen mit Farbcodierung",
-                feature2Desc: "Unbekannte Wörter erscheinen in Lila, zu lernende Wörter in Orange. Klicken Sie auf ein beliebiges Wort für eine sofortige Übersetzung und fügen Sie es Ihrem persönlichen Karteikartenstapel hinzu.",
-                feature3Title: "Immersive Inhalte",
-                feature3Desc: "Lesen Sie maßgeschneiderte Texte und chatten Sie mit KI-Bots. Integriertes Text-to-Speech verbessert die Aussprache, während Sie auf natürliche Weise Vokabeln im Kontext lernen.",
-                pricingTitle: "Einfache, transparente Preise",
-                pricingSubtitle: "Beginne noch heute deine Sprachlernreise",
-                pricingWeekly: "Wöchentlich",
-                pricingPerWeek: "pro Woche",
-                pricingMonthly: "Monatlich",
-                pricingPerMonth: "pro Monat",
-                pricingSave: "25% sparen",
-                bestValue: "BESTER PREIS",
-                experienceTitle: "Erlebe Gummely",
-                experienceDesc: "Erleben Sie verständlichen Input, der sich an Ihr Niveau anpasst – genau wie Sie Ihre erste Sprache gelernt haben.",
-                ctaTitle: "Bereit, natürlich zu lernen?",
-                ctaDesc: "Schließen Sie sich Tausenden an und entdecken Sie die Kraft des verständlichen Inputs mit Gummely",
-                footerContact: "Kontakt",
-                footerLegal: "Rechtliches",
-                footerPrivacy: "Datenschutzrichtlinie",
-                footerTerms: "Nutzungsbedingungen",
-                footerFollow: "Folge uns",
-                footerRights: "Alle Rechte vorbehalten."
-            },
-            es: {
-                heroTitle: "Aprende idiomas como aprendiste el primero",
-                heroSubtitle: "Domina cualquier idioma de forma natural con input comprensible impulsado por IA, sin ejercicios de gramática ni memorización. Empieza a hablar con confianza.",
-                downloadIos: "Descargar para iOS",
-                downloadAndroid: "Descargar para Android",
-                socialProofTitle: "Con la confianza de estudiantes de idiomas de todo el mundo",
-                testimonial1: "He probado innumerables aplicaciones, pero Gummely hizo que aprender español pareciera fácil. Los textos personalizados me mantuvieron interesado, ¡y estoy asombrado de lo rápido que creció mi vocabulario!",
-                user1: "Jamie L.",
-                testimonial2: "La codificación por colores y las funciones de audio me ayudaron a concentrarme en palabras nuevas mientras disfrutaba del contenido. ¡Ahora me siento más seguro leyendo en francés!",
-                user2: "Alex M.",
-                testimonial3: "Para alguien que se intimida fácilmente con las reglas gramaticales, Gummely fue un cambio radical. Estoy aprendiendo alemán de una manera que se siente natural y divertida.",
-                user3: "Sam K.",
-                scienceTitle: "La ciencia de la adquisición natural del lenguaje",
-                science1Title: "La hipótesis del input de Krashen: Tu \"i+1\"",
-                science1Desc: "Nuestro método se basa en la teoría del lingüista Stephen Krashen de que adquirimos mejor el lenguaje cuando recibimos un \"input comprensible\" que está solo un paso más allá de nuestro nivel actual (i+1). La IA de Gummely garantiza que siempre estés en esta zona de aprendizaje óptima: desafiado, pero nunca abrumado.",
-                science2Title: "Cobertura léxica óptima para la lectura",
-                science2Desc: "La investigación muestra que para leer y comprender cómodamente un texto, necesitas conocer entre el 95% y el 98% de las palabras. Nuestra IA personaliza el contenido para alcanzar este umbral, permitiéndote inferir el significado de nuevas palabras a partir del contexto, lo que mejora drásticamente la retención.",
-                howTitle: "Cómo funciona Gummely para ti",
-                how1Title: "Contenido personalizado",
-                how1Desc: "Nuestra IA analiza tu vocabulario y te ofrece textos y chats con un 90-98% de palabras que ya conoces, creando el entorno de aprendizaje perfecto.",
-                how2Title: "Aprendizaje interactivo",
-                how2Desc: "¿Ves una palabra en morado (desconocida) o naranja (en aprendizaje)? Solo tócala para una traducción instantánea y agrégala a tu mazo de tarjetas personal.",
-                how3Title: "Práctica multimodal",
-                how3Desc: "Refuerza lo que has aprendido escuchando el texto con nuestra función de texto a voz integrada, mejorando tu pronunciación y tus habilidades de escucha simultáneamente.",
-                demoTitle: "Experimenta la magia de Gummely",
-                demoDesc: "¿Tienes curiosidad por saber cómo se siente? Haz una prueba de vocabulario de 1 minuto para encontrar tu nivel y luego ten una breve charla con nuestra IA. Observa cómo se adapta a ti en tiempo real, sin necesidad de descargas.",
-                demoButton: "Iniciar la demostración de 1 minuto",
-                languagesTitle: "Aprende 11 idiomas y contando",
-                langEnglish: "Inglés",
-                langGerman: "Alemán",
-                langFrench: "Francés",
-                langSpanish: "Español",
-                langItalian: "Italiano",
-                langJapanese: "Japonés",
-                langKorean: "Coreano",
-                langPortuguese: "Portugués",
-                langRussian: "Ruso",
-                langChineseSimp: "Chino (Simp)",
-                langChineseTrad: "Chino (Trad)",
-                whyTitle: "¿Por qué elegir Gummely?",
-                feature1Title: "Método respaldado por la ciencia",
-                feature1Desc: "Basado en la Hipótesis de Entrada de Krashen. El contenido con un 90-98% de palabras conocidas te mantiene en la zona de aprendizaje óptima: desafiante pero nunca abrumador.",
-                feature2Title: "Aprendizaje codificado por colores",
-                feature2Desc: "Las palabras desconocidas aparecen en morado, las palabras en aprendizaje en naranja. Haz clic en cualquier palabra para una traducción instantánea y agrégala a tu mazo de tarjetas personalizado.",
-                feature3Title: "Contenido inmersivo",
-                feature3Desc: "Lee textos personalizados y chatea con bots de IA. El texto a voz integrado mejora la pronunciación mientras construyes vocabulario de forma natural a través del contexto.",
-                pricingTitle: "Precios simples y transparentes",
-                pricingSubtitle: "Comienza tu viaje de aprendizaje de idiomas hoy",
-                pricingWeekly: "Semanal",
-                pricingPerWeek: "por semana",
-                pricingMonthly: "Mensual",
-                pricingPerMonth: "por mes",
-                pricingSave: "Ahorra 25%",
-                bestValue: "MEJOR VALOR",
-                experienceTitle: "Experimenta Gummely",
-                experienceDesc: "Experimenta un input comprensible que se adapta a tu nivel, tal como aprendiste tu primer idioma.",
-                ctaTitle: "¿Listo para aprender de forma natural?",
-                ctaDesc: "Únete a miles que descubren el poder del input comprensible con Gummely",
-                footerContact: "Contacto",
-                footerLegal: "Legal",
-                footerPrivacy: "Política de Privacidad",
-                footerTerms: "Términos de Servicio",
-                footerFollow: "Síguenos",
-                footerRights: "Todos los derechos reservados."
-            },
-            fr: {
-                heroTitle: "Apprenez les langues comme vous avez appris votre première",
-                heroSubtitle: "Maîtrisez n'importe quelle langue naturellement avec un input compréhensible alimenté par l'IA — sans exercices de grammaire, sans mémorisation. Commencez à parler avec confiance.",
-                downloadIos: "Télécharger pour iOS",
-                downloadAndroid: "Télécharger pour Android",
-                socialProofTitle: "Approuvé par les apprenants de langues du monde entier",
-                testimonial1: "J'ai essayé d'innombrables applications, mais Gummely a rendu l'apprentissage de l'espagnol facile. Les textes personnalisés m'ont gardé engagé, et je suis étonné de la rapidité avec laquelle mon vocabulaire s'est développé !",
-                user1: "Jamie L.",
-                testimonial2: "Le codage couleur et les fonctionnalités audio m'ont aidé à me concentrer sur de nouveaux mots tout en profitant du contenu. Je me sens plus confiant en lisant le français maintenant !",
-                user2: "Alex M.",
-                testimonial3: "En tant que personne facilement intimidée par les règles de grammaire, Gummely a changé la donne. J'apprends l'allemand d'une manière qui semble naturelle et amusante.",
-                user3: "Sam K.",
-                scienceTitle: "La science de l'acquisition naturelle du langage",
-                science1Title: "L'hypothèse de l'input de Krashen : Votre \"i+1\"",
-                science1Desc: "Notre méthode est basée sur la théorie du linguiste Stephen Krashen selon laquelle nous acquérons le mieux une langue lorsque nous recevons un \"input compréhensible\" qui se situe juste un cran au-dessus de notre niveau actuel (i+1). L'IA de Gummely garantit que vous êtes toujours dans cette zone d'apprentissage optimale — mis au défi, mais jamais dépassé.",
-                science2Title: "Couverture lexicale optimale pour la lecture",
-                science2Desc: "La recherche montre que pour lire et comprendre confortablement un texte, vous devez connaître environ 95 à 98 % des mots. Notre IA personnalise le contenu pour atteindre ce seuil, vous permettant de déduire le sens des nouveaux mots à partir du contexte, ce qui améliore considérablement la rétention.",
-                howTitle: "Comment Gummely fonctionne pour vous",
-                how1Title: "Contenu personnalisé",
-                how1Desc: "Notre IA analyse votre vocabulaire et fournit des textes et des discussions avec 90 à 98 % de mots que vous connaissez déjà, créant ainsi l'environnement d'apprentissage parfait.",
-                how2Title: "Apprentissage interactif",
-                how2Desc: "Vous voyez un mot en violet (inconnu) ou en orange (en apprentissage) ? Appuyez simplement dessus pour une traduction instantanée et ajoutez-le à votre jeu de flashcards personnel.",
-                how3Title: "Pratique multimodale",
-                how3Desc: "Renforcez ce que vous avez appris en écoutant le texte avec notre fonction de synthèse vocale intégrée, améliorant simultanément votre prononciation et vos compétences d'écoute.",
-                demoTitle: "Découvrez la magie de Gummely",
-                demoDesc: "Curieux de savoir ce que ça fait ? Faites un quiz de vocabulaire d'une minute pour trouver votre niveau, puis discutez brièvement avec notre IA. Voyez comment elle s'adapte à vous en temps réel — aucun téléchargement requis.",
-                demoButton: "Démarrer la démo d'1 minute",
-                languagesTitle: "Apprenez 11 langues et ce n'est pas fini",
-                langEnglish: "Anglais",
-                langGerman: "Allemand",
-                langFrench: "Français",
-                langSpanish: "Espagnol",
-                langItalian: "Italien",
-                langJapanese: "Japonais",
-                langKorean: "Coréen",
-                langPortuguese: "Portugais",
-                langRussian: "Russe",
-                langChineseSimp: "Chinois (Simp)",
-                langChineseTrad: "Chinois (Trad)",
-                whyTitle: "Pourquoi choisir Gummely ?",
-                feature1Title: "Méthode scientifiquement prouvée",
-                feature1Desc: "Basé sur l'hypothèse de l'input de Krashen. Le contenu avec 90-98 % de mots connus vous maintient dans la zone d'apprentissage optimale — stimulant mais jamais écrasant.",
-                feature2Title: "Apprentissage par code couleur",
-                feature2Desc: "Les mots inconnus apparaissent en violet, les mots en apprentissage en orange. Cliquez sur n'importe quel mot pour une traduction instantanée et ajoutez-le à votre jeu de cartes mémoire personnalisé.",
-                feature3Title: "Contenu immersif",
-                feature3Desc: "Lisez des textes sur mesure et discutez avec des bots IA. La synthèse vocale intégrée améliore la prononciation tout en développant naturellement le vocabulaire par le contexte.",
-                pricingTitle: "Tarification simple et transparente",
-                pricingSubtitle: "Commencez votre parcours d'apprentissage des langues dès aujourd'hui",
-                pricingWeekly: "Hebdomadaire",
-                pricingPerWeek: "par semaine",
-                pricingMonthly: "Mensuel",
-                pricingPerMonth: "par mois",
-                pricingSave: "Économisez 25%",
-                bestValue: "MEILLEUR PRIX",
-                experienceTitle: "Découvrez Gummely",
-                experienceDesc: "Faites l'expérience d'un apport compréhensible qui s'adapte à votre niveau, exactement comme vous avez appris votre première langue.",
-                ctaTitle: "Prêt à apprendre naturellement ?",
-                ctaDesc: "Rejoignez des milliers de personnes qui découvrent le pouvoir de l'input compréhensible avec Gummely",
-                footerContact: "Contact",
-                footerLegal: "Légal",
-                footerPrivacy: "Politique de confidentialité",
-                footerTerms: "Conditions d'utilisation",
-                footerFollow: "Suivez-nous",
-                footerRights: "Tous droits réservés."
-            },
-            it: {
-                heroTitle: "Impara le lingue come hai imparato la tua prima",
-                heroSubtitle: "Padroneggia qualsiasi lingua in modo naturale con input comprensibile potenziato dall'IA — senza esercizi di grammatica, senza memorizzazione. Inizia a parlare con sicurezza.",
-                downloadIos: "Scarica per iOS",
-                downloadAndroid: "Scarica per Android",
-                socialProofTitle: "Scelto da studenti di lingue in tutto il mondo",
-                testimonial1: "Ho provato innumerevoli app, ma Gummely ha reso l'apprendimento dello spagnolo un gioco da ragazzi. I testi personalizzati mi hanno tenuto impegnato e sono stupito di quanto velocemente sia cresciuto il mio vocabolario!",
-                user1: "Jamie L.",
-                testimonial2: "La codifica a colori e le funzioni audio mi hanno aiutato a concentrarmi sulle nuove parole mentre mi godevo il contenuto. Ora mi sento più sicuro a leggere in francese!",
-                user2: "Alex M.",
-                testimonial3: "Per una persona che si lascia facilmente intimidire dalle regole grammaticali, Gummely è stata una svolta. Sto imparando il tedesco in un modo che sembra naturale e divertente.",
-                user3: "Sam K.",
-                scienceTitle: "La scienza dell'acquisizione naturale del linguaggio",
-                science1Title: "L'ipotesi dell'input di Krashen: il tuo \"i+1\"",
-                science1Desc: "Il nostro metodo si basa sulla teoria del linguista Stephen Krashen secondo cui acquisiamo meglio la lingua quando riceviamo un \"input comprensibile\" che è solo un passo oltre il nostro livello attuale (i+1). L'IA di Gummely ti assicura di essere sempre in questa zona di apprendimento ottimale — stimolato, ma mai sopraffatto.",
-                science2Title: "Copertura lessicale ottimale per la lettura",
-                science2Desc: "La ricerca mostra che per leggere e comprendere comodamente un testo, è necessario conoscere circa il 95-98% delle parole. La nostra IA personalizza i contenuti per raggiungere questa soglia, permettendoti di dedurre il significato di nuove parole dal contesto, il che migliora notevolmente la ritenzione.",
-                howTitle: "Come funziona Gummely per te",
-                how1Title: "Contenuti personalizzati",
-                how1Desc: "La nostra IA analizza il tuo vocabolario e fornisce testi e chat con il 90-98% di parole che già conosci, creando l'ambiente di apprendimento perfetto.",
-                how2Title: "Apprendimento interattivo",
-                how2Desc: "Vedi una parola in viola (sconosciuta) o arancione (in apprendimento)? Basta toccarla per una traduzione istantanea e aggiungerla al tuo mazzo di flashcard personale.",
-                how3Title: "Pratica multimodale",
-                how3Desc: "Rafforza ciò che hai imparato ascoltando il testo con la nostra funzione di sintesi vocale integrata, migliorando contemporaneamente la pronuncia e le capacità di ascolto.",
-                demoTitle: "Sperimenta la magia di Gummely",
-                demoDesc: "Curioso di sapere come ci si sente? Fai un quiz di vocabolario di 1 minuto per scoprire il tuo livello, poi fai una breve chiacchierata con la nostra IA. Guarda come si adatta a te in tempo reale — nessun download richiesto.",
-                demoButton: "Inizia la demo di 1 minuto",
-                languagesTitle: "Impara 11 lingue e altre ancora",
-                langEnglish: "Inglese",
-                langGerman: "Tedesco",
-                langFrench: "Francese",
-                langSpanish: "Spagnolo",
-                langItalian: "Italiano",
-                langJapanese: "Giapponese",
-                langKorean: "Coreano",
-                langPortuguese: "Portoghese",
-                langRussian: "Russo",
-                langChineseSimp: "Cinese (Semp)",
-                langChineseTrad: "Cinese (Trad)",
-                whyTitle: "Perché scegliere Gummely?",
-                feature1Title: "Metodo scientificamente provato",
-                feature1Desc: "Basato sull'ipotesi dell'input di Krashen. Contenuti con il 90-98% di parole conosciute ti mantengono nella zona di apprendimento ottimale: stimolante ma mai opprimente.",
-                feature2Title: "Apprendimento con codice colore",
-                feature2Desc: "Le parole sconosciute appaiono in viola, le parole in apprendimento in arancione. Clicca su qualsiasi parola per la traduzione istantanea e aggiungila al tuo mazzo di flashcard personalizzato.",
-                feature3Title: "Contenuti immersivi",
-                feature3Desc: "Leggi testi su misura e chatta con i bot IA. La sintesi vocale integrata migliora la pronuncia mentre costruisci il vocabolario in modo naturale attraverso il contesto.",
-                pricingTitle: "Prezzi semplici e trasparenti",
-                pricingSubtitle: "Inizia oggi il tuo viaggio di apprendimento delle lingue",
-                pricingWeekly: "Settimanale",
-                pricingPerWeek: "a settimana",
-                pricingMonthly: "Mensile",
-                pricingPerMonth: "al mese",
-                pricingSave: "Risparmia il 25%",
-                bestValue: "MIGLIOR VALORE",
-                experienceTitle: "Prova Gummely",
-                experienceDesc: "Sperimenta un input comprensibile che si adatta al tuo livello, proprio come hai imparato la tua prima lingua.",
-                ctaTitle: "Pronto a imparare in modo naturale?",
-                ctaDesc: "Unisciti a migliaia di persone che scoprono il potere dell'input comprensibile con Gummely",
-                footerContact: "Contatti",
-                footerLegal: "Legale",
-                footerPrivacy: "Informativa sulla privacy",
-                footerTerms: "Termini di servizio",
-                footerFollow: "Seguici",
-                footerRights: "Tutti i diritti riservati."
-            },
-            pt: {
-                heroTitle: "Aprenda idiomas da maneira como aprendeu o seu primeiro",
-                heroSubtitle: "Domine qualquer idioma naturalmente com input compreensível alimentado por IA — sem exercícios de gramática, sem memorização. Comece a falar com confiança.",
-                downloadIos: "Baixar para iOS",
-                downloadAndroid: "Baixar para Android",
-                socialProofTitle: "Aprovado por estudantes de idiomas em todo o mundo",
-                testimonial1: "Já tentei inúmeros aplicativos, mas o Gummely fez com que aprender espanhol parecesse fácil. Os textos personalizados me mantiveram engajado, e estou impressionado com a rapidez com que meu vocabulário cresceu!",
-                user1: "Jamie L.",
-                testimonial2: "A codificação por cores e os recursos de áudio me ajudaram a focar em novas palavras enquanto aproveitava o conteúdo. Sinto-me mais confiante lendo em francês agora!",
-                user2: "Alex M.",
-                testimonial3: "Como alguém que se intimida facilmente com regras gramaticais, o Gummely foi um divisor de águas. Estou aprendendo alemão de uma forma que parece natural e divertida.",
-                user3: "Sam K.",
-                scienceTitle: "A Ciência da Aquisição Natural de Linguagem",
-                science1Title: "A Hipótese do Input de Krashen: Seu \"i+1\"",
-                science1Desc: "Nosso método é construído sobre a teoria do linguista Stephen Krashen de que adquirimos melhor a linguagem quando recebemos \"input compreensível\" que está apenas um passo além do nosso nível atual (i+1). A IA do Gummely garante que você esteja sempre nesta zona de aprendizado ideal — desafiado, mas nunca sobrecarregado.",
-                science2Title: "Cobertura lexical ideal para leitura",
-                science2Desc: "Pesquisas mostram que, para ler e entender confortavelmente um texto, você precisa conhecer cerca de 95-98% das palavras. Nossa IA personaliza o conteúdo para atingir esse limiar, permitindo que você infira o significado de novas palavras a partir do contexto, o que melhora drasticamente a retenção.",
-                howTitle: "Como o Gummely funciona para você",
-                how1Title: "Conteúdo Personalizado",
-                how1Desc: "Nossa IA analisa seu vocabulário e entrega textos e chats com 90-98% de palavras que você já conhece, criando o ambiente de aprendizado perfeito.",
-                how2Title: "Aprendizagem Interativa",
-                how2Desc: "Viu uma palavra em roxo (desconhecida) ou laranja (em aprendizado)? Basta tocar nela para uma tradução instantânea e adicioná-la ao seu baralho de flashcards pessoal.",
-                how3Title: "Prática Multimodal",
-                how3Desc: "Reforce o que você aprendeu ouvindo o texto com nosso recurso integrado de conversão de texto em fala, melhorando sua pronúncia e habilidades de escuta simultaneamente.",
-                demoTitle: "Experimente a Magia do Gummely",
-                demoDesc: "Curioso para saber como é? Faça um teste de vocabulário de 1 minuto para encontrar seu nível e, em seguida, converse um pouco com nossa IA. Veja como ela se adapta a você em tempo real — sem necessidade de download.",
-                demoButton: "Iniciar a Demonstração de 1 Minuto",
-                languagesTitle: "Aprenda 11 idiomas e contando",
-                langEnglish: "Inglês",
-                langGerman: "Alemão",
-                langFrench: "Francês",
-                langSpanish: "Espanhol",
-                langItalian: "Italiano",
-                langJapanese: "Japonês",
-                langKorean: "Coreano",
-                langPortuguese: "Português",
-                langRussian: "Russo",
-                langChineseSimp: "Chinês (Simp)",
-                langChineseTrad: "Chinês (Trad)",
-                whyTitle: "Por que escolher o Gummely?",
-                feature1Title: "Método com base científica",
-                feature1Desc: "Baseado na Hipótese de Entrada de Krashen. O conteúdo com 90-98% de palavras conhecidas mantém você na zona de aprendizado ideal: desafiador, mas nunca avassalador.",
-                feature2Title: "Aprendizagem codificada por cores",
-                feature2Desc: "Palavras desconhecidas aparecem em roxo, palavras em aprendizado em laranja. Clique em qualquer palavra para tradução instantânea e adicione ao seu baralho de cartões de memória personalizado.",
-                feature3Title: "Conteúdo imersivo",
-                feature3Desc: "Leia textos personalizados e converse com bots de IA. A conversão de texto em fala integrada melhora a pronúncia enquanto você constrói vocabulário naturalmente através do contexto.",
-                pricingTitle: "Preços simples e transparentes",
-                pricingSubtitle: "Comece sua jornada de aprendizado de idiomas hoje",
-                pricingWeekly: "Semanal",
-                pricingPerWeek: "por semana",
-                pricingMonthly: "Mensal",
-                pricingPerMonth: "por mês",
-                pricingSave: "Economize 25%",
-                bestValue: "MELHOR VALOR",
-                experienceTitle: "Experimente o Gummely",
-                experienceDesc: "Experimente um input compreensível que se adapta ao seu nível - assim como você aprendeu sua primeira língua.",
-                ctaTitle: "Pronto para aprender naturalmente?",
-                ctaDesc: "Junte-se a milhares descobrindo o poder do input compreensível com Gummely",
-                footerContact: "Contato",
-                footerLegal: "Legal",
-                footerPrivacy: "Política de Privacidade",
-                footerTerms: "Termos de Serviço",
-                footerFollow: "Siga-nos",
-                footerRights: "Todos os direitos reservados."
-            },
-            ru: {
-                heroTitle: "Изучайте языки так, как вы выучили свой первый",
-                heroSubtitle: "Осваивайте любой язык естественным образом с помощью понятного ввода на базе ИИ — без грамматических упражнений и запоминания. Начните говорить уверенно.",
-                downloadIos: "Скачать для iOS",
-                downloadAndroid: "Скачать для Android",
-                socialProofTitle: "Нам доверяют изучающие языки по всему миру",
-                testimonial1: "Я пробовал бесчисленное количество приложений, но с Gummely изучение испанского стало легким. Персонализированные тексты поддерживали мой интерес, и я поражен, как быстро вырос мой словарный запас!",
-                user1: "Джейми Л.",
-                testimonial2: "Цветовая кодировка и аудиофункции помогли мне сосредоточиться на новых словах, наслаждаясь контентом. Теперь я чувствую себя увереннее, читая по-французски!",
-                user2: "Алекс М.",
-                testimonial3: "Для человека, которого легко пугают грамматические правила, Gummely стал настоящим прорывом. Я изучаю немецкий язык естественным и увлекательным способом.",
-                user3: "Сэм К.",
-                scienceTitle: "Наука о естественном овладении языком",
-                science1Title: "Гипотеза ввода Крашена: Ваше \"i+1\"",
-                science1Desc: "Наш метод основан на теории лингвиста Стивена Крашена о том, что мы лучше всего усваиваем язык, когда получаем \"понятный ввод\", который находится всего на один шаг выше нашего текущего уровня (i+1). ИИ Gummely гарантирует, что вы всегда будете находиться в этой оптимальной зоне обучения — это будет сложно, но не непосильно.",
-                science2Title: "Оптимальный лексический охват для чтения",
-                science2Desc: "Исследования показывают, что для комфортного чтения и понимания текста необходимо знать около 95-98% слов. Наш ИИ персонализирует контент для достижения этого порога, позволяя вам выводить значение новых слов из контекста, что значительно улучшает запоминание.",
-                howTitle: "Как Gummely работает для вас",
-                how1Title: "Персонализированный контент",
-                how1Desc: "Наш ИИ анализирует ваш словарный запас и предоставляет тексты и чаты, содержащие 90-98% уже известных вам слов, создавая идеальную среду для обучения.",
-                how2Title: "Интерактивное обучение",
-                how2Desc: "Видите слово фиолетового (неизвестное) или оранжевого (изучаемое) цвета? Просто нажмите на него для мгновенного перевода и добавьте в свою личную колоду карточек.",
-                how3Title: "Мультимодальная практика",
-                how3Desc: "Закрепляйте изученное, слушая текст с помощью нашей встроенной функции преобразования текста в речь, одновременно улучшая произношение и навыки аудирования.",
-                demoTitle: "Испытайте магию Gummely",
-                demoDesc: "Хотите узнать, каково это? Пройдите 1-минутный тест на словарный запас, чтобы определить свой уровень, а затем коротко пообщайтесь с нашим ИИ. Посмотрите, как он адаптируется к вам в реальном времени — загрузка не требуется.",
-                demoButton: "Начать 1-минутную демонстрацию",
-                languagesTitle: "Изучайте 11 языков, и это не предел",
-                langEnglish: "Английский",
-                langGerman: "Немецкий",
-                langFrench: "Французский",
-                langSpanish: "Испанский",
-                langItalian: "Итальянский",
-                langJapanese: "Японский",
-                langKorean: "Корейский",
-                langPortuguese: "Португальский",
-                langRussian: "Русский",
-                langChineseSimp: "Китайский (упр.)",
-                langChineseTrad: "Китайский (трад.)",
-                whyTitle: "Почему стоит выбрать Gummely?",
-                feature1Title: "Научно обоснованный метод",
-                feature1Desc: "Основано на гипотезе входных данных Крашена. Содержание, содержащее 90-98% известных слов, удерживает вас в оптимальной зоне обучения — сложно, но никогда не ошеломляюще.",
-                feature2Title: "Обучение с цветовой кодировкой",
-                feature2Desc: "Незнакомые слова отображаются фиолетовым цветом, изучаемые слова - оранжевым. Нажмите на любое слово для мгновенного перевода и добавьте его в свою персональную колоду карточек.",
-                feature3Title: "Иммерсивный контент",
-                feature3Desc: "Читайте специально подобранные тексты и общайтесь с ботами ИИ. Встроенный синтезатор речи улучшает произношение, пока вы естественным образом пополняете словарный запас через контекст.",
-                pricingTitle: "Простые и прозрачные цены",
-                pricingSubtitle: "Начните свое путешествие по изучению языка сегодня",
-                pricingWeekly: "Еженедельно",
-                pricingPerWeek: "в неделю",
-                pricingMonthly: "Ежемесячно",
-                pricingPerMonth: "в месяц",
-                pricingSave: "Экономия 25%",
-                bestValue: "ЛУЧШАЯ ЦЕНА",
-                experienceTitle: "Попробуйте Gummely",
-                experienceDesc: "Испытайте понятный ввод, который адаптируется к вашему уровню — так же, как вы учили свой первый язык.",
-                ctaTitle: "Готовы учиться естественно?",
-                ctaDesc: "Присоединяйтесь к тысячам, открывающим для себя силу понятного ввода с Gummely",
-                footerContact: "Контакты",
-                footerLegal: "Юридическая информация",
-                footerPrivacy: "Политика конфиденциальности",
-                footerTerms: "Условия использования",
-                footerFollow: "Следите за нами",
-                footerRights: "Все права защищены."
-            },
-            ja: {
-                heroTitle: "母国語を学んだ方法で言語を学ぶ",
-                heroSubtitle: "AIを活用した理解可能なインプットで、文法の練習や暗記なしに、どんな言語でも自然にマスターできます。自信を持って話し始めましょう。",
-                downloadIos: "iOS版をダウンロード",
-                downloadAndroid: "Android版をダウンロード",
-                socialProofTitle: "世界中の言語学習者から信頼されています",
-                testimonial1: "数え切れないほどのアプリを試しましたが、Gummelyはスペイン語学習を楽にしてくれました。パーソナライズされたテキストは私を夢中にさせ、語彙がこんなに早く増えたことに驚いています！",
-                user1: "ジェイミー L.",
-                testimonial2: "色分けと音声機能のおかげで、コンテンツを楽しみながら新しい単語に集中できました。今ではフランス語を読むことに自信が持てます！",
-                user2: "アレックス M.",
-                testimonial3: "文法規則に怖気づきやすい私にとって、Gummelyは画期的でした。自然で楽しい方法でドイツ語を学んでいます。",
-                user3: "サム K.",
-                scienceTitle: "自然言語習得の科学",
-                science1Title: "クラッシェンのインプット仮説：あなたの「i+1」",
-                science1Desc: "私たちのメソッドは、言語学者スティーブン・クラッシェンの理論に基づいています。それは、現在のレベルより一段階だけ進んだ「理解可能なインプット」（i+1）を受け取るときに、言語を最もよく習得できるというものです。GummelyのAIは、あなたが常にこの最適な学習ゾーンにいることを保証します。挑戦的でありながら、決して圧倒されることはありません。",
-                science2Title: "読解のための最適な語彙カバー率",
-                science2Desc: "研究によると、テキストを快適に読んで理解するためには、単語の約95〜98％を知っている必要があります。私たちのAIは、このしきい値を満たすようにコンテンツをパーソナライズし、文脈から新しい単語の意味を推測できるようにすることで、記憶の定着を劇的に向上させます。",
-                howTitle: "Gummelyがあなたのためにどのように機能するか",
-                how1Title: "パーソナライズされたコンテンツ",
-                how1Desc: "私たちのAIがあなたの語彙を分析し、あなたがすでに知っている単語を90〜98％含むテキストやチャットを提供し、完璧な学習環境を作り出します。",
-                how2Title: "インタラクティブな学習",
-                how2Desc: "紫（未知）またはオレンジ（学習中）の単語を見ましたか？タップするだけで即座に翻訳し、個人用のフラッシュカードデッキに追加できます。",
-                how3Title: "マルチモーダルな練習",
-                how3Desc: "統合されたテキスト読み上げ機能でテキストを聞いて学んだことを強化し、発音とリスニングスキルを同時に向上させます。",
-                demoTitle: "Gummelyマジックを体験してください",
-                demoDesc: "どんな感じか気になりますか？1分間の語彙クイズであなたのレベルを見つけ、AIと短いチャットをしてみてください。ダウンロード不要で、リアルタイムであなたに適応する様子をご覧ください。",
-                demoButton: "1分間のデモを開始",
-                languagesTitle: "11言語以上を学べます",
-                langEnglish: "英語",
-                langGerman: "ドイツ語",
-                langFrench: "フランス語",
-                langSpanish: "スペイン語",
-                langItalian: "イタリア語",
-                langJapanese: "日本語",
-                langKorean: "韓国語",
-                langPortuguese: "ポルトガル語",
-                langRussian: "ロシア語",
-                langChineseSimp: "中国語（簡体）",
-                langChineseTrad: "中国語（繁体）",
-                whyTitle: "なぜGummelyを選ぶのか？",
-                feature1Title: "科学に裏付けられた方法",
-                feature1Desc: "クラッシェンのインプット仮説に基づいています。既知の単語が90〜98％のコンテンツは、あなたを最適な学習ゾーンに保ちます。挑戦的ですが、決して圧倒的ではありません。",
-                feature2Title: "色分けされた学習",
-                feature2Desc: "未知の単語は紫色で、学習中の単語はオレンジ色で表示されます。単語をクリックするとすぐに翻訳され、パーソナライズされたフラッシュカードデッキに追加できます。",
-                feature3Title: "没入型コンテンツ",
-                feature3Desc: "カスタマイズされたテキストを読んだり、AIボットとチャットしたりできます。統合されたテキスト読み上げ機能により、文脈を通じて自然に語彙を増やしながら発音を向上させます。",
-                pricingTitle: "シンプルで透明な価格設定",
-                pricingSubtitle: "今日から言語学習の旅を始めましょう",
-                pricingWeekly: "週次",
-                pricingPerWeek: "週あたり",
-                pricingMonthly: "月次",
-                pricingPerMonth: "月あたり",
-                pricingSave: "25%割引",
-                bestValue: "お得",
-                experienceTitle: "Gummelyを体験する",
-                experienceDesc: "あなたが最初の言語を学んだときのように、あなたのレベルに適応する理解可能な入力を体験してください。",
-                ctaTitle: "自然に学ぶ準備はできましたか？",
-                ctaDesc: "Gummelyで理解可能なインプットの力を発見している何千人もの人々に加わってください",
-                footerContact: "お問い合わせ",
-                footerLegal: "法的情報",
-                footerPrivacy: "プライバシーポリシー",
-                footerTerms: "利用規約",
-                footerFollow: "フォローする",
-                footerRights: "無断複写・転載を禁じます。"
-            },
-            ko: {
-                heroTitle: "모국어를 배웠던 방식으로 언어를 배우세요",
-                heroSubtitle: "AI 기반의 이해 가능한 입력으로 문법 훈련이나 암기 없이 자연스럽게 모든 언어를 마스터하세요. 자신감을 갖고 말하기 시작하세요.",
-                downloadIos: "iOS용 다운로드",
-                downloadAndroid: "Android용 다운로드",
-                socialProofTitle: "전 세계 언어 학습자들이 신뢰합니다",
-                testimonial1: "수많은 앱을 사용해봤지만, Gummely는 스페인어 학습을 수월하게 만들어줬어요. 맞춤형 텍스트는 저를 계속 몰입하게 했고, 제 어휘력이 얼마나 빨리 늘었는지 놀라워요!",
-                user1: "제이미 L.",
-                testimonial2: "색상 코딩과 오디오 기능 덕분에 콘텐츠를 즐기면서 새로운 단어에 집중할 수 있었어요. 이제 프랑스어를 읽는 데 더 자신감이 생겼어요!",
-                user2: "알렉스 M.",
-                testimonial3: "문법 규칙에 쉽게 겁을 먹는 저 같은 사람에게 Gummely는 게임 체인저였어요. 자연스럽고 재미있는 방식으로 독일어를 배우고 있어요.",
-                user3: "샘 K.",
-                scienceTitle: "자연스러운 언어 습득의 과학",
-                science1Title: "크라센의 입력 가설: 당신의 \"i+1\"",
-                science1Desc: "우리의 방법은 언어학자 스티븐 크라센의 이론에 기반을 두고 있습니다. 즉, 현재 수준보다 한 단계 높은 '이해 가능한 입력'(i+1)을 받을 때 언어를 가장 잘 습득한다는 것입니다. Gummely의 AI는 당신이 항상 이 최적의 학습 영역에 있도록 보장합니다. 도전적이지만 결코 벅차지 않습니다.",
-                science2Title: "읽기를 위한 최적의 어휘 범위",
-                science2Desc: "연구에 따르면 텍스트를 편안하게 읽고 이해하려면 단어의 약 95-98%를 알아야 합니다. 우리의 AI는 이 기준을 충족하도록 콘텐츠를 개인화하여 문맥에서 새로운 단어의 의미를 추론할 수 있게 함으로써 기억력을 극적으로 향상시킵니다.",
-                howTitle: "Gummely가 당신을 위해 작동하는 방식",
-                how1Title: "맞춤형 콘텐츠",
-                how1Desc: "우리의 AI는 당신의 어휘를 분석하여 당신이 이미 알고 있는 단어가 90-98% 포함된 텍스트와 채팅을 제공하여 완벽한 학습 환경을 만듭니다.",
-                how2Title: "인터랙티브 학습",
-                how2Desc: "보라색(모르는 단어)이나 주황색(학습 중인 단어) 단어가 보이시나요? 탭 한 번으로 즉시 번역하고 개인 플래시카드 덱에 추가하세요.",
-                how3Title: "다중 모드 연습",
-                how3Desc: "내장된 텍스트 음성 변환 기능으로 텍스트를 들으며 배운 것을 강화하고, 발음과 듣기 능력을 동시에 향상시키세요.",
-                demoTitle: "Gummely의 마법을 경험하세요",
-                demoDesc: "어떤 느낌인지 궁금하신가요? 1분 어휘 퀴즈로 당신의 수준을 확인한 다음, 저희 AI와 짧은 대화를 나눠보세요. 다운로드 없이 실시간으로 당신에게 맞춰지는 것을 확인하세요.",
-                demoButton: "1분 데모 시작하기",
-                languagesTitle: "11개 이상의 언어를 배우세요",
-                langEnglish: "영어",
-                langGerman: "독일어",
-                langFrench: "프랑스어",
-                langSpanish: "스페인어",
-                langItalian: "이탈리아어",
-                langJapanese: "일본어",
-                langKorean: "한국어",
-                langPortuguese: "포르투갈어",
-                langRussian: "러시아어",
-                langChineseSimp: "중국어(간체)",
-                langChineseTrad: "중국어(번체)",
-                whyTitle: "왜 Gummely를 선택해야 할까요?",
-                feature1Title: "과학 기반의 방법",
-                feature1Desc: "크라센의 입력 가설에 기반합니다. 90-98%의 아는 단어로 구성된 콘텐츠는 당신을 최적의 학습 구역에 머물게 합니다. 도전적이지만 결코 벅차지 않습니다.",
-                feature2Title: "색상으로 구분된 학습",
-                feature2Desc: "모르는 단어는 보라색으로, 배우는 단어는 주황색으로 나타납니다. 단어를 클릭하여 즉시 번역하고 개인화된 플래시카드 덱에 추가하세요.",
-                feature3Title: "몰입형 콘텐츠",
-                feature3Desc: "맞춤형 텍스트를 읽고 AI 봇과 채팅하세요. 통합된 텍스트 음성 변환 기능은 문맥을 통해 자연스럽게 어휘를 습득하면서 발음을 향상시킵니다.",
-                pricingTitle: "간단하고 투명한 가격",
-                pricingSubtitle: "오늘 언어 학습 여정을 시작하세요",
-                pricingWeekly: "주간",
-                pricingPerWeek: "주당",
-                pricingMonthly: "월간",
-                pricingPerMonth: "월당",
-                pricingSave: "25% 할인",
-                bestValue: "최고의 가치",
-                experienceTitle: "Gummely 경험하기",
-                experienceDesc: "마치 모국어를 배울 때처럼, 당신의 수준에 맞는 이해 가능한 입력을 경험해보세요.",
-                ctaTitle: "자연스럽게 배울 준비가 되셨나요?",
-                ctaDesc: "Gummely와 함께 이해 가능한 입력의 힘을 발견하는 수천 명과 함께하세요",
-                footerContact: "연락처",
-                footerLegal: "법률",
-                footerPrivacy: "개인정보 처리방침",
-                footerTerms: "서비스 약관",
-                footerFollow: "팔로우하기",
-                footerRights: "모든 권리 보유."
-            },
-            'zh-CN': {
-                heroTitle: "像学母语一样学语言",
-                heroSubtitle: "借助人工智能驱动的可理解输入法，自然掌握任何语言——无需语法训练，无需死记硬背。自信开口说。",
-                downloadIos: "下载iOS版",
-                downloadAndroid: "下载Android版",
-                socialProofTitle: "深受全球语言学习者的信赖",
-                testimonial1: "我试过无数的应用程序，但Gummely让学习西班牙语变得毫不费力。个性化的文本让我保持参与，我的词汇量增长之快令我惊讶！",
-                user1: "杰米 L.",
-                testimonial2: "颜色编码和音频功能帮助我在享受内容的同时专注于新单词。我现在读法语更有信心了！",
-                user2: "亚历克斯 M.",
-                testimonial3: "作为一个容易被语法规则吓倒的人，Gummely改变了游戏规则。我正在以一种感觉自然有趣的方式学习德语。",
-                user3: "萨姆 K.",
-                scienceTitle: "自然语言习得的科学",
-                science1Title: "克拉申的输入假说：你的“i+1”",
-                science1Desc: "我们的方法建立在语言学家斯蒂芬·克拉申的理论之上，即当我们接收到比当前水平（i+1）仅高一步的“可理解输入”时，我们能最好地习得语言。Gummely的人工智能确保您始终处于这个最佳学习区——充满挑战，但从不让人不知所措。",
-                science2Title: "阅读的最佳词汇覆盖率",
-                science2Desc: "研究表明，要舒适地阅读和理解一篇文章，您需要认识大约95-98%的单词。我们的人工智能会个性化内容以达到这个阈值，让您能从上下文中推断新词的含义，从而极大地提高记忆力。",
-                howTitle: "Gummely如何为您服务",
-                how1Title: "个性化内容",
-                how1Desc: "我们的AI会分析您的词汇量，并提供包含90-98%您已知单词的文本和聊天，创造完美的学习环境。",
-                how2Title: "互动学习",
-                how2Desc: "看到紫色（未知）或橙色（学习中）的单词？只需点击它即可即时翻译，并将其添加到您的个人闪卡组中。",
-                how3Title: "多模式练习",
-                how3Desc: "通过我们集成的文本转语音功能听课文，巩固所学知识，同时提高您的发音和听力技巧。",
-                demoTitle: "体验Gummely的魔力",
-                demoDesc: "好奇感觉如何？参加一个1分钟的词汇测验来找到您的水平，然后与我们的AI进行简短聊天。看看它如何实时适应您——无需下载。",
-                demoButton: "开始1分钟演示",
-                languagesTitle: "学习11种语言并不断增加",
-                langEnglish: "英语",
-                langGerman: "德语",
-                langFrench: "法语",
-                langSpanish: "西班牙语",
-                langItalian: "意大利语",
-                langJapanese: "日语",
-                langKorean: "韩语",
-                langPortuguese: "葡萄牙语",
-                langRussian: "俄语",
-                langChineseSimp: "简体中文",
-                langChineseTrad: "繁体中文",
-                whyTitle: "为什么选择 Gummely？",
-                feature1Title: "科学支持的方法",
-                feature1Desc: "基于克拉申的输入假说。包含90-98%已知单词的内容让您处于最佳学习区——充满挑战但从不令人不知所措。",
-                feature2Title: "颜色编码学习",
-                feature2Desc: "未知单词以紫色显示，学习中单词以橙色显示。点击任何单词即可即时翻译并添加到您的个性化闪卡组中。",
-                feature3Title: "沉浸式内容",
-                feature3Desc: "阅读量身定制的文本并与AI机器人聊天。集成的文本转语音功能在您通过上下文自然建立词汇的同时提高发音。",
-                pricingTitle: "简单透明的定价",
-                pricingSubtitle: "今天就开始您的语言学习之旅",
-                pricingWeekly: "每周",
-                pricingPerWeek: "每周",
-                pricingMonthly: "每月",
-                pricingPerMonth: "每月",
-                pricingSave: "节省25%",
-                bestValue: "最佳价值",
-                experienceTitle: "体验Gummely",
-                experienceDesc: "体验适合您水平的可理解输入——就像您学习第一语言一样。",
-                ctaTitle: "准备好自然学习了吗？",
-                ctaDesc: "加入成千上万的行列，与Gummely一起发现可理解输入的强大功能",
-                footerContact: "联系我们",
-                footerLegal: "法律",
-                footerPrivacy: "隐私政策",
-                footerTerms: "服务条款",
-                footerFollow: "关注我们",
-                footerRights: "版权所有。"
-            },
-            'zh-TW': {
-                heroTitle: "像學母語一樣學語言",
-                heroSubtitle: "借助人工智能驅動的可理解輸入法，自然掌握任何語言——無需語法訓練，無需死記硬背。自信開口說。",
-                downloadIos: "下載iOS版",
-                downloadAndroid: "下載Android版",
-                socialProofTitle: "深受全球語言學習者的信賴",
-                testimonial1: "我試過無數的應用程式，但Gummely讓學習西班牙語變得毫不費力。個人化的文本讓我保持參與，我的詞彙量增長之快令我驚訝！",
-                user1: "潔米 L.",
-                testimonial2: "顏色編碼和音訊功能幫助我在享受內容的同時專注於新單字。我現在讀法語更有信心了！",
-                user2: "亞歷克斯 M.",
-                testimonial3: "作為一個容易被語法規則嚇倒的人，Gummely改變了遊戲規則。我正在以一種感覺自然有趣的方式學習德語。",
-                user3: "薩姆 K.",
-                scienceTitle: "自然語言習得的科學",
-                science1Title: "克拉申的輸入假說：您的「i+1」",
-                science1Desc: "我們的方法建立在語言學家史蒂芬·克拉申的理論之上，即當我們接收到比當前水平（i+1）僅高一步的「可理解輸入」時，我們能最好地習得語言。Gummely的人工智能確保您始終處於這個最佳學習區——充滿挑戰，但從不讓人不知所措。",
-                science2Title: "閱讀的最佳詞彙覆蓋率",
-                science2Desc: "研究表明，要舒適地閱讀和理解一篇文章，您需要認識大約95-98%的單字。我們的人工智能會個人化內容以達到這個閾值，讓您能從上下文中推斷新詞的含義，從而極大地提高記憶力。",
-                howTitle: "Gummely如何為您服務",
-                how1Title: "個人化內容",
-                how1Desc: "我們的AI會分析您的詞彙量，並提供包含90-98%您已知單字的文本和聊天，創造完美的學習環境。",
-                how2Title: "互動學習",
-                how2Desc: "看到紫色（未知）或橙色（學習中）的單字？只需點擊它即可即時翻譯，並將其新增至您的個人閃卡組中。",
-                how3Title: "多模式練習",
-                how3Desc: "透過我們整合的文字轉語音功能聽課文，鞏固所學知識，同時提高您的發音和聽力技巧。",
-                demoTitle: "體驗Gummely的魔力",
-                demoDesc: "好奇感覺如何？參加一個1分鐘的詞彙測驗來找到您的水平，然後與我們的AI進行簡短聊天。看看它如何即時適應您——無需下載。",
-                demoButton: "開始1分鐘演示",
-                languagesTitle: "學習11種語言並不斷增加",
-                langEnglish: "英語",
-                langGerman: "德語",
-                langFrench: "法語",
-                langSpanish: "西班牙語",
-                langItalian: "義大利語",
-                langJapanese: "日語",
-                langKorean: "韓語",
-                langPortuguese: "葡萄牙語",
-                langRussian: "俄語",
-                langChineseSimp: "簡體中文",
-                langChineseTrad: "繁體中文",
-                whyTitle: "為什麼選擇 Gummely？",
-                feature1Title: "科學支持的方法",
-                feature1Desc: "基於克拉申的輸入假說。包含90-98%已知單字的內容讓您處於最佳學習區——充滿挑戰但從不令人不知所措。",
-                feature2Title: "顏色編碼學習",
-                feature2Desc: "未知單字以紫色顯示，學習中單字以橙色顯示。點擊任何單字即可即時翻譯並新增至您的個人化閃卡組中。",
-                feature3Title: "沉浸式內容",
-                feature3Desc: "閱讀量身訂製的文本並與AI機器人聊天。整合的文字轉語音功能在您透過上下文自然建立詞彙的同時提高發音。",
-                pricingTitle: "簡單透明的定價",
-                pricingSubtitle: "今天就開始您的語言學習之旅",
-                pricingWeekly: "每週",
-                pricingPerWeek: "每週",
-                pricingMonthly: "每月",
-                pricingPerMonth: "每月",
-                pricingSave: "節省25%",
-                bestValue: "最佳價值",
-                experienceTitle: "體驗Gummely",
-                experienceDesc: "體驗適合您水平的可理解輸入——就像您學習第一語言一樣。",
-                ctaTitle: "準備好自然學習了嗎？",
-                ctaDesc: "加入成千上萬的行列，與Gummely一起發現可理解輸入的強大功能",
-                footerContact: "聯絡我們",
-                footerLegal: "法律",
-                footerPrivacy: "隱私權政策",
-                footerTerms: "服務條款",
-                footerFollow: "關注我們",
-                footerRights: "版權所有。"
-            }
-        };
+        document.addEventListener('DOMContentLoaded', () => {
 
-        const supportedLanguages = Object.keys(translations);
-        const langButtons = {};
-        supportedLanguages.forEach(lang => {
-            langButtons[lang] = document.getElementById(`lang-${lang}`);
-        });
-
-        const setLanguage = (language) => {
-            // Fallback to English if language is not supported
-            const langToSet = translations[language] ? language : 'en';
-
-            document.documentElement.lang = langToSet;
-            document.querySelectorAll('[data-translate-key]').forEach(element => {
-                const key = element.getAttribute('data-translate-key');
-                const translation = translations[langToSet]?.[key];
-                if (translation) {
-                    element.textContent = translation;
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
                 }
             });
 
-            const recommendedCard = document.querySelector('.pricing-card.recommended');
-            if (recommendedCard) {
-                const bestValueText = translations[langToSet]?.bestValue || 'BEST VALUE';
-                recommendedCard.setAttribute('data-best-value-text', bestValueText);
+            // --- On-Scroll Reveal Animation ---
+            const revealElements = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(el => {
+                observer.observe(el);
+            });
+
+            // --- Translation Logic ---
+            const translations = {
+                en: {
+                    heroTitle: "Learn Languages the Way You Learned Your First",
+                    heroSubtitle: "Master any language naturally with AI-powered comprehensible input—no grammar drills, no memorization. Start speaking with confidence.",
+                    downloadIos: "Download for iOS",
+                    downloadAndroid: "Download for Android",
+                    socialProofTitle: "Trusted by Language Learners Worldwide",
+                    testimonial1: "I’ve tried countless apps, but Gummely made learning Spanish feel effortless. The personalized texts kept me engaged, and I’m amazed at how quickly my vocabulary grew!",
+                    user1: "Jamie L.",
+                    testimonial2: "The color-coding and audio features helped me focus on new words while enjoying the content. I feel more confident reading French now!",
+                    user2: "Alex M.",
+                    testimonial3: "As someone who is easily intimidated by grammar rules, Gummely was a game-changer. I'm learning German in a way that feels natural and fun.",
+                    user3: "Sam K.",
+                    scienceTitle: "The Science of Natural Language Acquisition",
+                    science1Title: "Krashen's Input Hypothesis: Your \"i+1\"",
+                    science1Desc: "Our method is built on linguist Stephen Krashen's theory that we acquire language best when we receive \"comprehensible input\" that is just one step beyond our current level (i+1). Gummely’s AI ensures you’re always in this optimal learning zone—challenged, but never overwhelmed.",
+                    science2Title: "Optimal Lexical Coverage for Reading",
+                    science2Desc: "Research shows that to comfortably read and understand a text, you need to know about 95-98% of the words. Our AI personalizes content to meet this threshold, allowing you to infer the meaning of new words from context, which dramatically improves retention.",
+                    howTitle: "How Gummely Works for You",
+                    how1Title: "Personalized Content",
+                    how1Desc: "Our AI analyzes your vocabulary and delivers texts and chats with 90-98% of words you already know, creating the perfect learning environment.",
+                    how2Title: "Interactive Learning",
+                    how2Desc: "See a word in purple (unknown) or orange (learning)? Just tap on it for an instant translation and add it to your personal flashcard deck.",
+                    how3Title: "Multimodal Practice",
+                    how3Desc: "Reinforce what you've learned by listening to the text with our integrated text-to-speech feature, improving your pronunciation and listening skills simultaneously.",
+                    languagesTitle: "Learn 11+ Languages and Counting",
+                    langEnglish: "English",
+                    langGerman: "German",
+                    langFrench: "French",
+                    langSpanish: "Spanish",
+                    langItalian: "Italian",
+                    langJapanese: "Japanese",
+                    langKorean: "Korean",
+                    langPortuguese: "Portuguese",
+                    langRussian: "Russian",
+                    langChineseSimp: "Chinese (Simp)",
+                    langChineseTrad: "Chinese (Trad)",
+                    whyTitle: "Why Choose Gummely?",
+                    feature1Title: "Science-Backed Method",
+                    feature1Desc: "Based on Krashen's Input Hypothesis. Content with 90-98% known words keeps you in the optimal learning zone—challenging but never overwhelming.",
+                    feature2Title: "Color-Coded Learning",
+                    feature2Desc: "Unknown words appear in purple, learning words in orange. Click any word for instant translation and add to your personalized flashcard deck.",
+                    feature3Title: "Immersive Content",
+                    feature3Desc: "Read tailored texts and chat with AI bots. Integrated text-to-speech improves pronunciation while you build vocabulary naturally through context.",
+                    pricingTitle: "Simple, Transparent Pricing",
+                    pricingSubtitle: "Start your language learning journey today",
+                    pricingWeekly: "Weekly",
+                    pricingPerWeek: "per week",
+                    pricingMonthly: "Monthly",
+                    pricingPerMonth: "per month",
+                    pricingSave: "Save 25%",
+                    bestValue: "BEST VALUE",
+                    ctaTitle: "Ready to Learn Naturally?",
+                    ctaDesc: "Join thousands discovering the power of comprehensible input with Gummely.",
+                    footerContact: "Contact",
+                    footerLegal: "Legal",
+                    footerPrivacy: "Privacy Policy",
+                    footerTerms: "Terms of Service",
+                    footerFollow: "Follow Us",
+                    footerRights: "All rights reserved."
+                },
+                de: {
+                    heroTitle: "Lerne Sprachen, wie du deine erste gelernt hast",
+                    heroSubtitle: "Meistere jede Sprache auf natürliche Weise mit KI-gestütztem „Comprehensible Input“ – ohne Grammatikübungen, ohne Auswendiglernen. Sprich mit Selbstvertrauen.",
+                    downloadIos: "Für iOS herunterladen",
+                    downloadAndroid: "Für Android herunterladen",
+                    socialProofTitle: "Weltweites Vertrauen von Sprachlernern",
+                    testimonial1: "Ich habe unzählige Apps ausprobiert, aber mit Gummely fühlte sich das Spanischlernen mühelos an. Die personalisierten Texte fesselten mich und ich bin erstaunt, wie schnell mein Wortschatz wuchs!",
+                    user1: "Jamie L.",
+                    testimonial2: "Die Farbcodierung und die Audio-Funktionen halfen mir, mich auf neue Wörter zu konzentrieren, während ich den Inhalt genoss. Ich fühle mich jetzt viel sicherer beim Lesen auf Französisch!",
+                    user2: "Alex M.",
+                    testimonial3: "Als jemand, der sich leicht von Grammatikregeln einschüchtern lässt, war Gummely ein Wendepunkt. Ich lerne Deutsch auf eine Weise, die sich natürlich und unterhaltsam anfühlt.",
+                    user3: "Sam K.",
+                    scienceTitle: "Die Wissenschaft des natürlichen Spracherwerbs",
+                    science1Title: "Krashens Input-Hypothese: Dein „i+1“",
+                    science1Desc: "Unsere Methode basiert auf der Theorie des Linguisten Stephen Krashen, dass wir Sprache am besten erwerben, wenn wir „verständlichen Input“ erhalten, der nur einen Schritt über unserem aktuellen Niveau liegt (i+1). Die KI von Gummely stellt sicher, dass Sie sich immer in dieser optimalen Lernzone befinden – gefordert, aber nie überfordert.",
+                    science2Title: "Optimale lexikalische Abdeckung zum Lesen",
+                    science2Desc: "Die Forschung zeigt, dass man etwa 95-98% der Wörter kennen muss, um einen Text bequem lesen und verstehen zu können. Unsere KI personalisiert Inhalte, um diesen Schwellenwert zu erreichen, sodass Sie die Bedeutung neuer Wörter aus dem Kontext ableiten können, was die Merkfähigkeit drastisch verbessert.",
+                    howTitle: "So funktioniert Gummely für dich",
+                    how1Title: "Personalisierte Inhalte",
+                    how1Desc: "Unsere KI analysiert deinen Wortschatz und liefert Texte und Chats mit 90-98% bekannter Wörter, um die perfekte Lernumgebung zu schaffen.",
+                    how2Title: "Interaktives Lernen",
+                    how2Desc: "Siehst du ein Wort in Lila (unbekannt) oder Orange (im Lernprozess)? Tippe einfach darauf für eine sofortige Übersetzung und füge es zu deinem persönlichen Karteikartenset hinzu.",
+                    how3Title: "Multimodales Üben",
+                    how3Desc: "Verstärke das Gelernte, indem du den Text mit unserer integrierten Text-to-Speech-Funktion anhörst und so gleichzeitig deine Aussprache und dein Hörverständnis verbesserst.",
+                    languagesTitle: "Lerne 11+ Sprachen und mehr",
+                    langEnglish: "Englisch",
+                    langGerman: "Deutsch",
+                    langFrench: "Französisch",
+                    langSpanish: "Spanisch",
+                    langItalian: "Italienisch",
+                    langJapanese: "Japanisch",
+                    langKorean: "Koreanisch",
+                    langPortuguese: "Portugiesisch",
+                    langRussian: "Russisch",
+                    langChineseSimp: "Chinesisch (Ver.)",
+                    langChineseTrad: "Chinesisch (Trad.)",
+                    whyTitle: "Warum Gummely wählen?",
+                    feature1Title: "Wissenschaftlich fundierte Methode",
+                    feature1Desc: "Basierend auf Krashens Input-Hypothese. Inhalte mit 90-98 % bekannten Wörtern halten Sie in der optimalen Lernzone – herausfordernd, aber niemals überfordernd.",
+                    feature2Title: "Lernen mit Farbcodierung",
+                    feature2Desc: "Unbekannte Wörter erscheinen in Lila, zu lernende Wörter in Orange. Klicken Sie auf ein beliebiges Wort für eine sofortige Übersetzung und fügen Sie es Ihrem persönlichen Karteikartenstapel hinzu.",
+                    feature3Title: "Immersive Inhalte",
+                    feature3Desc: "Lesen Sie maßgeschneiderte Texte und chatten Sie mit KI-Bots. Integriertes Text-to-Speech verbessert die Aussprache, während Sie auf natürliche Weise Vokabeln im Kontext lernen.",
+                    pricingTitle: "Einfache, transparente Preise",
+                    pricingSubtitle: "Beginne noch heute deine Sprachlernreise",
+                    pricingWeekly: "Wöchentlich",
+                    pricingPerWeek: "pro Woche",
+                    pricingMonthly: "Monatlich",
+                    pricingPerMonth: "pro Monat",
+                    pricingSave: "25% sparen",
+                    bestValue: "BESTER PREIS",
+                    ctaTitle: "Bereit, natürlich zu lernen?",
+                    ctaDesc: "Schließen Sie sich Tausenden an und entdecken Sie die Kraft des verständlichen Inputs mit Gummely.",
+                    footerContact: "Kontakt",
+                    footerLegal: "Rechtliches",
+                    footerPrivacy: "Datenschutzrichtlinie",
+                    footerTerms: "Nutzungsbedingungen",
+                    footerFollow: "Folge uns",
+                    footerRights: "Alle Rechte vorbehalten."
+                },
+                es: {
+                    heroTitle: "Aprende idiomas como aprendiste el primero",
+                    heroSubtitle: "Domina cualquier idioma de forma natural con entrada comprensible impulsada por IA, sin ejercicios de gramática ni memorización. Empieza a hablar con confianza.",
+                    downloadIos: "Descargar para iOS",
+                    downloadAndroid: "Descargar para Android",
+                    socialProofTitle: "Con la confianza de estudiantes de idiomas de todo el mundo",
+                    testimonial1: "He probado innumerables aplicaciones, pero Gummely hizo que aprender español fuera fácil. Los textos personalizados me mantuvieron involucrado, ¡y me asombra lo rápido que creció mi vocabulario!",
+                    user1: "Jamie L.",
+                    testimonial2: "Las funciones de codificación de colores y audio me ayudaron a centrarme en palabras nuevas mientras disfrutaba del contenido. ¡Ahora me siento más seguro leyendo francés!",
+                    user2: "Alex M.",
+                    testimonial3: "Como alguien a quien las reglas gramaticales intimidan fácilmente, Gummely fue un cambio de juego. Estoy aprendiendo alemán de una manera que se siente natural y divertida.",
+                    user3: "Sam K.",
+                    scienceTitle: "La Ciencia de la Adquisición Natural del Lenguaje",
+                    science1Title: "La Hipótesis del Input de Krashen: Tu \"i+1\"",
+                    science1Desc: "Nuestro método se basa en la teoría del lingüista Stephen Krashen de que adquirimos el lenguaje mejor cuando recibimos \"input comprensible\" que está solo un paso más allá de nuestro nivel actual (i+1). La IA de Gummely asegura que siempre estés en esta zona de aprendizaje óptima—desafiado, pero nunca abrumado.",
+                    science2Title: "Cobertura Lexical Óptima para la Lectura",
+                    science2Desc: "La investigación muestra que para leer y entender cómodamente un texto, necesitas conocer aproximadamente el 95-98% de las palabras. Nuestra IA personaliza el contenido para cumplir con este umbral, permitiéndote inferir el significado de nuevas palabras a partir del contexto, lo que mejora drásticamente la retención.",
+                    howTitle: "Cómo Gummely funciona para ti",
+                    how1Title: "Contenido Personalizado",
+                    how1Desc: "Nuestra IA analiza tu vocabulario y entrega textos y chats con un 90-98% de palabras que ya conoces, creando el ambiente de aprendizaje perfecto.",
+                    how2Title: "Aprendizaje Interactivo",
+                    how2Desc: "¿Ves una palabra en morado (desconocida) o naranja (en aprendizaje)? Simplemente tócala para una traducción instantánea y añádela a tu mazo de tarjetas personal.",
+                    how3Title: "Práctica Multimodal",
+                    how3Desc: "Refuerza lo aprendido escuchando el texto con nuestra función de texto a voz integrada, mejorando tu pronunciación y tus habilidades de escucha simultáneamente.",
+                    languagesTitle: "Aprende más de 11 idiomas y contando",
+                    langEnglish: "Inglés",
+                    langGerman: "Alemán",
+                    langFrench: "Francés",
+                    langSpanish: "Español",
+                    langItalian: "Italiano",
+                    langJapanese: "Japonés",
+                    langKorean: "Coreano",
+                    langPortuguese: "Portugués",
+                    langRussian: "Ruso",
+                    langChineseSimp: "Chino (Simplificado)",
+                    langChineseTrad: "Chino (Tradicional)",
+                    whyTitle: "Por qué elegir Gummely?",
+                    feature1Title: "Método Basado en la Ciencia",
+                    feature1Desc: "Basado en la Hipótesis del Input de Krashen. El contenido con un 90-98% de palabras conocidas te mantiene en la zona de aprendizaje óptima, desafiante pero nunca abrumador.",
+                    feature2Title: "Aprendizaje Codificado por Colores",
+                    feature2Desc: "Las palabras desconocidas aparecen en morado, las palabras de aprendizaje en naranja. Haz clic en cualquier palabra para una traducción instantánea y añádela a tu mazo de tarjetas personalizado.",
+                    feature3Title: "Contenido Inmersivo",
+                    feature3Desc: "Lee textos personalizados y chatea con bots de IA. La función de texto a voz integrada mejora la pronunciación mientras construyes vocabulario de forma natural a través del contexto.",
+                    pricingTitle: "Precios Simples y Transparentes",
+                    pricingSubtitle: "Comienza hoy tu viaje de aprendizaje de idiomas",
+                    pricingWeekly: "Semanal",
+                    pricingPerWeek: "por semana",
+                    pricingMonthly: "Mensual",
+                    pricingPerMonth: "por mes",
+                    pricingSave: "Ahorra 25%",
+                    bestValue: "MEJOR VALOR",
+                    ctaTitle: "¿Listo para aprender de forma natural?",
+                    ctaDesc: "Únete a miles que descubren el poder del input comprensible con Gummely.",
+                    footerContact: "Contacto",
+                    footerLegal: "Legal",
+                    footerPrivacy: "Política de privacidad",
+                    footerTerms: "Términos de servicio",
+                    footerFollow: "Síguenos",
+                    footerRights: "Todos los derechos reservados."
+                },
+                fr: {
+                    heroTitle: "Apprenez les langues comme vous avez appris la vôtre",
+                    heroSubtitle: "Maîtrisez n'importe quelle langue naturellement avec l'input compréhensible alimenté par l'IA — pas de leçons de grammaire, pas de mémorisation. Commencez à parler avec confiance.",
+                    downloadIos: "Télécharger pour iOS",
+                    downloadAndroid: "Télécharger pour Android",
+                    socialProofTitle: "Reconnu par les apprenants de langues du monde entier",
+                    testimonial1: "J'ai essayé d'innombrables applications, mais Gummely a rendu l'apprentissage de l'espagnol sans effort. Les textes personnalisés m'ont gardé engagé, et je suis étonné de la rapidité avec laquelle mon vocabulaire a grandi !",
+                    user1: "Jamie L.",
+                    testimonial2: "Le codage couleur et les fonctions audio m'ont aidé à me concentrer sur les nouveaux mots tout en appréciant le contenu. Je me sens plus confiant en lisant le français maintenant !",
+                    user2: "Alex M.",
+                    testimonial3: "En tant que personne facilement intimidée par les règles de grammaire, Gummely a changé la donne. J'apprends l'allemand d'une manière qui semble naturelle et amusante.",
+                    user3: "Sam K.",
+                    scienceTitle: "La Science de l'Acquisition Naturelle du Langage",
+                    science1Title: "L'Hypothèse de l'Input de Krashen : Votre \"i+1\"",
+                    science1Desc: "Notre méthode est basée sur la théorie du linguiste Stephen Krashen selon laquelle nous acquérons mieux une langue lorsque nous recevons un \"input compréhensible\" qui n'est qu'un pas au-delà de notre niveau actuel (i+1). L'IA de Gummely vous assure d'être toujours dans cette zone d'apprentissage optimale — stimulant, mais jamais accablant.",
+                    science2Title: "Couverture Lexicale Optimale pour la Lecture",
+                    science2Desc: "La recherche montre que pour lire et comprendre confortablement un texte, vous devez connaître environ 95 à 98 % des mots. Notre IA personnalise le contenu pour atteindre ce seuil, vous permettant d'inférer le sens des nouveaux mots à partir du contexte, ce qui améliore considérablement la rétention.",
+                    howTitle: "Comment Gummely fonctionne pour vous",
+                    how1Title: "Contenu Personnalisé",
+                    how1Desc: "Notre IA analyse votre vocabulaire et vous fournit des textes et des chats avec 90 à 98 % de mots que vous connaissez déjà, créant ainsi l'environnement d'apprentissage parfait.",
+                    how2Title: "Apprentissage Interactif",
+                    how2Desc: "Vous voyez un mot en violet (inconnu) ou en orange (en cours d'apprentissage) ? Il suffit de taper dessus pour une traduction instantanée et de l'ajouter à votre jeu de flashcards personnel.",
+                    how3Title: "Pratique Multimodale",
+                    how3Desc: "Renforcez ce que vous avez appris en écoutant le texte avec notre fonction de synthèse vocale intégrée, améliorant simultanément votre prononciation et votre compréhension orale.",
+                    languagesTitle: "Apprenez plus de 11 langues et ce n'est pas fini",
+                    langEnglish: "Anglais",
+                    langGerman: "Allemand",
+                    langFrench: "Français",
+                    langSpanish: "Espagnol",
+                    langItalian: "Italien",
+                    langJapanese: "Japonais",
+                    langKorean: "Coréen",
+                    langPortuguese: "Portugais",
+                    langRussian: "Russe",
+                    langChineseSimp: "Chinois (Simplifié)",
+                    langChineseTrad: "Chinois (Traditionnel)",
+                    whyTitle: "Pourquoi choisir Gummely?",
+                    feature1Title: "Méthode Scientifiquement Prouvée",
+                    feature1Desc: "Basée sur l'hypothèse de l'Input de Krashen. Le contenu avec 90-98 % de mots connus vous maintient dans la zone d'apprentissage optimale — stimulant mais jamais accablant.",
+                    feature2Title: "Apprentissage Codé par Couleurs",
+                    feature2Desc: "Les mots inconnus apparaissent en violet, les mots en apprentissage en orange. Cliquez sur n'importe quel mot pour une traduction instantanée et ajoutez-le à votre deck de flashcards personnalisé.",
+                    feature3Title: "Contenu Immersif",
+                    feature3Desc: "Lisez des textes adaptés et discutez avec des bots IA. La synthèse vocale intégrée améliore la prononciation pendant que vous développez votre vocabulaire naturellement par le contexte.",
+                    pricingTitle: "Tarifs simples et transparents",
+                    pricingSubtitle: "Commencez votre parcours d'apprentissage des langues dès aujourd'hui",
+                    pricingWeekly: "Hebdomadaire",
+                    pricingPerWeek: "par semaine",
+                    pricingMonthly: "Mensuel",
+                    pricingPerMonth: "par mois",
+                    pricingSave: "Économisez 25%",
+                    bestValue: "MEILLEURE OFFRE",
+                    ctaTitle: "Prêt à apprendre naturellement ?",
+                    ctaDesc: "Rejoignez des milliers de personnes qui découvrent le pouvoir de l'input compréhensible avec Gummely.",
+                    footerContact: "Contact",
+                    footerLegal: "Mentions légales",
+                    footerPrivacy: "Politique de confidentialité",
+                    footerTerms: "Conditions d'utilisation",
+                    footerFollow: "Suivez-nous",
+                    footerRights: "Tous droits réservés."
+                },
+                it: {
+                    heroTitle: "Impara le lingue come hai imparato la tua prima",
+                    heroSubtitle: "Domina qualsiasi lingua in modo naturale con input comprensibile basato sull'IA, senza esercizi di grammatica né memorizzazione. Inizia a parlare con fiducia.",
+                    downloadIos: "Scarica per iOS",
+                    downloadAndroid: "Scarica per Android",
+                    socialProofTitle: "Scelto da studenti di lingue in tutto il mondo",
+                    testimonial1: "Ho provato innumerevoli app, ma Gummely ha reso l'apprendimento dello spagnolo senza sforzo. I testi personalizzati mi hanno tenuto impegnato e sono sbalordito da quanto velocemente sia cresciuto il mio vocabolario!",
+                    user1: "Jamie L.",
+                    testimonial2: "La codifica a colori e le funzioni audio mi hanno aiutato a concentrarmi sulle parole nuove mentre mi godevo il contenuto. Ora mi sento più sicuro a leggere il francese!",
+                    user2: "Alex M.",
+                    testimonial3: "Come persona facilmente intimidita dalle regole grammaticali, Gummely è stato un punto di svolta. Sto imparando il tedesco in un modo che sembra naturale e divertente.",
+                    user3: "Sam K.",
+                    scienceTitle: "La Scienza dell'Acquisizione Naturale del Linguaggio",
+                    science1Title: "L'Ipotesi dell'Input di Krashen: il tuo \"i+1\"",
+                    science1Desc: "Il nostro metodo si basa sulla teoria del linguista Stephen Krashen secondo cui acquisiamo meglio una lingua quando riceviamo un \"input comprensibile\" che è solo un passo oltre il nostro livello attuale (i+1). L'IA di Gummely assicura che tu sia sempre in questa zona di apprendimento ottimale—sfidato, ma mai sopraffatto.",
+                    science2Title: "Copertura Lessicale Ottimale per la Lettura",
+                    science2Desc: "La ricerca dimostra che per leggere e comprendere comodamente un testo, è necessario conoscere circa il 95-98% delle parole. La nostra IA personalizza i contenuti per raggiungere questa soglia, permettendoti di dedurre il significato delle nuove parole dal contesto, il che migliora drasticamente la ritenzione.",
+                    howTitle: "Come Gummely funziona per te",
+                    how1Title: "Contenuto Personalizzato",
+                    how1Desc: "La nostra IA analizza il tuo vocabolario e ti fornisce testi e chat con il 90-98% di parole che già conosci, creando l'ambiente di apprendimento perfetto.",
+                    how2Title: "Apprendimento Interattivo",
+                    how2Desc: "Vedi una parola in viola (sconosciuta) o arancione (in apprendimento)? Ti basta toccarla per una traduzione istantanea e aggiungerla al tuo mazzo di flashcard personale.",
+                    how3Title: "Pratica Multimodale",
+                    how3Desc: "Rafforza ciò che hai imparato ascoltando il testo con la nostra funzione integrata di sintesi vocale, migliorando contemporaneamente la tua pronuncia e le tue capacità di ascolto.",
+                    languagesTitle: "Impara più di 11 lingue e continua ad aggiungere",
+                    langEnglish: "Inglese",
+                    langGerman: "Tedesco",
+                    langFrench: "Francese",
+                    langSpanish: "Spagnolo",
+                    langItalian: "Italiano",
+                    langJapanese: "Giapponese",
+                    langKorean: "Coreano",
+                    langPortuguese: "Portoghese",
+                    langRussian: "Russo",
+                    langChineseSimp: "Cinese (Semplificato)",
+                    langChineseTrad: "Cinese (Tradizionale)",
+                    whyTitle: "Perché scegliere Gummely?",
+                    feature1Title: "Metodo Basato sulla Scienza",
+                    feature1Desc: "Basato sull'Ipotesi dell'Input di Krashen. I contenuti con il 90-98% di parole conosciute ti mantengono nella zona di apprendimento ottimale — stimolante ma mai opprimente.",
+                    feature2Title: "Apprendimento Codificato a Colori",
+                    feature2Desc: "Le parole sconosciute appaiono in viola, le parole in apprendimento in arancione. Clicca su qualsiasi parola per una traduzione istantanea e aggiungila al tuo mazzo di flashcard personalizzato.",
+                    feature3Title: "Contenuto Immersivo",
+                    feature3Desc: "Leggi testi personalizzati e chatta con i bot AI. La sintesi vocale integrata migliora la pronuncia mentre costruisci il vocabolario naturalmente attraverso il contesto.",
+                    pricingTitle: "Prezzi Semplici e Trasparenti",
+                    pricingSubtitle: "Inizia oggi il tuo percorso di apprendimento delle lingue",
+                    pricingWeekly: "Settimanale",
+                    pricingPerWeek: "a settimana",
+                    pricingMonthly: "Mensile",
+                    pricingPerMonth: "al mese",
+                    pricingSave: "Risparmia il 25%",
+                    bestValue: "MIGLIOR VALORE",
+                    ctaTitle: "Pronto a imparare naturalmente?",
+                    ctaDesc: "Unisciti a migliaia di persone che scoprono il potere dell'input comprensibile con Gummely.",
+                    footerContact: "Contatto",
+                    footerLegal: "Legale",
+                    footerPrivacy: "Informativa sulla privacy",
+                    footerTerms: "Termini di servizio",
+                    footerFollow: "Seguici",
+                    footerRights: "Tutti i diritti riservati."
+                },
+                pt: {
+                    heroTitle: "Aprenda Idiomas da Maneira Que Você Aprendeu o Seu Primeiro",
+                    heroSubtitle: "Domine qualquer idioma naturalmente com entrada compreensível alimentada por IA — sem exercícios de gramática, sem memorização. Comece a falar com confiança.",
+                    downloadIos: "Baixar para iOS",
+                    downloadAndroid: "Baixar para Android",
+                    socialProofTitle: "Confiado por Aprendizes de Idiomas em Todo o Mundo",
+                    testimonial1: "Experimentei inúmeros aplicativos, mas Gummely tornou o aprendizado de espanhol fácil. Os textos personalizados me mantiveram engajado, e estou impressionado com a rapidez com que meu vocabulário cresceu!",
+                    user1: "Jamie L.",
+                    testimonial2: "A codificação de cores e os recursos de áudio me ajudaram a focar em palavras novas enquanto desfrutava do conteúdo. Sinto-me mais confiante lendo francês agora!",
+                    user2: "Alex M.",
+                    testimonial3: "Como alguém que se intimida facilmente com as regras gramaticais, Gummely foi um divisor de águas. Estou aprendendo alemão de uma forma que parece natural e divertida.",
+                    user3: "Sam K.",
+                    scienceTitle: "A Ciência da Aquisição Natural da Linguagem",
+                    science1Title: "Hipótese do Input de Krashen: Seu \"i+1\"",
+                    science1Desc: "Nosso método é baseado na teoria do linguista Stephen Krashen de que adquirimos melhor a linguagem quando recebemos \"input compreensível\" que está apenas um passo além do nosso nível atual (i+1). A IA de Gummely garante que você esteja sempre nesta zona de aprendizado ideal—desafiado, mas nunca sobrecarregado.",
+                    science2Title: "Cobertura Lexical Ótima para Leitura",
+                    science2Desc: "Pesquisas mostram que para ler e entender confortavelmente um texto, você precisa conhecer cerca de 95-98% das palavras. Nossa IA personaliza o conteúdo para atender a esse limite, permitindo que você infira o significado de novas palavras a partir do contexto, o que melhora drasticamente a retenção.",
+                    howTitle: "Como Gummely Funciona Para Você",
+                    how1Title: "Conteúdo Personalizado",
+                    how1Desc: "Nossa IA analisa seu vocabulário e entrega textos e chats com 90-98% das palavras que você já conhece, criando o ambiente de aprendizado perfeito.",
+                    how2Title: "Aprendizado Interativo",
+                    how2Desc: "Vê uma palavra em roxo (desconhecida) ou laranja (em aprendizado)? Basta tocar nela para uma tradução instantânea e adicioná-la ao seu baralho de flashcards pessoal.",
+                    how3Title: "Prática Multimodal",
+                    how3Desc: "Reforce o que você aprendeu ouvindo o texto com nosso recurso de texto para fala integrado, melhorando simultaneamente sua pronúncia e suas habilidades de escuta.",
+                    languagesTitle: "Aprenda mais de 11 idiomas e contando",
+                    langEnglish: "Inglês",
+                    langGerman: "Alemão",
+                    langFrench: "Francês",
+                    langSpanish: "Espanhol",
+                    langItalian: "Italiano",
+                    langJapanese: "Japonês",
+                    langKorean: "Coreano",
+                    langPortuguese: "Português",
+                    langRussian: "Russo",
+                    langChineseSimp: "Chinês (Simplificado)",
+                    langChineseTrad: "Chinês (Tradicional)",
+                    whyTitle: "Por que escolher Gummely?",
+                    feature1Title: "Método Baseado na Ciência",
+                    feature1Desc: "Baseado na Hipótese do Input de Krashen. Conteúdo com 90-98% de palavras conhecidas o mantém na zona de aprendizado ideal — desafiador, mas nunca avassalador.",
+                    feature2Title: "Aprendizado Codificado por Cores",
+                    feature2Desc: "Palavras desconhecidas aparecem em roxo, palavras em aprendizado em laranja. Clique em qualquer palavra para tradução instantânea e adicione ao seu baralho de flashcards personalizado.",
+                    feature3Title: "Conteúdo Imersivo",
+                    feature3Desc: "Leia textos personalizados e converse com bots de IA. A integração de texto para fala melhora a pronúncia enquanto você constrói vocabulário naturalmente através do contexto.",
+                    pricingTitle: "Preços Simples e Transparentes",
+                    pricingSubtitle: "Comece sua jornada de aprendizado de idiomas hoje",
+                    pricingWeekly: "Semanal",
+                    pricingPerWeek: "por semana",
+                    pricingMonthly: "Mensal",
+                    pricingPerMonth: "por mês",
+                    pricingSave: "Economize 25%",
+                    bestValue: "MELHOR CUSTO-BENEFÍCIO",
+                    ctaTitle: "Pronto para aprender naturalmente?",
+                    ctaDesc: "Junte-se a milhares de pessoas descobrindo o poder do input compreensível com Gummely.",
+                    footerContact: "Contato",
+                    footerLegal: "Legal",
+                    footerPrivacy: "Política de Privacidade",
+                    footerTerms: "Termos de Serviço",
+                    footerFollow: "Siga-nos",
+                    footerRights: "Todos os direitos reservados."
+                },
+                ru: {
+                    heroTitle: "Изучайте языки так, как вы выучили свой первый",
+                    heroSubtitle: "Освойте любой язык естественным путем с помощью понятного ввода на базе ИИ — никаких грамматических упражнений, никакого заучивания. Начните говорить уверенно.",
+                    downloadIos: "Скачать для iOS",
+                    downloadAndroid: "Скачать для Android",
+                    socialProofTitle: "Доверие изучающих языки по всему миру",
+                    testimonial1: "Я перепробовал бесчисленное количество приложений, но с Gummely изучение испанского стало легким. Персонализированные тексты удерживали меня, и я поражен тем, как быстро вырос мой словарный запас!",
+                    user1: "Джейми Л.",
+                    testimonial2: "Цветовая кодировка и аудио функции помогли мне сосредоточиться на новых словах, наслаждаясь контентом. Теперь я чувствую себя увереннее, читая по-французски!",
+                    user2: "Алекс М.",
+                    testimonial3: "Как человек, которого легко пугают грамматические правила, Gummely стал для меня переломным моментом. Я учу немецкий так, как это кажется естественным и веселым.",
+                    user3: "Сэм К.",
+                    scienceTitle: "Наука о естественном усвоении языка",
+                    science1Title: "Гипотеза ввода Крашена: ваш \"i+1\"",
+                    science1Desc: "Наш метод основан на теории лингвиста Стивена Крашена о том, что мы лучше всего усваиваем язык, когда получаем \"понятный ввод\", который находится всего на один шаг выше нашего текущего уровня (i+1). ИИ Gummely гарантирует, что вы всегда будете находиться в этой оптимальной зоне обучения — это будет вызовом, но никогда не будет подавляющим.",
+                    science2Title: "Оптимальный лексический охват для чтения",
+                    science2Desc: "Исследования показывают, что для комфортного чтения и понимания текста необходимо знать около 95-98% слов. Наш ИИ персонализирует контент, чтобы соответствовать этому порогу, позволяя вам выводить значение новых слов из контекста, что значительно улучшает запоминание.",
+                    howTitle: "Как Gummely работает для вас",
+                    how1Title: "Персонализированный контент",
+                    how1Desc: "Наш ИИ анализирует ваш словарный запас и предоставляет тексты и чаты с 90-98% знакомых вам слов, создавая идеальную среду обучения.",
+                    how2Title: "Интерактивное обучение",
+                    how2Desc: "Видите слово фиолетовым (неизвестное) или оранжевым (изучаемое)? Просто нажмите на него для мгновенного перевода и добавьте его в свою личную колоду карточек.",
+                    how3Title: "Многоканальная практика",
+                    how3Desc: "Закрепляйте выученное, прослушивая текст с помощью нашей встроенной функции преобразования текста в речь, одновременно улучшая свое произношение и навыки аудирования.",
+                    languagesTitle: "Изучайте 11+ языков и больше",
+                    langEnglish: "Английский",
+                    langGerman: "Немецкий",
+                    langFrench: "Французский",
+                    langSpanish: "Испанский",
+                    langItalian: "Итальянский",
+                    langJapanese: "Японский",
+                    langKorean: "Корейский",
+                    langPortuguese: "Португальский",
+                    langRussian: "Русский",
+                    langChineseSimp: "Китайский (Упрощенный)",
+                    langChineseTrad: "Китайский (Традиционный)",
+                    whyTitle: "Почему стоит выбрать Gummely?",
+                    feature1Title: "Научно обоснованный метод",
+                    feature1Desc: "Основан на гипотезе ввода Крашена. Контент с 90-98% известных слов держит вас в оптимальной зоне обучения — это вызывает трудности, но никогда не перегружает.",
+                    feature2Title: "Обучение с цветовой кодировкой",
+                    feature2Desc: "Неизвестные слова отображаются фиолетовым, изучаемые слова — оранжевым. Нажмите на любое слово, чтобы получить мгновенный перевод и добавить его в свой персональный набор карточек.",
+                    feature3Title: "Иммерсивный контент",
+                    feature3Desc: "Читайте адаптированные тексты и общайтесь с ИИ-ботами. Встроенный синтез речи улучшает произношение, пока вы естественным образом пополняете словарный запас через контекст.",
+                    pricingTitle: "Простое, прозрачное ценообразование",
+                    pricingSubtitle: "Начните свое путешествие по изучению языка сегодня",
+                    pricingWeekly: "Еженедельно",
+                    pricingPerWeek: "в неделю",
+                    pricingMonthly: "Ежемесячно",
+                    pricingPerMonth: "в месяц",
+                    pricingSave: "Сэкономьте 25%",
+                    bestValue: "ЛУЧШАЯ ЦЕНА",
+                    ctaTitle: "Готовы учиться естественно?",
+                    ctaDesc: "Присоединяйтесь к тысячам людей, открывающим для себя силу понятного ввода с Gummely.",
+                    footerContact: "Контакты",
+                    footerLegal: "Правовая информация",
+                    footerPrivacy: "Политика конфиденциальности",
+                    footerTerms: "Условия использования",
+                    footerFollow: "Подпишитесь на нас",
+                    footerRights: "Все права защищены."
+                },
+                ko: {
+                    heroTitle: "원어민처럼 언어를 배우세요",
+                    heroSubtitle: "AI 기반의 이해 가능한 입력으로 문법 연습이나 암기 없이 자연스럽게 모든 언어를 마스터하세요. 자신감 있게 말하기 시작하세요.",
+                    downloadIos: "iOS용 다운로드",
+                    downloadAndroid: "Android용 다운로드",
+                    socialProofTitle: "전 세계 언어 학습자들이 신뢰하는",
+                    testimonial1: "수많은 앱을 사용해봤지만 Gummely는 스페인어 학습을 수월하게 만들어줬어요. 개인 맞춤형 텍스트 덕분에 몰입할 수 있었고, 제 어휘력이 이렇게 빨리 늘어나는 것에 놀랐습니다!",
+                    user1: "제이미 L.",
+                    testimonial2: "색상 코드와 오디오 기능이 콘텐츠를 즐기면서 새로운 단어에 집중하는 데 도움이 되었어요. 이제 프랑스어 읽기에 더 자신감이 생겼습니다!",
+                    user2: "알렉스 M.",
+                    testimonial3: "문법 규칙에 쉽게 위축되는 사람으로서 Gummely는 판도를 바꿨습니다. 저는 자연스럽고 재미있는 방식으로 독일어를 배우고 있습니다.",
+                    user3: "샘 K.",
+                    scienceTitle: "자연어 습득의 과학",
+                    science1Title: "크라센의 입력 가설: 당신의 \"i+1\"",
+                    science1Desc: "저희 방법은 언어학자 스티븐 크라센의 이론에 기반을 두고 있습니다. 이는 현재 수준(i+1)보다 한 단계 높은 '이해 가능한 입력'을 받을 때 언어를 가장 잘 습득한다는 것입니다. Gummely의 AI는 여러분이 항상 최적의 학습 영역에 있도록 보장합니다. 도전적이지만 결코 압도적이지 않습니다.",
+                    science2Title: "최적의 어휘 범위로 읽기",
+                    science2Desc: "연구에 따르면 텍스트를 편안하게 읽고 이해하려면 약 95-98%의 단어를 알아야 합니다. 저희 AI는 이 임계값을 충족하도록 콘텐츠를 개인화하여, 새로운 단어의 의미를 문맥에서 추론할 수 있도록 함으로써 기억력을 크게 향상시킵니다.",
+                    howTitle: "Gummely가 당신을 위해 작동하는 방법",
+                    how1Title: "개인 맞춤형 콘텐츠",
+                    how1Desc: "저희 AI는 여러분의 어휘력을 분석하여 이미 알고 있는 단어의 90-98%를 포함하는 텍스트와 채팅을 제공하여 완벽한 학습 환경을 만듭니다.",
+                    how2Title: "대화형 학습",
+                    how2Desc: "보라색(모르는 단어) 또는 주황색(학습 중인 단어)으로 표시된 단어를 보셨나요? 해당 단어를 탭하면 즉시 번역되고 개인 플래시카드 덱에 추가됩니다.",
+                    how3Title: "다중 모드 연습",
+                    how3Desc: "통합된 텍스트 음성 변환 기능을 통해 텍스트를 들으며 학습한 내용을 강화하여 발음과 듣기 능력을 동시에 향상시킵니다.",
+                    languagesTitle: "11개 이상의 언어 학습 및 계속 추가 중",
+                    langEnglish: "영어",
+                    langGerman: "독일어",
+                    langFrench: "프랑스어",
+                    langSpanish: "스페인어",
+                    langItalian: "이탈리아어",
+                    langJapanese: "일본어",
+                    langKorean: "한국어",
+                    langPortuguese: "포르투갈어",
+                    langRussian: "러시아어",
+                    langChineseSimp: "중국어 (간체)",
+                    langChineseTrad: "중국어 (번체)",
+                    whyTitle: "왜 Gummely를 선택해야 할까요?",
+                    feature1Title: "과학적 기반의 방법",
+                    feature1Desc: "크라센의 입력 가설에 기반을 둡니다. 90-98%의 단어를 아는 내용이 최적의 학습 영역에 머물게 합니다. 도전적이지만 결코 압도적이지 않습니다.",
+                    feature2Title: "색상 코딩 학습",
+                    feature2Desc: "모르는 단어는 보라색으로, 학습 중인 단어는 주황색으로 표시됩니다. 어떤 단어든 클릭하면 즉시 번역되고 개인 플래시카드 덱에 추가됩니다.",
+                    feature3Title: "몰입형 콘텐츠",
+                    feature3Desc: "맞춤형 텍스트를 읽고 AI 봇과 대화하세요. 통합된 텍스트 음성 변환 기능은 문맥을 통해 자연스럽게 어휘를 구축하면서 발음을 향상시킵니다.",
+                    pricingTitle: "간단하고 투명한 가격",
+                    pricingSubtitle: "오늘 바로 언어 학습 여정을 시작하세요",
+                    pricingWeekly: "주간",
+                    pricingPerWeek: "주당",
+                    pricingMonthly: "월간",
+                    pricingPerMonth: "월당",
+                    pricingSave: "25% 절약",
+                    bestValue: "최고의 가치",
+                    ctaTitle: "자연스럽게 배울 준비가 되셨나요?",
+                    ctaDesc: "Gummely와 함께 이해 가능한 입력의 힘을 발견하는 수천 명의 사람들과 함께하세요.",
+                    footerContact: "연락처",
+                    footerLegal: "법률",
+                    footerPrivacy: "개인정보처리방침",
+                    footerTerms: "서비스 약관",
+                    footerFollow: "팔로우하기",
+                    footerRights: "모든 권리 보유."
+                },
+                ja: {
+                    heroTitle: "最初の言語を学んだように言語を学ぶ",
+                    heroSubtitle: "AIを活用した理解可能なインプットで、文法練習や暗記なしで、どんな言語でも自然に習得できます。自信を持って話し始めましょう。",
+                    downloadIos: "iOS版をダウンロード",
+                    downloadAndroid: "Android版をダウンロード",
+                    socialProofTitle: "世界中の語学学習者から信頼されています",
+                    testimonial1: "数え切れないほどのアプリを試してきましたが、Gummelyはスペイン語学習を楽にしてくれました。パーソナライズされたテキストのおかげで集中でき、語彙がこんなに早く増えたことに驚いています！",
+                    user1: "ジェイミー・L。",
+                    testimonial2: "色分けされた表示と音声機能のおかげで、コンテンツを楽しみながら新しい単語に集中できました。今ではフランス語を読むことに自信が持てます！",
+                    user2: "アレックス・M。",
+                    testimonial3: "文法規則にすぐに気後れしてしまう私にとって、Gummelyは画期的なアプリでした。自然で楽しい方法でドイツ語を学んでいます。",
+                    user3: "サム・K。",
+                    scienceTitle: "自然言語習得の科学",
+                    science1Title: "クラッシェンのインプット仮説：あなたの「i+1」",
+                    science1Desc: "私たちのメソッドは、言語学者スティーブン・クラッシェンの理論に基づいています。これは、現在のレベルからほんの一歩先にある「理解可能なインプット」を受け取ることで、言語を最もよく習得できるというものです（i+1）。GummelyのAIは、あなたが常にこの最適な学習ゾーンにいることを保証します。挑戦的ではありますが、決して圧倒されることはありません。",
+                    science2Title: "読解のための最適な語彙カバー率",
+                    science2Desc: "研究によると、テキストを快適に読み理解するためには、単語の約95～98％を知っている必要があります。私たちのAIはこの閾値を満たすようにコンテンツをパーソナライズし、新しい単語の意味を文脈から推測できるようにすることで、記憶力を劇的に向上させます。",
+                    howTitle: "Gummelyの仕組み",
+                    how1Title: "パーソナライズされたコンテンツ",
+                    how1Desc: "当社のAIはあなたの語彙を分析し、あなたがすでに知っている単語の90～98%を含むテキストとチャットを提供することで、完璧な学習環境を作り出します。",
+                    how2Title: "インタラクティブな学習",
+                    how2Desc: "紫（不明な単語）またはオレンジ（学習中の単語）の単語を見ましたか？タップするだけで即座に翻訳され、個人のフラッシュカードデッキに追加されます。",
+                    how3Title: "マルチモーダル練習",
+                    how3Desc: "統合されたテキスト読み上げ機能でテキストを聞くことで、学習したことを強化し、同時に発音とリスニングスキルを向上させます。",
+                    languagesTitle: "11以上の言語を学習中",
+                    langEnglish: "英語",
+                    langGerman: "ドイツ語",
+                    langFrench: "フランス語",
+                    langSpanish: "スペイン語",
+                    langItalian: "イタリア語",
+                    langJapanese: "日本語",
+                    langKorean: "韓国語",
+                    langPortuguese: "ポルトガル語",
+                    langRussian: "ロシア語",
+                    langChineseSimp: "中国語 (簡体字)",
+                    langChineseTrad: "中国語 (繁体字)",
+                    whyTitle: "Gummelyを選ぶ理由",
+                    feature1Title: "科学に基づいたメソッド",
+                    feature1Desc: "クラッシェンのインプット仮説に基づいています。既知の単語が90〜98%含まれるコンテンツは、最適な学習ゾーンにあなたを保ち、挑戦的でありながら決して圧倒されることはありません。",
+                    feature2Title: "色分けされた学習",
+                    feature2Desc: "未知の単語は紫色で、学習中の単語はオレンジ色で表示されます。任意の単語をクリックすると即座に翻訳され、あなたのパーソナルフラッシュカードデッキに追加されます。",
+                    feature3Title: "没入型コンテンツ",
+                    feature3Desc: "カスタマイズされたテキストを読んだり、AIボットとチャットしたりできます。統合されたテキスト読み上げ機能は、文脈を通じて自然に語彙を構築しながら発音を向上させます。",
+                    pricingTitle: "シンプルで透明性の高い料金",
+                    pricingSubtitle: "今すぐ語学学習の旅を始めましょう",
+                    pricingWeekly: "週払い",
+                    pricingPerWeek: "週あたり",
+                    pricingMonthly: "月払い",
+                    pricingPerMonth: "月あたり",
+                    pricingSave: "25%節約",
+                    bestValue: "ベストバリュー",
+                    ctaTitle: "自然に学ぶ準備はできましたか？",
+                    ctaDesc: "Gummelyで理解可能なインプットの力を発見する何千人もの人々に加わりましょう。",
+                    footerContact: "お問い合わせ",
+                    footerLegal: "法的情報",
+                    footerPrivacy: "プライバシーポリシー",
+                    footerTerms: "利用規約",
+                    footerFollow: "フォローする",
+                    footerRights: "全著作権所有。"
+                },
+                "zh-Hans": {
+                    heroTitle: "像学习母语一样学习语言",
+                    heroSubtitle: "通过AI驱动的可理解输入自然掌握任何语言——无需语法练习，无需死记硬背。自信地开口说。",
+                    downloadIos: "下载iOS版",
+                    downloadAndroid: "下载Android版",
+                    socialProofTitle: "全球语言学习者信赖",
+                    testimonial1: "我尝试过无数的应用程序，但Gummely让学习西班牙语变得毫不费力。个性化的文本让我保持投入，我惊讶于我的词汇量增长如此之快！",
+                    user1: "杰米·L。",
+                    testimonial2: "颜色编码和音频功能帮助我在享受内容的同时专注于新单词。现在我阅读法语时感觉更自信了！",
+                    user2: "亚历克斯·M。",
+                    testimonial3: "作为一个容易被语法规则吓倒的人，Gummely改变了我的学习方式。我正在以一种自然而有趣的方式学习德语。",
+                    user3: "山姆·K。",
+                    scienceTitle: "自然语言习得的科学",
+                    science1Title: "克拉申的输入假说：你的“i+1”",
+                    science1Desc: "我们的方法基于语言学家史蒂芬·克拉申的理论，即当我们获得“可理解的输入”时，语言习得效果最佳，这些输入只比我们目前的水平高一步（i+1）。Gummely的AI确保您始终处于这个最佳学习区——有挑战，但绝不感到 overwhelming。",
+                    science2Title: "阅读的最佳词汇覆盖率",
+                    science2Desc: "研究表明，要舒适地阅读和理解文本，您需要认识大约95-98%的单词。我们的AI会个性化内容以达到这个阈值，让您能够从上下文中推断新单词的含义，这显著提高了记忆力。",
+                    howTitle: "Gummely如何为您服务",
+                    how1Title: "个性化内容",
+                    how1Desc: "我们的AI会分析您的词汇量，并提供包含90-98%您已知单词的文本和聊天内容，从而创造完美的学习环境。",
+                    how2Title: "互动学习",
+                    how2Desc: "看到一个紫色（未知）或橙色（正在学习）的单词？只需轻按它即可立即翻译并将其添加到您的个人抽认卡组。",
+                    how3Title: "多模式练习",
+                    how3Desc: "通过使用我们集成的文本转语音功能收听文本，巩固您所学到的知识，同时提高您的发音和听力技能。",
+                    languagesTitle: "学习11+种语言，还在不断增加",
+                    langEnglish: "英语",
+                    langGerman: "德语",
+                    langFrench: "法语",
+                    langSpanish: "西班牙语",
+                    langItalian: "意大利语",
+                    langJapanese: "日语",
+                    langKorean: "韩语",
+                    langPortuguese: "葡萄牙语",
+                    langRussian: "俄语",
+                    langChineseSimp: "简体中文",
+                    langChineseTrad: "繁体中文",
+                    whyTitle: "为什么选择Gummely？",
+                    feature1Title: "科学支持的方法",
+                    feature1Desc: "基于克拉申的输入假说。90-98%已知词汇的内容让您处于最佳学习区——有挑战性但绝不令人 overwhelming。",
+                    feature2Title: "颜色编码学习",
+                    feature2Desc: "未知单词以紫色显示，学习中单词以橙色显示。点击任何单词即可即时翻译并添加到您的个性化抽认卡组中。",
+                    feature3Title: "沉浸式内容",
+                    feature3Desc: "阅读量身定制的文本并与AI机器人聊天。集成的文本转语音功能在您通过上下文自然地建立词汇量的同时，提高您的发音。",
+                    pricingTitle: "简单透明的定价",
+                    pricingSubtitle: "今天就开始您的语言学习之旅",
+                    pricingWeekly: "每周",
+                    pricingPerWeek: "每周",
+                    pricingMonthly: "每月",
+                    pricingPerMonth: "每月",
+                    pricingSave: "节省25%",
+                    bestValue: "最佳价值",
+                    ctaTitle: "准备好自然学习了吗？",
+                    ctaDesc: "加入成千上万的人，与Gummely一起发现可理解输入的强大功能。",
+                    footerContact: "联系我们",
+                    footerLegal: "法律",
+                    footerPrivacy: "隐私政策",
+                    footerTerms: "服务条款",
+                    footerFollow: "关注我们",
+                    footerRights: "保留所有权利。"
+                },
+                "zh-Hant": {
+                    heroTitle: "像學習母語一樣學習語言",
+                    heroSubtitle: "透過AI驅動的可理解輸入自然掌握任何語言——無需語法練習，無需死記硬背。自信地開口說。",
+                    downloadIos: "下載iOS版",
+                    downloadAndroid: "下載Android版",
+                    socialProofTitle: "全球語言學習者信賴",
+                    testimonial1: "我嘗試過無數的應用程式，但Gummely讓學習西班牙語變得毫不費力。個性化的文本讓我保持投入，我驚訝於我的詞彙量增長如此之快！",
+                    user1: "傑米·L。",
+                    testimonial2: "顏色編碼和音頻功能幫助我在享受內容的同時專注於新單詞。現在我閱讀法語時感覺更自信了！",
+                    user2: "亞歷克斯·M。",
+                    testimonial3: "作為一個容易被語法規則嚇倒的人，Gummely改變了我的學習方式。我正在以一種自然而有趣的方式學習德語。",
+                    user3: "山姆·K。",
+                    scienceTitle: "自然語言習得的科學",
+                    science1Title: "克拉申的輸入假說：你的「i+1」",
+                    science1Desc: "我們的教學法基於語言學家史蒂芬·克拉申的理論，即當我們接收到僅比我們當前水平高一步的「可理解輸入」（i+1）時，語言習得效果最佳。Gummely的AI確保您始終處於這個最佳學習區—具有挑戰性，但絕不讓您感到不堪重負。",
+                    science2Title: "閱讀的最佳詞彙覆蓋率",
+                    science2Desc: "研究表明，要舒適地閱讀和理解文本，您需要認識大約95-98%的單詞。我們的AI會個性化內容以達到這個閾值，讓您能夠從上下文中推斷新單詞的含義，這顯著提高了記憶力。",
+                    howTitle: "Gummely如何為您服務",
+                    how1Title: "個性化內容",
+                    how1Desc: "我們的AI會分析您的詞彙量，並提供包含90-98%您已知單詞的文本和聊天內容，從而創造完美的學習環境。",
+                    how2Title: "互動學習",
+                    how2Desc: "看到一個紫色（未知）或橙色（正在學習）的單詞？只需輕按它即可立即翻譯並將其添加到您的個人抽認卡組。",
+                    how3Title: "多模式練習",
+                    how3Desc: "透過使用我們集成的文本轉語音功能收聽文本，鞏固您所學到的知識，同時提高您的發音和聽力技能。",
+                    languagesTitle: "學習11+種語言，還在不斷增加",
+                    langEnglish: "英語",
+                    langGerman: "德語",
+                    langFrench: "法語",
+                    langSpanish: "西班牙語",
+                    langItalian: "意大利語",
+                    langJapanese: "日語",
+                    langKorean: "韓語",
+                    langPortuguese: "葡萄牙語",
+                    langRussian: "俄語",
+                    langChineseSimp: "簡體中文",
+                    langChineseTrad: "繁體中文",
+                    whyTitle: "為什麼選擇Gummely？",
+                    feature1Title: "科學支持的方法",
+                    feature1Desc: "基於克拉申的輸入假說。90-98%已知詞彙的內容讓您處於最佳學習區——有挑戰性但絕不令人 overwhelming。",
+                    feature2Title: "顏色編碼學習",
+                    feature2Desc: "未知單詞以紫色顯示，學習中單詞以橙色顯示。點擊任何單詞即可即時翻譯並添加到您的個性化抽認卡組中。",
+                    feature3Title: "沉浸式內容",
+                    feature3Desc: "閱讀量身定制的文本並與AI機器人聊天。集成的文本轉語音功能在您透過上下文自然地建立詞彙量的同時，提高您的發音。",
+                    pricingTitle: "簡單透明的定價",
+                    pricingSubtitle: "今天就開始您的語言學習之旅",
+                    pricingWeekly: "每週",
+                    pricingPerWeek: "每週",
+                    pricingMonthly: "每月",
+                    pricingPerMonth: "每月",
+                    pricingSave: "節省25%",
+                    bestValue: "最佳價值",
+                    ctaTitle: "準備好自然學習了嗎？",
+                    ctaDesc: "加入成千上萬的人，與Gummely一起發現可理解輸入的強大功能。",
+                    footerContact: "聯絡我們",
+                    footerLegal: "法律",
+                    footerPrivacy: "隱私政策",
+                    footerTerms: "服務條款",
+                    footerFollow: "關注我們",
+                    footerRights: "保留所有權利。"
+                }
+            };
+            
+            const languageSwitcher = document.getElementById('language-switcher');
+
+            const setLanguage = (language) => {
+                document.documentElement.lang = language;
+                document.querySelectorAll('[data-translate-key]').forEach(element => {
+                    const key = element.getAttribute('data-translate-key');
+                    if (translations[language] && translations[language][key]) {
+                        element.innerHTML = translations[language][key];
+                    }
+                });
+
+                const recommendedCard = document.querySelector('.pricing-card.recommended');
+                if (recommendedCard) {
+                    const bestValueText = translations[language]?.bestValue || 'BEST VALUE';
+                    recommendedCard.setAttribute('data-best-value-text', bestValueText);
+                }
+
+                // Set the dropdown to the active language
+                languageSwitcher.value = language;
+            };
+
+            // Detect user's browser language and set as default if available
+            const userLang = navigator.language || navigator.userLanguage;
+            let defaultLang = 'en'; // Default to English
+            if (userLang.startsWith('de')) {
+                defaultLang = 'de';
+            } else if (userLang.startsWith('es')) {
+                defaultLang = 'es';
+            } else if (userLang.startsWith('fr')) {
+                defaultLang = 'fr';
+            } else if (userLang.startsWith('it')) {
+                defaultLang = 'it';
+            } else if (userLang.startsWith('pt')) {
+                defaultLang = 'pt';
+            } else if (userLang.startsWith('ru')) {
+                defaultLang = 'ru';
+            } else if (userLang.startsWith('ko')) {
+                defaultLang = 'ko';
+            } else if (userLang.startsWith('ja')) {
+                defaultLang = 'ja';
+            } else if (userLang.startsWith('zh')) { // Handle Simplified/Traditional Chinese
+                defaultLang = userLang === 'zh-TW' || userLang === 'zh-Hant' ? 'zh-Hant' : 'zh-Hans';
             }
             
-            // Update active button
-            supportedLanguages.forEach(lang => {
-                langButtons[lang]?.classList.toggle('active', lang === langToSet);
-            });
-        };
-
-        const detectLanguage = () => {
-            const userLang = (navigator.language || navigator.userLanguage).toLowerCase(); // e.g., 'en-us' or 'fr'
-            // Check for specific matches first (e.g., 'zh-tw')
-            if (supportedLanguages.includes(userLang)) {
-                return userLang;
-            }
-            // Check for generic matches (e.g., 'en' from 'en-us')
-            const genericLang = userLang.split('-')[0];
-            if (supportedLanguages.includes(genericLang)) {
-                return genericLang;
-            }
-            return 'en'; // Default to English
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const defaultLang = detectLanguage();
             setLanguage(defaultLang);
 
-            // Add event listeners to all buttons
-            supportedLanguages.forEach(lang => {
-                langButtons[lang]?.addEventListener('click', () => setLanguage(lang));
+            // Event listener for dropdown change
+            languageSwitcher.addEventListener('change', (event) => {
+                setLanguage(event.target.value);
             });
         });
     </script>
+
 </body>
 </html>
