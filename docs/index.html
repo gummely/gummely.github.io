@@ -74,7 +74,7 @@
             text-shadow: 0 0 15px rgba(244, 162, 97, 0.2);
         }
         
-        /* --- New Dropdown Styles --- */
+        /* --- Dropdown Styles with Flag --- */
         .lang-dropdown {
             position: relative;
             display: inline-block;
@@ -87,13 +87,16 @@
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--soft-lilac);
             color: white;
-            padding: 8px 30px 8px 12px;
+            padding: 8px 30px 8px 45px; /* Adjust padding for flag */
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: bold;
             font-family: inherit;
             font-size: 1rem;
+            background-repeat: no-repeat;
+            background-position: 12px center;
+            background-size: 24px 16px; /* Adjust flag size */
         }
 
         .lang-dropdown::after {
@@ -108,7 +111,7 @@
         }
 
         .lang-select:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.2);
             border-color: var(--golden-amber);
         }
 
@@ -320,7 +323,65 @@
         .pricing-card .period { color: var(--soft-lilac); margin-bottom: 20px; }
         .pricing-card .savings { color: var(--burnt-sienna); font-weight: bold; font-size: 1rem; margin-top: 15px; }
         @media (min-width: 768px) {
-            .pricing-cards { grid-template-columns: 1fr 1fr; max-width: 700px; }
+            .pricing-cards { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 900px; }
+        }
+
+        /* --- FAQ Section --- */
+        .faq-section { background: rgba(255, 255, 255, 0.05); }
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.07);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover {
+            border-color: var(--golden-amber);
+        }
+        .faq-question {
+            padding: 20px 25px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            transition: background-color 0.3s ease;
+        }
+        .faq-question:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .faq-question.active {
+            background-color: var(--royal-purple);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .faq-question .icon {
+            font-size: 1.8rem;
+            transition: transform 0.3s ease;
+        }
+        .faq-question.active .icon {
+            transform: rotate(45deg); /* Change plus to cross */
+        }
+        .faq-answer {
+            max-height: 0;
+            padding: 0 25px;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            color: var(--soft-lilac);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .faq-answer.active {
+            max-height: 200px; /* Or a larger value depending on max content */
+            padding: 20px 25px;
         }
 
         /* --- CTA Section --- */
@@ -341,6 +402,9 @@
             .section-title { font-size: 2.5rem; }
             .cta-section h2 { font-size: 2.5rem; }
             .science-grid { grid-template-columns: 1fr; }
+            .pricing-cards { grid-template-columns: 1fr; }
+            .faq-question { font-size: 1.2rem; }
+            .faq-answer { font-size: 1rem; }
         }
     </style>
 </head>
@@ -496,6 +560,12 @@
                 <p class="pricing-subtitle reveal" data-translate-key="pricingSubtitle">Start your language learning journey today</p>
                 <div class="pricing-cards">
                     <div class="pricing-card glass-card reveal">
+                        <h3 data-translate-key="pricingFreeTitle">Free</h3>
+                        <div class="price">$0</div>
+                        <div class="period" data-translate-key="pricingPerForever">forever</div>
+                        <div class="savings" data-translate-key="pricingFreeDesc">Get started for free with limited features.</div>
+                    </div>
+                    <div class="pricing-card glass-card reveal">
                         <h3 data-translate-key="pricingWeekly">Weekly</h3>
                         <div class="price">$4.99</div>
                         <div class="period" data-translate-key="pricingPerWeek">per week</div>
@@ -505,6 +575,48 @@
                         <div class="price">$14.99</div>
                         <div class="period" data-translate-key="pricingPerMonth">per month</div>
                         <div class="savings" data-translate-key="pricingSave">Save 25%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section faq-section">
+            <div class="container faq-container">
+                <h2 class="section-title reveal" data-translate-key="faqTitle">Frequently Asked Questions</h2>
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <span data-translate-key="faqQ1">What is Gummely based on?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-translate-key="faqA1">Gummely is built on Stephen Krashen's Input Hypothesis, which suggests language acquisition happens best when learners receive 'comprehensible input' (i+1).</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <span data-translate-key="faqQ2">How does Gummely personalize content?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-translate-key="faqA2">Our AI analyzes your vocabulary to deliver texts and chats where 90-98% of the words are already known to you, making new vocabulary acquisition intuitive.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <span data-translate-key="faqQ3">Can I use Gummely offline?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-translate-key="faqA3">Currently, Gummely requires an internet connection for most features, including AI chat and content generation. Offline modes for downloaded content are under development.</p>
+                    </div>
+                </div>
+                 <div class="faq-item reveal">
+                    <div class="faq-question">
+                        <span data-translate-key="faqQ4">What languages are available?</span>
+                        <span class="icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p data-translate-key="faqA4">Gummely currently supports English, German, Spanish, French, Italian, Portuguese, Russian, Korean, Japanese, Simplified Chinese, and Traditional Chinese, with more languages coming soon!</p>
                     </div>
                 </div>
             </div>
@@ -626,12 +738,24 @@
                     feature3Desc: "Read tailored texts and chat with AI bots. Integrated text-to-speech improves pronunciation while you build vocabulary naturally through context.",
                     pricingTitle: "Simple, Transparent Pricing",
                     pricingSubtitle: "Start your language learning journey today",
+                    pricingFreeTitle: "Free",
+                    pricingPerForever: "forever",
+                    pricingFreeDesc: "Get started for free with limited features.",
                     pricingWeekly: "Weekly",
                     pricingPerWeek: "per week",
                     pricingMonthly: "Monthly",
                     pricingPerMonth: "per month",
                     pricingSave: "Save 25%",
                     bestValue: "BEST VALUE",
+                    faqTitle: "Frequently Asked Questions",
+                    faqQ1: "What is Gummely based on?",
+                    faqA1: "Gummely is built on Stephen Krashen's Input Hypothesis, which suggests language acquisition happens best when learners receive 'comprehensible input' (i+1).",
+                    faqQ2: "How does Gummely personalize content?",
+                    faqA2: "Our AI analyzes your vocabulary to deliver texts and chats where 90-98% of the words are already known to you, making new vocabulary acquisition intuitive.",
+                    faqQ3: "Can I use Gummely offline?",
+                    faqA3: "Currently, Gummely requires an internet connection for most features, including AI chat and content generation. Offline modes for downloaded content are under development.",
+                    faqQ4: "What languages are available?",
+                    faqA4: "Gummely currently supports English, German, Spanish, French, Italian, Portuguese, Russian, Korean, Japanese, Simplified Chinese, and Traditional Chinese, with more languages coming soon!",
                     ctaTitle: "Ready to Learn Naturally?",
                     ctaDesc: "Join thousands discovering the power of comprehensible input with Gummely.",
                     footerContact: "Contact",
@@ -686,12 +810,24 @@
                     feature3Desc: "Lesen Sie maßgeschneiderte Texte und chatten Sie mit KI-Bots. Integriertes Text-to-Speech verbessert die Aussprache, während Sie auf natürliche Weise Vokabeln im Kontext lernen.",
                     pricingTitle: "Einfache, transparente Preise",
                     pricingSubtitle: "Beginne noch heute deine Sprachlernreise",
+                    pricingFreeTitle: "Kostenlos",
+                    pricingPerForever: "für immer",
+                    pricingFreeDesc: "Beginne kostenlos mit einer eingeschränkten Version.",
                     pricingWeekly: "Wöchentlich",
                     pricingPerWeek: "pro Woche",
                     pricingMonthly: "Monatlich",
                     pricingPerMonth: "pro Monat",
                     pricingSave: "25% sparen",
                     bestValue: "BESTER PREIS",
+                    faqTitle: "Häufig gestellte Fragen",
+                    faqQ1: "Worauf basiert Gummely?",
+                    faqA1: "Gummely basiert auf Stephen Krashens Input-Hypothese, die besagt, dass der Spracherwerb am besten erfolgt, wenn Lernende 'verständlichen Input' (i+1) erhalten.",
+                    faqQ2: "Wie personalisiert Gummely Inhalte?",
+                    faqA2: "Unsere KI analysiert deinen Wortschatz, um Texte und Chats zu liefern, bei denen 90-98% der Wörter bereits bekannt sind, was den Erwerb neuer Vokabeln intuitiv macht.",
+                    faqQ3: "Kann ich Gummely offline nutzen?",
+                    faqA3: "Derzeit benötigt Gummely für die meisten Funktionen, einschließlich KI-Chat und Inhaltserstellung, eine Internetverbindung. Offline-Modi für heruntergeladene Inhalte sind in Entwicklung.",
+                    faqQ4: "Welche Sprachen sind verfügbar?",
+                    faqA4: "Gummely unterstützt derzeit Englisch, Deutsch, Spanisch, Französisch, Italienisch, Portugiesisch, Russisch, Koreanisch, Japanisch, vereinfachtes Chinesisch und traditionelles Chinesisch, weitere Sprachen folgen bald!",
                     ctaTitle: "Bereit, natürlich zu lernen?",
                     ctaDesc: "Schließen Sie sich Tausenden an und entdecken Sie die Kraft des verständlichen Inputs mit Gummely.",
                     footerContact: "Kontakt",
@@ -739,19 +875,31 @@
                     langChineseTrad: "Chino (Tradicional)",
                     whyTitle: "Por qué elegir Gummely?",
                     feature1Title: "Método Basado en la Ciencia",
-                    feature1Desc: "Basado en la Hipótesis del Input de Krashen. El contenido con un 90-98% de palabras conocidas te mantiene en la zona de aprendizaje óptima, desafiante pero nunca abrumador.",
+                    feature1Desc: "Basado en la Hipótesis del Input de Krashen. El contenido con 90-98% de palabras conocidas te mantiene en la zona de aprendizaje óptima, desafiante pero nunca abrumador.",
                     feature2Title: "Aprendizaje Codificado por Colores",
                     feature2Desc: "Las palabras desconocidas aparecen en morado, las palabras de aprendizaje en naranja. Haz clic en cualquier palabra para una traducción instantánea y añádela a tu mazo de tarjetas personalizado.",
                     feature3Title: "Contenido Inmersivo",
                     feature3Desc: "Lee textos personalizados y chatea con bots de IA. La función de texto a voz integrada mejora la pronunciación mientras construyes vocabulario de forma natural a través del contexto.",
                     pricingTitle: "Precios Simples y Transparentes",
                     pricingSubtitle: "Comienza hoy tu viaje de aprendizaje de idiomas",
+                    pricingFreeTitle: "Gratis",
+                    pricingPerForever: "para siempre",
+                    pricingFreeDesc: "Empieza gratis con funciones limitadas.",
                     pricingWeekly: "Semanal",
                     pricingPerWeek: "por semana",
                     pricingMonthly: "Mensual",
                     pricingPerMonth: "por mes",
                     pricingSave: "Ahorra 25%",
                     bestValue: "MEJOR VALOR",
+                    faqTitle: "Preguntas Frecuentes",
+                    faqQ1: "¿En qué se basa Gummely?",
+                    faqA1: "Gummely se basa en la Hipótesis del Input de Stephen Krashen, que sugiere que la adquisición del lenguaje ocurre mejor cuando los estudiantes reciben 'input comprensible' (i+1).",
+                    faqQ2: "¿Cómo personaliza Gummely el contenido?",
+                    faqA2: "Nuestra IA analiza tu vocabulario para entregar textos y chats donde el 90-98% de las palabras ya te son conocidas, haciendo que la adquisición de nuevo vocabulario sea intuitiva.",
+                    faqQ3: "¿Puedo usar Gummely sin conexión?",
+                    faqA3: "Actualmente, Gummely requiere una conexión a internet para la mayoría de las funciones, incluyendo el chat de IA y la generación de contenido. Los modos sin conexión para contenido descargado están en desarrollo.",
+                    faqQ4: "¿Qué idiomas están disponibles?",
+                    faqA4: "Gummely actualmente es compatible con inglés, alemán, español, francés, italiano, portugués, ruso, coreano, japonés, chino simplificado y chino tradicional, ¡con más idiomas próximamente!",
                     ctaTitle: "¿Listo para aprender de forma natural?",
                     ctaDesc: "Únete a miles que descubren el poder del input comprensible con Gummely.",
                     footerContact: "Contacto",
@@ -780,7 +928,7 @@
                     science2Desc: "La recherche montre que pour lire et comprendre confortablement un texte, vous devez connaître environ 95 à 98 % des mots. Notre IA personnalise le contenu pour atteindre ce seuil, vous permettant d'inférer le sens des nouveaux mots à partir du contexte, ce qui améliore considérablement la rétention.",
                     howTitle: "Comment Gummely fonctionne pour vous",
                     how1Title: "Contenu Personnalisé",
-                    how1Desc: "Notre IA analyse votre vocabulaire et vous fournit des textes et des chats avec 90 à 98 % de mots que vous connaissez déjà, créant ainsi l'environnement d'apprentissage parfait.",
+                    how1Desc: "Notre AI analyse votre vocabulaire et vous fournit des textes et des chats avec 90 à 98 % de mots que vous connaissez déjà, créant ainsi l'environnement d'apprentissage parfait.",
                     how2Title: "Apprentissage Interactif",
                     how2Desc: "Vous voyez un mot en violet (inconnu) ou en orange (en cours d'apprentissage) ? Il suffit de taper dessus pour une traduction instantanée et de l'ajouter à votre jeu de flashcards personnel.",
                     how3Title: "Pratique Multimodale",
@@ -806,12 +954,24 @@
                     feature3Desc: "Lisez des textes adaptés et discutez avec des bots IA. La synthèse vocale intégrée améliore la prononciation pendant que vous développez votre vocabulaire naturellement par le contexte.",
                     pricingTitle: "Tarifs simples et transparents",
                     pricingSubtitle: "Commencez votre parcours d'apprentissage des langues dès aujourd'hui",
+                    pricingFreeTitle: "Gratuit",
+                    pricingPerForever: "pour toujours",
+                    pricingFreeDesc: "Commencez gratuitement avec des fonctionnalités limitées.",
                     pricingWeekly: "Hebdomadaire",
                     pricingPerWeek: "par semaine",
                     pricingMonthly: "Mensuel",
                     pricingPerMonth: "par mois",
                     pricingSave: "Économisez 25%",
                     bestValue: "MEILLEURE OFFRE",
+                    faqTitle: "Questions Fréquentes",
+                    faqQ1: "Sur quoi Gummely est-il basé ?",
+                    faqA1: "Gummely est basé sur l'Hypothèse de l'Input de Stephen Krashen, qui suggère que l'acquisition de la langue se produit le mieux lorsque les apprenants reçoivent un 'input compréhensible' (i+1).",
+                    faqQ2: "Comment Gummely personnalise-t-il le contenu ?",
+                    faqA2: "Notre IA analyse votre vocabulaire pour vous fournir des textes et des discussions où 90-98 % des mots vous sont déjà connus, rendant l'acquisition de nouveau vocabulaire intuitive.",
+                    faqQ3: "Puis-je utiliser Gummely hors ligne ?",
+                    faqA3: "Actuellement, Gummely nécessite une connexion Internet pour la plupart des fonctionnalités, y compris le chat IA et la génération de contenu. Les modes hors ligne pour le contenu téléchargé sont en cours de développement.",
+                    faqQ4: "Quelles sont les langues disponibles ?",
+                    faqA4: "Gummely prend actuellement en charge l'anglais, l'allemand, l'espagnol, le français, l'italien, le portugais, le russe, le coréen, le japonais, le chinois simplifié et le chinois traditionnel, avec d'autres langues à venir !",
                     ctaTitle: "Prêt à apprendre naturellement ?",
                     ctaDesc: "Rejoignez des milliers de personnes qui découvrent le pouvoir de l'input compréhensible avec Gummely.",
                     footerContact: "Contact",
@@ -866,12 +1026,24 @@
                     feature3Desc: "Leggi testi personalizzati e chatta con i bot AI. La sintesi vocale integrata migliora la pronuncia mentre costruisci il vocabolario naturalmente attraverso il contesto.",
                     pricingTitle: "Prezzi Semplici e Trasparenti",
                     pricingSubtitle: "Inizia oggi il tuo percorso di apprendimento delle lingue",
+                    pricingFreeTitle: "Gratuito",
+                    pricingPerForever: "per sempre",
+                    pricingFreeDesc: "Inizia gratuitamente con funzionalità limitate.",
                     pricingWeekly: "Settimanale",
                     pricingPerWeek: "a settimana",
                     pricingMonthly: "Mensile",
                     pricingPerMonth: "al mese",
                     pricingSave: "Risparmia il 25%",
                     bestValue: "MIGLIOR VALORE",
+                    faqTitle: "Domande Frequenti",
+                    faqQ1: "Su cosa si basa Gummely?",
+                    faqA1: "Gummely è costruito sull'Ipotesi dell'Input di Stephen Krashen, che suggerisce che l'acquisizione del linguaggio avviene meglio quando gli studenti ricevono 'input comprensibile' (i+1).",
+                    faqQ2: "In che modo Gummely personalizza i contenuti?",
+                    faqA2: "La nostra AI analizza il tuo vocabolario per fornirti testi e chat in cui il 90-98% delle parole ti sono già note, rendendo l'acquisizione di nuovi vocaboli intuitiva.",
+                    faqQ3: "Posso usare Gummely offline?",
+                    faqA3: "Attualmente, Gummely richiede una connessione Internet per la maggior parte delle funzionalità, inclusi la chat AI e la generazione di contenuti. Le modalità offline per i contenuti scaricati sono in fase di sviluppo.",
+                    faqQ4: "Quali lingue sono disponibili?",
+                    faqA4: "Gummely supporta attualmente inglese, tedesco, spagnolo, francese, italiano, portoghese, russo, coreano, giapponese, cinese semplificato e cinese tradizionale, con altre lingue in arrivo!",
                     ctaTitle: "Pronto a imparare naturalmente?",
                     ctaDesc: "Unisciti a migliaia di persone che scoprono il potere dell'input comprensibile con Gummely.",
                     footerContact: "Contatto",
@@ -926,12 +1098,24 @@
                     feature3Desc: "Leia textos personalizados e converse com bots de IA. A integração de texto para fala melhora a pronúncia enquanto você constrói vocabulário naturalmente através do contexto.",
                     pricingTitle: "Preços Simples e Transparentes",
                     pricingSubtitle: "Comece sua jornada de aprendizado de idiomas hoje",
+                    pricingFreeTitle: "Grátis",
+                    pricingPerForever: "para sempre",
+                    pricingFreeDesc: "Comece gratuitamente com recursos limitados.",
                     pricingWeekly: "Semanal",
                     pricingPerWeek: "por semana",
                     pricingMonthly: "Mensal",
                     pricingPerMonth: "por mês",
                     pricingSave: "Economize 25%",
                     bestValue: "MELHOR CUSTO-BENEFÍCIO",
+                    faqTitle: "Perguntas Frequentes",
+                    faqQ1: "Em que Gummely se baseia?",
+                    faqA1: "Gummely é construído sobre a Hipótese do Input de Stephen Krashen, que sugere que a aquisição de linguagem acontece melhor quando os alunos recebem 'input compreensível' (i+1).",
+                    faqQ2: "Como Gummely personaliza o conteúdo?",
+                    faqA2: "Nossa IA analisa seu vocabulário para entregar textos e chats onde 90-98% das palavras já são conhecidas por você, tornando a aquisição de novo vocabulário intuitiva.",
+                    faqQ3: "Posso usar Gummely offline?",
+                    faqA3: "Atualmente, Gummely requer uma conexão com a internet para a maioria das funcionalidades, incluindo chat de IA e geração de conteúdo. Modos offline para conteúdo baixado estão em desenvolvimento.",
+                    faqQ4: "Quais idiomas estão disponíveis?",
+                    faqA4: "Gummely atualmente suporta inglês, alemão, espanhol, francês, italiano, português, russo, coreano, japonês, chinês simplificado e chinês tradicional, com mais idiomas em breve!",
                     ctaTitle: "Pronto para aprender naturalmente?",
                     ctaDesc: "Junte-se a milhares de pessoas descobrindo o poder do input compreensível com Gummely.",
                     footerContact: "Contato",
@@ -986,12 +1170,24 @@
                     feature3Desc: "Читайте адаптированные тексты и общайтесь с ИИ-ботами. Встроенный синтез речи улучшает произношение, пока вы естественным образом пополняете словарный запас через контекст.",
                     pricingTitle: "Простое, прозрачное ценообразование",
                     pricingSubtitle: "Начните свое путешествие по изучению языка сегодня",
+                    pricingFreeTitle: "Бесплатно",
+                    pricingPerForever: "навсегда",
+                    pricingFreeDesc: "Начните бесплатно с ограниченными возможностями.",
                     pricingWeekly: "Еженедельно",
                     pricingPerWeek: "в неделю",
                     pricingMonthly: "Ежемесячно",
                     pricingPerMonth: "в месяц",
                     pricingSave: "Сэкономьте 25%",
                     bestValue: "ЛУЧШАЯ ЦЕНА",
+                    faqTitle: "Часто задаваемые вопросы",
+                    faqQ1: "На чём основан Gummely?",
+                    faqA1: "Gummely построен на гипотезе ввода Стивена Крашена, которая предполагает, что усвоение языка происходит лучше всего, когда учащиеся получают 'понятный ввод' (i+1).",
+                    faqQ2: "Как Gummely персонализирует контент?",
+                    faqA2: "Наш ИИ анализирует ваш словарный запас, чтобы предоставлять тексты и чаты, где 90-98% слов уже вам известны, делая усвоение нового словарного запаса интуитивным.",
+                    faqQ3: "Могу ли я использовать Gummely офлайн?",
+                    faqA3: "В настоящее время Gummely требует подключения к интернету для большинства функций, включая чат с ИИ и генерацию контента. Офлайн-режимы для загруженного контента находятся в разработке.",
+                    faqQ4: "Какие языки доступны?",
+                    faqA4: "Gummely в настоящее время поддерживает английский, немецкий, испанский, французский, итальянский, португальский, русский, корейский, японский, упрощенный китайский и традиционный китайский, и скоро появятся новые языки!",
                     ctaTitle: "Готовы учиться естественно?",
                     ctaDesc: "Присоединяйтесь к тысячам людей, открывающим для себя силу понятного ввода с Gummely.",
                     footerContact: "Контакты",
@@ -1046,12 +1242,24 @@
                     feature3Desc: "맞춤형 텍스트를 읽고 AI 봇과 대화하세요. 통합된 텍스트 음성 변환 기능은 문맥을 통해 자연스럽게 어휘를 구축하면서 발음을 향상시킵니다.",
                     pricingTitle: "간단하고 투명한 가격",
                     pricingSubtitle: "오늘 바로 언어 학습 여정을 시작하세요",
+                    pricingFreeTitle: "무료",
+                    pricingPerForever: "평생",
+                    pricingFreeDesc: "제한된 기능으로 무료로 시작하세요.",
                     pricingWeekly: "주간",
                     pricingPerWeek: "주당",
                     pricingMonthly: "월간",
                     pricingPerMonth: "월당",
                     pricingSave: "25% 절약",
                     bestValue: "최고의 가치",
+                    faqTitle: "자주 묻는 질문",
+                    faqQ1: "Gummely는 무엇을 기반으로 하나요?",
+                    faqA1: "Gummely는 학습자가 '이해 가능한 입력'(i+1)을 받을 때 언어 습득이 가장 잘 이루어진다는 스티븐 크라센의 입력 가설을 기반으로 합니다.",
+                    faqQ2: "Gummely는 어떻게 콘텐츠를 개인화하나요?",
+                    faqA2: "저희 AI는 여러분의 어휘력을 분석하여 이미 알고 있는 단어의 90-98%를 포함하는 텍스트와 채팅을 제공하여 새로운 어휘 습득을 직관적으로 만듭니다.",
+                    faqQ3: "Gummely를 오프라인으로 사용할 수 있나요?",
+                    faqA3: "현재 Gummely는 AI 채팅 및 콘텐츠 생성을 포함한 대부분의 기능을 위해 인터넷 연결이 필요합니다. 다운로드된 콘텐츠에 대한 오프라인 모드는 개발 중입니다.",
+                    faqQ4: "어떤 언어를 사용할 수 있나요?",
+                    faqA4: "Gummely는 현재 영어, 독일어, 스페인어, 프랑스어, 이탈리아어, 포르투갈어, 러시아어, 한국어, 일본어, 중국어 간체, 중국어 번체를 지원하며, 더 많은 언어가 곧 추가될 예정입니다!",
                     ctaTitle: "자연스럽게 배울 준비가 되셨나요?",
                     ctaDesc: "Gummely와 함께 이해 가능한 입력의 힘을 발견하는 수천 명의 사람들과 함께하세요.",
                     footerContact: "연락처",
@@ -1106,12 +1314,24 @@
                     feature3Desc: "カスタマイズされたテキストを読んだり、AIボットとチャットしたりできます。統合されたテキスト読み上げ機能は、文脈を通じて自然に語彙を構築しながら発音を向上させます。",
                     pricingTitle: "シンプルで透明性の高い料金",
                     pricingSubtitle: "今すぐ語学学習の旅を始めましょう",
+                    pricingFreeTitle: "無料",
+                    pricingPerForever: "永久",
+                    pricingFreeDesc: "限定機能で無料で始められます。",
                     pricingWeekly: "週払い",
                     pricingPerWeek: "週あたり",
                     pricingMonthly: "月払い",
                     pricingPerMonth: "月あたり",
                     pricingSave: "25%節約",
                     bestValue: "ベストバリュー",
+                    faqTitle: "よくある質問",
+                    faqQ1: "Gummelyは何に基づいていますか？",
+                    faqA1: "Gummelyは、学習者が「理解可能なインプット」（i+1）を受け取ることで、言語習得が最もよく行われるというスティーブン・クラッシェンのインプット仮説に基づいています。",
+                    faqQ2: "Gummelyはどのようにコンテンツをパーソナライズしますか？",
+                    faqA2: "当社のAIはあなたの語彙を分析し、あなたがすでに知っている単語の90〜98％を含むテキストとチャットを提供することで、新しい語彙の習得を直感的にします。",
+                    faqQ3: "Gummelyはオフラインで使用できますか？",
+                    faqA3: "現在、GummelyはAIチャットやコンテンツ生成を含むほとんどの機能でインターネット接続が必要です。ダウンロードされたコンテンツのオフラインモードは開発中です。",
+                    faqQ4: "利用できる言語は何ですか？",
+                    faqA4: "Gummelyは現在、英語、ドイツ語、スペイン語、フランス語、イタリア語、ポルトガル語、ロシア語、韓国語、日本語、簡体字中国語、繁体字中国語をサポートしており、今後さらに多くの言語が追加される予定です！",
                     ctaTitle: "自然に学ぶ準備はできましたか？",
                     ctaDesc: "Gummelyで理解可能なインプットの力を発見する何千人もの人々に加わりましょう。",
                     footerContact: "お問い合わせ",
@@ -1166,12 +1386,24 @@
                     feature3Desc: "阅读量身定制的文本并与AI机器人聊天。集成的文本转语音功能在您通过上下文自然地建立词汇量的同时，提高您的发音。",
                     pricingTitle: "简单透明的定价",
                     pricingSubtitle: "今天就开始您的语言学习之旅",
+                    pricingFreeTitle: "免费",
+                    pricingPerForever: "永久",
+                    pricingFreeDesc: "免费开始使用有限功能。",
                     pricingWeekly: "每周",
                     pricingPerWeek: "每周",
                     pricingMonthly: "每月",
                     pricingPerMonth: "每月",
                     pricingSave: "节省25%",
                     bestValue: "最佳价值",
+                    faqTitle: "常见问题",
+                    faqQ1: "Gummely基于什么？",
+                    faqA1: "Gummely建立在史蒂芬·克拉申的输入假说之上，该假说认为当学习者接收到“可理解的输入”（i+1）时，语言习得效果最佳。",
+                    faqQ2: "Gummely如何个性化内容？",
+                    faqA2: "我们的AI会分析您的词汇量，并提供包含90-98%您已知单词的文本和聊天内容，从而创造完美的学习环境。",
+                    faqQ3: "我可以使用Gummely离线吗？",
+                    faqA3: "目前，Gummely的大部分功能（包括AI聊天和内容生成）都需要互联网连接。已下载内容的离线模式正在开发中。",
+                    faqQ4: "支持哪些语言？",
+                    faqA4: "Gummely目前支持英语、德语、西班牙语、法语、意大利语、葡萄牙语、俄语、韩语、日语、简体中文和繁体中文，未来还将支持更多语言！",
                     ctaTitle: "准备好自然学习了吗？",
                     ctaDesc: "加入成千上万的人，与Gummely一起发现可理解输入的强大功能。",
                     footerContact: "联系我们",
@@ -1226,15 +1458,27 @@
                     feature3Desc: "閱讀量身定制的文本並與AI機器人聊天。集成的文本轉語音功能在您透過上下文自然地建立詞彙量的同時，提高您的發音。",
                     pricingTitle: "簡單透明的定價",
                     pricingSubtitle: "今天就開始您的語言學習之旅",
+                    pricingFreeTitle: "免費",
+                    pricingPerForever: "永久",
+                    pricingFreeDesc: "免費開始使用有限功能。",
                     pricingWeekly: "每週",
                     pricingPerWeek: "每週",
                     pricingMonthly: "每月",
                     pricingPerMonth: "每月",
                     pricingSave: "節省25%",
                     bestValue: "最佳價值",
+                    faqTitle: "常見問題",
+                    faqQ1: "Gummely基於什麼？",
+                    faqA1: "Gummely建立在史蒂芬·克拉申的輸入假說之上，該假說認為當學習者接收到「可理解的輸入」（i+1）時，語言習得效果最佳。",
+                    faqQ2: "Gummely如何個性化內容？",
+                    faqA2: "我們的AI會分析您的詞彙量，並提供包含90-98%您已知單詞的文本和聊天內容，從而創造完美的學習環境。",
+                    faqQ3: "我可以使用Gummely離線嗎？",
+                    faqA3: "目前，Gummely的大部分功能（包括AI聊天和內容生成）都需要網際網路連線。已下載內容的離線模式正在開發中。",
+                    faqQ4: "支援哪些語言？",
+                    faqA4: "Gummely目前支援英文、德文、西班牙文、法文、義大利文、葡萄牙文、俄文、韓文、日文、簡體中文和繁體中文，未來還會支援更多語言！",
                     ctaTitle: "準備好自然學習了嗎？",
                     ctaDesc: "加入成千上萬的人，與Gummely一起發現可理解輸入的強大功能。",
-                    footerContact: "聯絡我們",
+                    footerContact: "聯繫我們",
                     footerLegal: "法律",
                     footerPrivacy: "隱私政策",
                     footerTerms: "服務條款",
@@ -1244,6 +1488,21 @@
             };
             
             const languageSwitcher = document.getElementById('language-switcher');
+            
+            // Map language codes to flag SVG URLs
+            const flagMap = {
+                en: 'https://lipis.github.io/flag-icons/flags/4x3/us.svg',
+                de: 'https://lipis.github.io/flag-icons/flags/4x3/de.svg',
+                es: 'https://lipis.github.io/flag-icons/flags/4x3/es.svg',
+                fr: 'https://lipis.github.io/flag-icons/flags/4x3/fr.svg',
+                it: 'https://lipis.github.io/flag-icons/flags/4x3/it.svg',
+                pt: 'https://lipis.github.io/flag-icons/flags/4x3/br.svg', // Using Brazil flag as in original for consistency
+                ru: 'https://lipis.github.io/flag-icons/flags/4x3/ru.svg',
+                ko: 'https://lipis.github.io/flag-icons/flags/4x3/kr.svg',
+                ja: 'https://lipis.github.io/flag-icons/flags/4x3/jp.svg',
+                'zh-Hans': 'https://lipis.github.io/flag-icons/flags/4x3/cn.svg',
+                'zh-Hant': 'https://lipis.github.io/flag-icons/flags/4x3/tw.svg' // Using Taiwan flag for Traditional Chinese
+            };
 
             const setLanguage = (language) => {
                 document.documentElement.lang = language;
@@ -1262,29 +1521,24 @@
 
                 // Set the dropdown to the active language
                 languageSwitcher.value = language;
+
+                // Update the flag icon for the dropdown
+                if (flagMap[language]) {
+                    languageSwitcher.style.backgroundImage = `url('${flagMap[language]}')`;
+                } else {
+                    languageSwitcher.style.backgroundImage = 'none'; // Fallback if no flag
+                }
             };
 
             // Detect user's browser language and set as default if available
             const userLang = navigator.language || navigator.userLanguage;
             let defaultLang = 'en'; // Default to English
-            if (userLang.startsWith('de')) {
-                defaultLang = 'de';
-            } else if (userLang.startsWith('es')) {
-                defaultLang = 'es';
-            } else if (userLang.startsWith('fr')) {
-                defaultLang = 'fr';
-            } else if (userLang.startsWith('it')) {
-                defaultLang = 'it';
-            } else if (userLang.startsWith('pt')) {
-                defaultLang = 'pt';
-            } else if (userLang.startsWith('ru')) {
-                defaultLang = 'ru';
-            } else if (userLang.startsWith('ko')) {
-                defaultLang = 'ko';
-            } else if (userLang.startsWith('ja')) {
-                defaultLang = 'ja';
-            } else if (userLang.startsWith('zh')) { // Handle Simplified/Traditional Chinese
-                defaultLang = userLang === 'zh-TW' || userLang === 'zh-Hant' ? 'zh-Hant' : 'zh-Hans';
+
+            // Check if user's broad language preference (e.g., 'de', 'es') exists in our direct map
+            if (Object.keys(flagMap).includes(userLang.substring(0, 2))) {
+                defaultLang = userLang.substring(0, 2);
+            } else if (userLang.startsWith('zh')) { // Special handling for Chinese variants
+                defaultLang = (userLang === 'zh-TW' || userLang === 'zh-Hant') ? 'zh-Hant' : 'zh-Hans';
             }
             
             setLanguage(defaultLang);
@@ -1292,6 +1546,27 @@
             // Event listener for dropdown change
             languageSwitcher.addEventListener('change', (event) => {
                 setLanguage(event.target.value);
+            });
+
+            // --- FAQ Accordion Logic ---
+            const faqQuestions = document.querySelectorAll('.faq-question');
+
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling; // Get the sibling .faq-answer
+                    
+                    // Close other open FAQ items
+                    faqQuestions.forEach(otherQuestion => {
+                        if (otherQuestion !== question && otherQuestion.classList.contains('active')) {
+                            otherQuestion.classList.remove('active');
+                            otherQuestion.nextElementSibling.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle the clicked FAQ item
+                    question.classList.toggle('active');
+                    answer.classList.toggle('active');
+                });
             });
         });
     </script>
