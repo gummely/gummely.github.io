@@ -27,7 +27,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: var(--bg-color);
             color: white;
             overflow-x: hidden;
@@ -274,6 +274,16 @@
             flex-wrap: wrap;
         }
 
+        /* Specific styling for hero section download buttons */
+        .hero .download-buttons {
+            justify-content: center; /* Default for mobile/small screens */
+        }
+
+        /* Centering for CTA download buttons - new class */
+        .cta-section .download-buttons-centered {
+            justify-content: center; /* Center buttons horizontally */
+        }
+
         .download-btn {
             display: inline-flex; align-items: center; gap: 15px;
             padding: 16px 32px;
@@ -439,16 +449,21 @@
         }
         .faq-answer {
             max-height: 0;
-            padding: 0 25px;
+            padding: 0 25px; /* Changed: Initial padding to 0 top/bottom */
+            padding-top: 0; /* Ensures no top padding when collapsed */
+            padding-bottom: 0; /* Ensures no bottom padding when collapsed */
             overflow: hidden;
-            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Include padding in transition */
             color: var(--soft-lilac);
             font-size: 1.1rem;
             line-height: 1.6;
         }
         .faq-answer.active {
             max-height: 200px; /* Or a larger value depending on max content */
-            padding: 20px 25px;
+            padding-top: 20px; /* Specific padding for active state */
+            padding-bottom: 20px; /* Specific padding for active state */
+            padding-left: 25px; /* Keep horizontal padding consistent */
+            padding-right: 25px; /* Keep horizontal padding consistent */
         }
 
         /* --- CTA Section --- */
@@ -482,8 +497,8 @@
                 flex: 1; /* Distribute space */
                 max-width: 50%; /* Content takes roughly half the width */
             }
-            .download-buttons {
-                justify-content: flex-start; /* Align buttons left with text */
+            .hero .download-buttons { /* Ensure hero buttons stay left-aligned on desktop */
+                justify-content: flex-start; 
             }
             .hero-image {
                 margin-top: 0; /* Remove top margin when side-by-side */
@@ -534,7 +549,16 @@
             .science-grid { grid-template-columns: 1fr; }
             .pricing-cards { grid-template-columns: 1fr; }
             .faq-question { font-size: 1rem; padding: 15px 20px; }
-            .faq-answer { font-size: 0.9rem; padding: 15px 20px; }
+            .faq-answer { font-size: 0.9rem; /* Smaller font for mobile FAQ answer */
+                          padding: 15px 20px; /* Apply appropriate padding */
+            }
+            /* Override for mobile FAQ answer active state to match new padding */
+            .faq-answer.active {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
         }
     </style>
 </head>
@@ -769,7 +793,7 @@
             <div class="container reveal">
                 <h2 data-translate-key="ctaTitle">Ready to Learn Naturally?</h2>
                 <p data-translate-key="ctaDesc">Join thousands discovering the power of comprehensible input with Gummely.</p>
-                <div class="download-buttons">
+                <div class="download-buttons download-buttons-centered"> <!-- Added download-buttons-centered class -->
                      <a href="#" class="download-btn">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
                         <span data-translate-key="downloadIos">Download for iOS</span>
@@ -841,10 +865,10 @@
                     heroSubtitle: "Master any language naturally with AI-powered comprehensible input—no grammar drills, no memorization. Start speaking with confidence.",
                     downloadIos: "Download for iOS",
                     downloadAndroid: "Download for Android",
-                    navFeatures: "Features", /* New */
-                    navReviews: "Reviews",   /* New */
-                    navPricing: "Pricing",   /* New */
-                    navFaq: "FAQ",         /* New */
+                    navFeatures: "Features",
+                    navReviews: "Reviews",
+                    navPricing: "Pricing",
+                    navFaq: "FAQ",
                     socialProofTitle: "Trusted by Language Learners Worldwide",
                     testimonial1: "I’ve tried countless apps, but Gummely made learning Spanish feel effortless. The personalized texts kept me engaged, and I’m amazed at how quickly my vocabulary grew!",
                     user1: "Jamie L.",
@@ -1510,7 +1534,7 @@
                     faqQ3: "Gummelyはオフラインで使用できますか？",
                     faqA3: "現在、GummelyはAIチャットやコンテンツ生成を含むほとんどの機能でインターネット接続が必要です。ダウンロードされたコンテンツのオフラインモードは開発中です。",
                     faqQ4: "利用できる言語は何ですか？",
-                    faqQ4: "Gummelyは現在、英語、ドイツ語、スペイン語、フランス語、イタリア語、ポルトガル語、ロシア語、韓国語、日本語、簡体字中国語、繁体字中国語をサポートしており、今後さらに多くの言語が追加される予定です！",
+                    faqA4: "Gummelyは現在、英語、ドイツ語、スペイン語、フランス語、イタリア語、ポルトガル語、ロシア語、韓国語、日本語、簡体字中国語、繁体字中国語をサポートしており、今後さらに多くの言語が追加される予定です！",
                     ctaTitle: "自然に学ぶ準備はできましたか？",
                     ctaDesc: "Gummelyで理解可能なインプットの力を発見する何千人もの人々に加わりましょう。",
                     footerContact: "お問い合わせ",
