@@ -27,7 +27,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             background-color: var(--bg-color);
             color: white;
             overflow-x: hidden;
@@ -46,8 +46,13 @@
             padding: 20px 0;
             position: fixed;
             width: 100%;
+            top: 0; /* Added: Ensures header sticks to the very top */
             z-index: 1000;
             transition: background-color 0.3s ease;
+            background: transparent;
+        }
+
+        header.scrolled {
             background: rgba(49, 44, 98, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -69,17 +74,27 @@
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 15px rgba(244, 162, 97, 0.2);
         }
+        
+        /* New: Navigation Links */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 30px; /* Space between nav links and dropdown */
+        }
 
         .nav-links {
+            list-style: none;
             display: flex;
-            gap: 20px;
+            gap: 30px; /* Space between individual links */
+            margin: 0; /* Remove default ul margin */
+            padding: 0; /* Remove default ul padding */
         }
 
         .nav-links a {
-            color: var(--soft-lilac);
+            color: white;
             text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 1.1rem;
             transition: color 0.3s ease;
         }
 
@@ -100,7 +115,7 @@
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--soft-lilac);
             color: white;
-            padding: 8px 30px 8px 45px;
+            padding: 8px 30px 8px 45px; /* Adjust padding for flag */
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -109,7 +124,7 @@
             font-size: 1rem;
             background-repeat: no-repeat;
             background-position: 12px center;
-            background-size: 24px 16px;
+            background-size: 24px 16px; /* Adjust flag size */
         }
 
         .lang-dropdown::after {
@@ -137,23 +152,20 @@
         /* --- Hero Section with CSS Parallax --- */
         .hero {
             position: relative;
-            min-height: calc(100vh - 80px);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 100px 20px 50px;
+            padding: 100px 20px 50px; /* Ensures space for fixed header on all screen sizes */
             overflow: hidden;
             background: linear-gradient(135deg, var(--delft-blue) 0%, var(--royal-purple) 100%);
-            margin-top: 80px;
         }
 
         .parallax-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             pointer-events: none;
         }
 
@@ -168,18 +180,14 @@
         }
 
         .parallax-bg::before {
-            width: 400px;
-            height: 400px;
-            top: 10%;
-            left: 5%;
+            width: 400px; height: 400px;
+            top: 10%; left: 5%;
             animation-duration: 12s;
         }
 
         .parallax-bg::after {
-            width: 300px;
-            height: 300px;
-            bottom: 15%;
-            right: 10%;
+            width: 300px; height: 300px;
+            bottom: 15%; right: 10%;
             background: radial-gradient(circle, var(--golden-amber), transparent 60%);
             animation-duration: 9s;
             animation-direction: reverse;
@@ -194,18 +202,18 @@
             50% { transform: scale(1.1); }
         }
 
-        .hero-inner {
+        .hero-inner { /* New container for hero content and image */
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Stack vertically on small screens by default */
             align-items: center;
             justify-content: center;
-            gap: 40px;
+            gap: 40px; /* Space between content and image */
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            animation: fade-in-up 1s ease-out;
+            max-width: 1200px; /* Constrain the inner content */
+            margin: 0 auto; /* Center the inner content */
+            animation: fade-in-up 1s ease-out; /* Apply reveal animation to the whole inner section */
         }
 
         @keyframes fade-in-up {
@@ -214,33 +222,34 @@
         }
 
         .hero-content {
-            flex: 1;
-            max-width: 700px;
+            flex: 1; /* Allows it to grow */
+            max-width: 700px; /* Constrain content width */
             text-align: center;
         }
 
-        .hero-image {
-            flex: 1;
+        .hero-image { /* New div for the iPhone image */
+            flex: 1; /* Allows it to grow */
             display: flex;
             justify-content: center;
             align-items: center;
-            max-width: 350px;
-            width: 80%;
-            margin-top: 20px;
+            max-width: 350px; /* Max width for the image container - adjusted for better balance */
+            width: 80%; /* Responsive width for mobile */
+            margin-top: 20px; /* Add some space on small screens */
         }
 
         .app-screenshot {
-            width: 100%;
+            width: 100%; /* Make image fill its container */
             height: auto;
             display: block;
-            transform: rotateY(-10deg) rotateX(5deg) scale(1.05);
-            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
-            transition: transform 0.5s ease;
-            transform-origin: center center;
+            /* If your image asset itself isn't tilted, you can add a subtle 3D effect here */
+            transform: rotateY(-10deg) rotateX(5deg) scale(1.05); /* Example tilt, adjust as needed */
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5)); /* Stronger shadow for 3D feel */
+            transition: transform 0.5s ease; /* Smooth transition on hover */
+            transform-origin: center center; /* Ensure the transform origin is centered for tilt effects */
         }
 
         .app-screenshot:hover {
-            transform: rotateY(-8deg) rotateX(4deg) scale(1.07);
+            transform: rotateY(-8deg) rotateX(4deg) scale(1.07); /* Slightly more pronounced tilt on hover */
         }
 
         .hero h1 {
@@ -257,7 +266,7 @@
             margin: 0 auto 40px;
             color: var(--soft-lilac);
         }
-
+        
         .download-buttons {
             display: flex;
             gap: 20px;
@@ -266,31 +275,21 @@
         }
 
         .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
+            display: inline-flex; align-items: center; gap: 15px;
             padding: 16px 32px;
             background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber));
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.1rem;
+            color: white; text-decoration: none; border-radius: 50px;
+            font-weight: bold; font-size: 1.1rem;
             transition: all 0.3s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 2px solid transparent;
         }
-
         .download-btn:hover {
             transform: translateY(-5px) scale(1.05);
             box-shadow: 0 15px 40px rgba(0,0,0,0.4);
             border-color: var(--golden-amber);
         }
-
-        .download-btn svg {
-            width: 26px;
-            height: 26px;
-        }
+        .download-btn svg { width: 26px; height: 26px; }
 
         /* --- General Section Styling --- */
         .section {
@@ -298,7 +297,7 @@
             position: relative;
             overflow: hidden;
         }
-
+        
         .section-title {
             text-align: center;
             font-size: 3rem;
@@ -309,7 +308,7 @@
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
+        
         /* --- Glass Card Effect --- */
         .glass-card {
             background: rgba(255, 255, 255, 0.07);
@@ -318,287 +317,88 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            height: 100%;
+            height: 100%; /* For grid layouts */
         }
-
         .glass-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 45px rgba(0,0,0,0.3);
             border-color: rgba(255, 255, 255, 0.2);
         }
-
+        
         /* --- On-Scroll Animations --- */
         .reveal {
             opacity: 0;
             transform: translateY(50px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-
+        
         /* --- Testimonials --- */
-        .testimonials {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-        }
-
-        .testimonial-card p {
-            font-style: italic;
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-            color: var(--soft-lilac);
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .testimonial-author img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid var(--golden-amber);
-        }
-
-        .testimonial-author-info h4 {
-            font-size: 1.2rem;
-            color: white;
-        }
+        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+        .testimonial-card p { font-style: italic; font-size: 1.1rem; margin-bottom: 25px; color: var(--soft-lilac); }
+        .testimonial-author { display: flex; align-items: center; gap: 15px; }
+        .testimonial-author img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--golden-amber); }
+        .testimonial-author-info h4 { font-size: 1.2rem; color: white; }
 
         /* --- Features Section --- */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-
-        .feature-card {
-            text-align: center;
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 25px;
-            background: linear-gradient(45deg, var(--soft-lilac), var(--royal-purple));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
-
-        .feature-card h3 {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            color: white;
-        }
-
-        .feature-card p {
-            color: var(--soft-lilac);
-            line-height: 1.6;
-        }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .feature-card { text-align: center; }
+        .feature-icon { width: 60px; height: 60px; margin: 0 auto 25px; background: linear-gradient(45deg, var(--soft-lilac), var(--royal-purple)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+        .feature-card h3 { font-size: 1.6rem; margin-bottom: 15px; color: white; }
+        .feature-card p { color: var(--soft-lilac); line-height: 1.6; }
 
         /* --- Science Section --- */
-        .science-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-        }
-
-        .science-card h3 {
-            font-size: 1.8rem;
-            color: var(--golden-amber);
-            margin-bottom: 15px;
-        }
-
-        .science-card p {
-            color: var(--soft-lilac);
-            line-height: 1.7;
-        }
-
+        .science-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+        .science-card h3 { font-size: 1.8rem; color: var(--golden-amber); margin-bottom: 15px; }
+        .science-card p { color: var(--soft-lilac); line-height: 1.7; }
+        
         /* --- How It Works --- */
-        .how-it-works-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .how-it-works-step {
-            text-align: center;
-        }
-
-        .step-number {
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: var(--golden-amber);
-            margin-bottom: 10px;
-            line-height: 1;
-            text-shadow: 0 0 20px rgba(244, 162, 97, 0.4);
-        }
-
-        .how-it-works-step h3 {
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-            color: white;
-        }
-
-        .how-it-works-step p {
-            color: var(--soft-lilac);
-            line-height: 1.6;
-        }
-
+        .how-it-works-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .how-it-works-step { text-align: center; }
+        .step-number { font-size: 3.5rem; font-weight: bold; color: var(--golden-amber); margin-bottom: 10px; line-height: 1; text-shadow: 0 0 20px rgba(244, 162, 97, 0.4); }
+        .how-it-works-step h3 { font-size: 1.6rem; margin-bottom: 15px; color: white; }
+        .how-it-works-step p { color: var(--soft-lilac); line-height: 1.6; }
+        
         /* --- Languages --- */
-        .languages-section {
-            background: rgba(0, 0, 0, 0.15);
-        }
-
-        .languages-container {
-            overflow: hidden;
-            padding: 30px 0;
-            -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
-            mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
-        }
-
-        .languages-scroll {
-            display: flex;
-            gap: 40px;
-            animation: scroll 40s linear infinite;
-            width: max-content;
-        }
-
-        .language-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            min-width: 120px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-
-        .language-item:hover {
-            transform: translateY(-8px) scale(1.05);
-            background: rgba(255, 255, 255, 0.1);
-            animation-play-state: paused;
-        }
-
-        .flag {
-            width: 70px;
-            height: 46px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-
-        .flag img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .language-name {
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-            text-align: center;
-        }
+        .languages-section { background: rgba(0, 0, 0, 0.15); }
+        .languages-container { overflow: hidden; padding: 30px 0; -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent); }
+        .languages-scroll { display: flex; gap: 40px; animation: scroll 40s linear infinite; width: max-content; }
+        .language-item { display: flex; flex-direction: column; align-items: center; gap: 15px; min-width: 120px; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 20px; transition: transform 0.3s ease, background-color 0.3s ease; }
+        .language-item:hover { transform: translateY(-8px) scale(1.05); background: rgba(255, 255, 255, 0.1); animation-play-state: paused; }
+        .flag { width: 70px; height: 46px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; }
+        .flag img { width: 100%; height: 100%; object-fit: cover; }
+        .language-name { font-size: 1rem; font-weight: 600; color: white; text-align: center; }
 
         @keyframes scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-
+        
         /* --- Pricing Section --- */
-        .pricing-section {
-            background: rgba(0,0,0,0.1);
-        }
-
-        .pricing-subtitle {
-            text-align: center;
-            font-size: 1.3rem;
-            margin-top: -40px;
-            margin-bottom: 60px;
-            color: var(--soft-lilac);
-        }
-
-        .pricing-cards {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .pricing-card {
-            position: relative;
-            text-align: center;
-        }
-
-        .pricing-card.recommended {
-            border: 2px solid var(--golden-amber);
-            transform: scale(1.05);
-        }
-
+        .pricing-section { background: rgba(0,0,0,0.1); }
+        .pricing-subtitle { text-align: center; font-size: 1.3rem; margin-top: -40px; margin-bottom: 60px; color: var(--soft-lilac); }
+        .pricing-cards { display: grid; grid-template-columns: 1fr; gap: 30px; max-width: 400px; margin: 0 auto; }
+        .pricing-card { position: relative; text-align: center; }
+        .pricing-card.recommended { border: 2px solid var(--golden-amber); transform: scale(1.05); }
         .pricing-card.recommended::before {
-            content: attr(data-best-value-text);
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--golden-amber);
-            color: var(--delft-blue);
-            padding: 5px 20px;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            font-weight: bold;
+            content: attr(data-best-value-text); /* Use attribute for translation */
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            background: var(--golden-amber); color: var(--delft-blue);
+            padding: 5px 20px; border-radius: 15px; font-size: 0.9rem; font-weight: bold;
         }
-
-        .pricing-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: var(--golden-amber);
-        }
-
-        .pricing-card .price {
-            font-size: 3rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 5px;
-        }
-
-        .pricing-card .period {
-            color: var(--soft-lilac);
-            margin-bottom: 20px;
-        }
-
-        .pricing-card .savings {
-            color: var(--burnt-sienna);
-            font-weight: bold;
-            font-size: 1rem;
-            margin-top: 15px;
-        }
-
+        .pricing-card h3 { font-size: 1.5rem; margin-bottom: 10px; color: var(--golden-amber); }
+        .pricing-card .price { font-size: 3rem; font-weight: bold; color: white; margin-bottom: 5px; }
+        .pricing-card .period { color: var(--soft-lilac); margin-bottom: 20px; }
+        .pricing-card .savings { color: var(--burnt-sienna); font-weight: bold; font-size: 1rem; margin-top: 15px; }
         @media (min-width: 768px) {
-            .pricing-cards {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                max-width: 900px;
-            }
+            .pricing-cards { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 900px; }
         }
 
         /* --- FAQ Section --- */
-        .faq-section {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
+        .faq-section { background: rgba(255, 255, 255, 0.05); }
         .faq-container {
             max-width: 800px;
             margin: 0 auto;
         }
-
         .faq-item {
             margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -608,11 +408,9 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
         }
-
         .faq-item:hover {
             border-color: var(--golden-amber);
         }
-
         .faq-question {
             padding: 20px 25px;
             font-size: 1.4rem;
@@ -625,25 +423,20 @@
             background: rgba(255, 255, 255, 0.05);
             transition: background-color 0.3s ease;
         }
-
         .faq-question:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-
         .faq-question.active {
             background-color: var(--royal-purple);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .faq-question .icon {
             font-size: 1.8rem;
             transition: transform 0.3s ease;
         }
-
         .faq-question.active .icon {
-            transform: rotate(45deg);
+            transform: rotate(45deg); /* Change plus to cross */
         }
-
         .faq-answer {
             max-height: 0;
             padding: 0 25px;
@@ -653,209 +446,133 @@
             font-size: 1.1rem;
             line-height: 1.6;
         }
-
         .faq-answer.active {
-            max-height: 200px;
+            max-height: 200px; /* Or a larger value depending on max content */
             padding: 20px 25px;
         }
 
         /* --- CTA Section --- */
-        .cta-section {
-            padding: 100px 0;
-            background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber));
-            text-align: center;
-        }
-
-        .cta-section h2 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.25);
-        }
-
-        .cta-section p {
-            font-size: 1.3rem;
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+        .cta-section { padding: 100px 0; background: linear-gradient(45deg, var(--burnt-sienna), var(--golden-amber)); text-align: center; }
+        .cta-section h2 { font-size: 3rem; margin-bottom: 20px; text-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+        .cta-section p { font-size: 1.3rem; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
         /* --- Footer --- */
-        footer {
-            background: #2a265a;
-            padding: 60px 0;
-            text-align: center;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section h3 {
-            color: var(--golden-amber);
-            margin-bottom: 20px;
-            font-size: 1.4rem;
-        }
-
-        .footer-section p,
-        .footer-section a {
-            color: var(--soft-lilac);
-            text-decoration: none;
-            line-height: 1.7;
-            font-size: 1rem;
-        }
-
-        .footer-section a:hover {
-            color: var(--golden-amber);
-            text-decoration: underline;
-        }
+        footer { background: #2a265a; padding: 60px 0; text-align: center; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { color: var(--golden-amber); margin-bottom: 20px; font-size: 1.4rem; }
+        .footer-section p, .footer-section a { color: var(--soft-lilac); text-decoration: none; line-height: 1.7; font-size: 1rem; }
+        .footer-section a:hover { color: var(--golden-amber); text-decoration: underline; }
 
         /* Media queries for responsiveness */
-        @media (min-width: 992px) {
+        @media (min-width: 992px) { /* Desktop layout for hero section */
             .hero {
-                padding-top: 0;
-                min-height: calc(100vh - 80px);
+                /* padding-top is now consistently 100px; no override here */
+                min-height: 100vh; /* Keep full viewport height on desktop */
             }
-
             .hero-inner {
-                flex-direction: row;
-                text-align: left;
-                justify-content: space-between;
-                align-items: center;
-                min-height: calc(100vh - 80px);
-                padding-bottom: 0;
+                flex-direction: row; /* Side-by-side on larger screens */
+                text-align: left; /* Align text left when side-by-side */
+                justify-content: space-between; /* Space out content and image */
+                align-items: center; /* Vertically align items in the row */
+                /* Removed: min-height: calc(100vh - 100px); as hero padding handles offset */
+                padding-bottom: 0; /* Remove mobile-specific padding */
             }
-
             .hero-content {
                 text-align: left;
-                flex: 1;
-                max-width: 50%;
+                flex: 1; /* Distribute space */
+                max-width: 50%; /* Content takes roughly half the width */
             }
-
             .download-buttons {
-                justify-content: flex-start;
+                justify-content: flex-start; /* Align buttons left with text */
             }
-
             .hero-image {
-                margin-top: 0;
-                flex: 1;
-                max-width: 450px;
-                padding-left: 40px;
+                margin-top: 0; /* Remove top margin when side-by-side */
+                flex: 1; /* Distribute space */
+                max-width: 450px; /* Adjusted for larger desktop image */
+                padding-left: 40px; /* Add some spacing between text and image */
             }
         }
 
-        @media (max-width: 768px) {
-            .hero {
-                padding-top: 80px;
-                min-height: auto;
-                height: auto;
-            }
-
-            .hero-inner {
-                padding-bottom: 30px;
-                gap: 30px;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-                margin-bottom: 15px;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-                margin-bottom: 30px;
-            }
-
-            .download-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-            }
-
-            .download-btn {
-                width: 90%;
-                max-width: 300px;
-            }
-
-            .hero-image {
-                max-width: 280px;
-                width: 90%;
-            }
-
-            .app-screenshot {
-                transform: rotateY(-5deg) rotateX(2deg) scale(1.0);
-                filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .cta-section h2 {
-                font-size: 2rem;
-            }
-
-            .science-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .pricing-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .faq-question {
-                font-size: 1rem;
-                padding: 15px 20px;
-            }
-
-            .faq-answer {
-                font-size: 0.9rem;
-                padding: 15px 20px;
-            }
-
+        @media (max-width: 991px) { /* Hide navigation links on tablets/mobiles */
             .nav-links {
                 display: none;
             }
+            /* You might consider adding a hamburger menu icon here */
+        }
+
+        @media (max-width: 768px) { /* Mobile specific adjustments */
+            .hero {
+                /* padding-top is now consistently 100px; no override here */
+                min-height: auto; /* Allow height to adapt to content, no fixed vh for mobile */
+                height: auto; /* Remove fixed height on small screens */
+            }
+            .hero-inner {
+                padding-bottom: 30px; /* Add some space below the image on mobile */
+                gap: 30px; /* Reduce gap on smaller screens */
+            }
+            .hero h1 { font-size: 2.5rem; margin-bottom: 15px; } /* Smaller font for mobile H1 */
+            .hero p { font-size: 1.1rem; margin-bottom: 30px; } /* Smaller font for mobile paragraph */
+            .download-buttons {
+                flex-direction: column; /* Stack buttons vertically on very small screens */
+                align-items: center;
+                gap: 15px;
+            }
+            .download-btn {
+                width: 90%; /* Make buttons wider on mobile */
+                max-width: 300px; /* But not too wide */
+            }
+            .hero-image {
+                max-width: 280px; /* Even smaller max-width for image on very small screens */
+                width: 90%; /* Still responsive to its container */
+            }
+            .app-screenshot {
+                transform: rotateY(-5deg) rotateX(2deg) scale(1.0); /* Less pronounced 3D effect on small screens, no extra scale */
+                filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+            }
+            .section-title { font-size: 2rem; }
+            .cta-section h2 { font-size: 2rem; }
+            .science-grid { grid-template-columns: 1fr; }
+            .pricing-cards { grid-template-columns: 1fr; }
+            .faq-question { font-size: 1rem; padding: 15px 20px; }
+            .faq-answer { font-size: 0.9rem; padding: 15px 20px; }
         }
     </style>
 </head>
 <body>
+
     <header id="header">
         <nav class="container">
             <div class="logo">Gummely</div>
-            <div class="nav-links">
-                <a href="#faq">FAQ</a>
-                <a href="#social-proof">Reviews</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#features">Features</a>
-                <a href="#how-it-works">How It Works</a>
-                <a href="#languages">Languages</a>
-            </div>
-            <div class="lang-dropdown">
-                <select id="language-switcher" class="lang-select">
-                    <option value="en">English</option>
-                    <option value="de">Deutsch</option>
-                    <option value="es">Español</option>
-                    <option value="fr">Français</option>
-                    <option value="it">Italiano</option>
-                    <option value="pt">Português</option>
-                    <option value="ru">Русский</option>
-                    <option value="ko">한국어</option>
-                    <option value="ja">日本語</option>
-                    <option value="zh-Hans">简体中文</option>
-                    <option value="zh-Hant">繁體中文</option>
-                </select>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#features" data-translate-key="navFeatures">Features</a></li>
+                    <li><a href="#reviews" data-translate-key="navReviews">Reviews</a></li>
+                    <li><a href="#pricing" data-translate-key="navPricing">Pricing</a></li>
+                    <li><a href="#faq" data-translate-key="navFaq">FAQ</a></li>
+                </ul>
+                <div class="lang-dropdown">
+                    <select id="language-switcher" class="lang-select">
+                        <option value="en">English</option>
+                        <option value="de">Deutsch</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="it">Italiano</option>
+                        <option value="pt">Português</option>
+                        <option value="ru">Русский</option>
+                        <option value="ko">한국어</option>
+                        <option value="ja">日本語</option>
+                        <option value="zh-Hans">简体中文</option>
+                        <option value="zh-Hant">繁體中文</option>
+                    </select>
+                </div>
             </div>
         </nav>
     </header>
 
     <main>
-        <section class="hero" id="hero">
+        <section class="hero">
             <div class="parallax-bg"></div>
-            <div class="container hero-inner">
+            <div class="container hero-inner"> <!-- New container for hero content and image -->
                 <div class="hero-content">
                     <h1 data-translate-key="heroTitle">Learn Languages the Way You Learned Your First</h1>
                     <p data-translate-key="heroSubtitle">Master any language naturally with AI-powered comprehensible input—no grammar drills, no memorization. Start speaking with confidence.</p>
@@ -864,19 +581,19 @@
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
                             <span data-translate-key="downloadIos">Download for iOS</span>
                         </a>
-                        <a href="#" class="download-btn">
+                         <a href="#" class="download-btn">
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/></svg>
                             <span data-translate-key="downloadAndroid">Download for Android</span>
                         </a>
                     </div>
                 </div>
-                <div class="hero-image">
+                <div class="hero-image"> <!-- Placeholder for your iPhone app screenshot -->
                     <img src="screenshot2.webp" alt="Gummely App on iPhone" class="app-screenshot">
                 </div>
             </div>
         </section>
 
-        <section class="section social-proof" id="social-proof">
+        <section class="section social-proof" id="reviews">
             <div class="container">
                 <h2 class="section-title reveal" data-translate-key="socialProofTitle">Trusted by Language Learners Worldwide</h2>
                 <div class="testimonials">
@@ -918,8 +635,8 @@
                 </div>
             </div>
         </section>
-
-        <section class="section" id="science">
+        
+        <section class="section">
             <div class="container reveal">
                 <h2 class="section-title" data-translate-key="scienceTitle">The Science of Natural Language Acquisition</h2>
                 <div class="science-grid">
@@ -927,15 +644,15 @@
                         <h3 data-translate-key="science1Title">Krashen's Input Hypothesis: Your "i+1"</h3>
                         <p data-translate-key="science1Desc">Our method is built on linguist Stephen Krashen's theory that we acquire language best when we receive "comprehensible input" that is just one step beyond our current level (i+1). Gummely’s AI ensures you’re always in this optimal learning zone—challenged, but never overwhelmed.</p>
                     </div>
-                    <div class="science-card glass-card">
+                     <div class="science-card glass-card">
                         <h3 data-translate-key="science2Title">Optimal Lexical Coverage for Reading</h3>
                         <p data-translate-key="science2Desc">Research shows that to comfortably read and understand a text, you need to know about 95-98% of the words. Our AI personalizes content to meet this threshold, allowing you to infer the meaning of new words from context, which dramatically improves retention.</p>
                     </div>
                 </div>
             </div>
         </section>
-
-        <section class="section how-it-works" id="how-it-works">
+        
+        <section class="section how-it-works">
             <div class="container">
                 <h2 class="section-title reveal" data-translate-key="howTitle">How Gummely Works for You</h2>
                 <div class="how-it-works-grid">
@@ -946,12 +663,13 @@
             </div>
         </section>
 
-        <section class="section languages-section" id="languages">
+        <section class="section languages-section">
             <div class="container">
                 <h2 class="section-title reveal" data-translate-key="languagesTitle">Learn 11+ Languages and Counting</h2>
             </div>
             <div class="languages-container">
                 <div class="languages-scroll">
+                    <!-- Items are duplicated for a seamless loop -->
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/us.svg" alt="USA Flag"></div><div class="language-name" data-translate-key="langEnglish">English</div></div>
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/de.svg" alt="German Flag"></div><div class="language-name" data-translate-key="langGerman">German</div></div>
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/es.svg" alt="Spanish Flag"></div><div class="language-name" data-translate-key="langSpanish">Spanish</div></div>
@@ -963,6 +681,7 @@
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/jp.svg" alt="Japanese Flag"></div><div class="language-name" data-translate-key="langJapanese">Japanese</div></div>
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/cn.svg" alt="Chinese Flag"></div><div class="language-name" data-translate-key="langChineseSimp">Chinese (Simp)</div></div>
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/tw.svg" alt="Taiwanese Flag"></div><div class="language-name" data-translate-key="langChineseTrad">Chinese (Trad)</div></div>
+                    <!-- Duplicate for seamless loop -->
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/us.svg" alt="USA Flag"></div><div class="language-name" data-translate-key="langEnglish">English</div></div>
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/de.svg" alt="German Flag"></div><div class="language-name" data-translate-key="langGerman">German</div></div>
                     <div class="language-item"><div class="flag"><img src="https://lipis.github.io/flag-icons/flags/4x3/es.svg" alt="Spanish Flag"></div><div class="language-name" data-translate-key="langSpanish">Spanish</div></div>
@@ -1034,7 +753,7 @@
                         <p data-translate-key="faqA3">Currently, Gummely requires an internet connection for most features, including AI chat and content generation. Offline modes for downloaded content are under development.</p>
                     </div>
                 </div>
-                <div class="faq-item reveal">
+                 <div class="faq-item reveal">
                     <div class="faq-question">
                         <span data-translate-key="faqQ4">What languages are available?</span>
                         <span class="icon">+</span>
@@ -1051,7 +770,7 @@
                 <h2 data-translate-key="ctaTitle">Ready to Learn Naturally?</h2>
                 <p data-translate-key="ctaDesc">Join thousands discovering the power of comprehensible input with Gummely.</p>
                 <div class="download-buttons">
-                    <a href="#" class="download-btn">
+                     <a href="#" class="download-btn">
                         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
                         <span data-translate-key="downloadIos">Download for iOS</span>
                     </a>
@@ -1062,8 +781,9 @@
                 </div>
             </div>
         </section>
-    </main>
 
+    </main>
+    
     <footer>
         <div class="container">
             <div class="footer-content reveal">
@@ -1087,6 +807,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
             // --- Header Scroll Effect ---
             const header = document.getElementById('header');
             window.addEventListener('scroll', () => {
@@ -1120,6 +841,10 @@
                     heroSubtitle: "Master any language naturally with AI-powered comprehensible input—no grammar drills, no memorization. Start speaking with confidence.",
                     downloadIos: "Download for iOS",
                     downloadAndroid: "Download for Android",
+                    navFeatures: "Features", /* New */
+                    navReviews: "Reviews",   /* New */
+                    navPricing: "Pricing",   /* New */
+                    navFaq: "FAQ",         /* New */
                     socialProofTitle: "Trusted by Language Learners Worldwide",
                     testimonial1: "I’ve tried countless apps, but Gummely made learning Spanish feel effortless. The personalized texts kept me engaged, and I’m amazed at how quickly my vocabulary grew!",
                     user1: "Jamie L.",
@@ -1192,6 +917,10 @@
                     heroSubtitle: "Meistere jede Sprache auf natürliche Weise mit KI-gestütztem „Comprehensible Input“ – ohne Grammatikübungen, ohne Auswendiglernen. Sprich mit Selbstvertrauen.",
                     downloadIos: "Für iOS herunterladen",
                     downloadAndroid: "Für Android herunterladen",
+                    navFeatures: "Funktionen",
+                    navReviews: "Bewertungen",
+                    navPricing: "Preise",
+                    navFaq: "FAQ",
                     socialProofTitle: "Weltweites Vertrauen von Sprachlernern",
                     testimonial1: "Ich habe unzählige Apps ausprobiert, aber mit Gummely fühlte sich das Spanischlernen mühelos an. Die personalisierten Texte fesselten mich und ich bin erstaunt, wie schnell mein Wortschatz wuchs!",
                     user1: "Jamie L.",
@@ -1264,6 +993,10 @@
                     heroSubtitle: "Domina cualquier idioma de forma natural con entrada comprensible impulsada por IA, sin ejercicios de gramática ni memorización. Empieza a hablar con confianza.",
                     downloadIos: "Descargar para iOS",
                     downloadAndroid: "Descargar para Android",
+                    navFeatures: "Características",
+                    navReviews: "Reseñas",
+                    navPricing: "Precios",
+                    navFaq: "Preguntas Frecuentes",
                     socialProofTitle: "Con la confianza de estudiantes de idiomas de todo el mundo",
                     testimonial1: "He probado innumerables aplicaciones, pero Gummely hizo que aprender español fuera fácil. Los textos personalizados me mantuvieron involucrado, ¡y me asombra lo rápido que creció mi vocabulario!",
                     user1: "Jamie L.",
@@ -1336,6 +1069,10 @@
                     heroSubtitle: "Maîtrisez n'importe quelle langue naturellement avec l'input compréhensible alimenté par l'IA — pas de leçons de grammaire, pas de mémorisation. Commencez à parler avec confiance.",
                     downloadIos: "Télécharger pour iOS",
                     downloadAndroid: "Télécharger pour Android",
+                    navFeatures: "Fonctionnalités",
+                    navReviews: "Avis",
+                    navPricing: "Tarifs",
+                    navFaq: "FAQ",
                     socialProofTitle: "Reconnu par les apprenants de langues du monde entier",
                     testimonial1: "J'ai essayé d'innombrables applications, mais Gummely a rendu l'apprentissage de l'espagnol sans effort. Les textes personnalisés m'ont gardé engagé, et je suis étonné de la rapidité avec laquelle mon vocabulaire a grandi !",
                     user1: "Jamie L.",
@@ -1408,6 +1145,10 @@
                     heroSubtitle: "Domina qualsiasi lingua in modo naturale con input comprensibile basato sull'IA, senza esercizi di grammatica né memorizzazione. Inizia a parlare con fiducia.",
                     downloadIos: "Scarica per iOS",
                     downloadAndroid: "Scarica per Android",
+                    navFeatures: "Funzionalità",
+                    navReviews: "Recensioni",
+                    navPricing: "Prezzi",
+                    navFaq: "FAQ",
                     socialProofTitle: "Scelto da studenti di lingue in tutto il mondo",
                     testimonial1: "Ho provato innumerevoli app, ma Gummely ha reso l'apprendimento dello spagnolo senza sforzo. I testi personalizzati mi hanno tenuto impegnato e sono sbalordito da quanto velocemente sia cresciuto il mio vocabolario!",
                     user1: "Jamie L.",
@@ -1480,6 +1221,10 @@
                     heroSubtitle: "Domine qualquer idioma naturalmente com entrada compreensível alimentada por IA — sem exercícios de gramática, sem memorização. Comece a falar com confiança.",
                     downloadIos: "Baixar para iOS",
                     downloadAndroid: "Baixar para Android",
+                    navFeatures: "Recursos",
+                    navReviews: "Avaliações",
+                    navPricing: "Preços",
+                    navFaq: "FAQ",
                     socialProofTitle: "Confiado por Aprendizes de Idiomas em Todo o Mundo",
                     testimonial1: "Experimentei inúmeros aplicativos, mas Gummely tornou o aprendizado de espanhol fácil. Os textos personalizados me mantiveram engajado, e estou impressionado com a rapidez com que meu vocabulário cresceu!",
                     user1: "Jamie L.",
@@ -1513,7 +1258,7 @@
                     langChineseTrad: "Chinês (Tradicional)",
                     whyTitle: "Por que escolher Gummely?",
                     feature1Title: "Método Baseado na Ciência",
-                    feature1Desc: "Baseado na Hipótese do Input de Krashen. Conteúdo com 90-98% de palavras conhecidas o mantém na zona de aprendizado ideal — desafiador, mas nunca avassalador.",
+                    feature1Desc: "Basado na Hipótese do Input de Krashen. Conteúdo com 90-98% de palavras conhecidas o mantém na zona de aprendizado ideal — desafiador, mas nunca avassalador.",
                     feature2Title: "Aprendizado Codificado por Cores",
                     feature2Desc: "Palavras desconhecidas aparecem em roxo, palavras em aprendizado em laranja. Clique em qualquer palavra para tradução instantânea e adicione ao seu baralho de flashcards personalizado.",
                     feature3Title: "Contenido Immersivo",
@@ -1552,6 +1297,10 @@
                     heroSubtitle: "Освойте любой язык естественным путем с помощью понятного ввода на базе ИИ — никаких грамматических упражнений, никакого заучивания. Начните говорить уверенно.",
                     downloadIos: "Скачать для iOS",
                     downloadAndroid: "Скачать для Android",
+                    navFeatures: "Возможности",
+                    navReviews: "Отзывы",
+                    navPricing: "Цены",
+                    navFaq: "FAQ",
                     socialProofTitle: "Доверие изучающих языки по всему миру",
                     testimonial1: "Я перепробовал бесчисленное количество приложений, но с Gummely изучение испанского стало легким. Персонализированные тексты удерживали меня, и я поражен тем, как быстро вырос мой словарный запас!",
                     user1: "Джейми Л.",
@@ -1611,7 +1360,7 @@
                     faqQ4: "Какие языки доступны?",
                     faqA4: "Gummely в настоящее время поддерживает английский, немецкий, испанский, французский, итальянский, португальский, русский, корейский, японский, упрощенный китайский и традиционный китайский, и скоро появятся новые языки!",
                     ctaTitle: "Готовы учиться естественно?",
-                    ctaDesc: "Присоединитесь к тысячам людей, открывающим для себя силу понятного ввода с Gummely.",
+                    ctaDesc: "Присоединится к тысячам людей, открывающим для себя силу понятного ввода с Gummely.",
                     footerContact: "Контакты",
                     footerLegal: "Правовая информация",
                     footerPrivacy: "Политика конфиденциальности",
@@ -1624,6 +1373,10 @@
                     heroSubtitle: "AI 기반의 이해 가능한 입력으로 문법 연습이나 암기 없이 자연스럽게 모든 언어를 마스터하세요. 자신감 있게 말하기 시작하세요.",
                     downloadIos: "iOS용 다운로드",
                     downloadAndroid: "Android용 다운로드",
+                    navFeatures: "기능",
+                    navReviews: "리뷰",
+                    navPricing: "가격",
+                    navFaq: "자주 묻는 질문",
                     socialProofTitle: "전 세계 언어 학습자들이 신뢰하는",
                     testimonial1: "수많은 앱을 사용해봤지만 Gummely는 스페인어 학습을 수월하게 만들어줬어요. 개인 맞춤형 텍스트 덕분에 몰입할 수 있었고, 제 어휘력이 이렇게 빨리 늘어나는 것에 놀랐습니다!",
                     user1: "제이미 L.",
@@ -1696,6 +1449,10 @@
                     heroSubtitle: "AIを活用した理解可能なインプットで、文法練習や暗記なしで、どんな言語でも自然に習得できます。自信を持って話し始めましょう。",
                     downloadIos: "iOS版をダウンロード",
                     downloadAndroid: "Android版をダウンロード",
+                    navFeatures: "特徴",
+                    navReviews: "レビュー",
+                    navPricing: "料金",
+                    navFaq: "よくある質問",
                     socialProofTitle: "世界中の語学学習者から信頼されています",
                     testimonial1: "数え切れないほどのアプリを試してきましたが、Gummelyはスペイン語学習を楽にしてくれました。パーソナライズされたテキストのおかげで集中でき、語彙がこんなに早く増えたことに驚いています！",
                     user1: "ジェイミー・L。",
@@ -1753,7 +1510,7 @@
                     faqQ3: "Gummelyはオフラインで使用できますか？",
                     faqA3: "現在、GummelyはAIチャットやコンテンツ生成を含むほとんどの機能でインターネット接続が必要です。ダウンロードされたコンテンツのオフラインモードは開発中です。",
                     faqQ4: "利用できる言語は何ですか？",
-                    faqA4: "Gummelyは現在、英語、ドイツ語、スペイン語、フランス語、イタリア語、ポルトガル語、ロシア語、韓国語、日本語、簡体字中国語、繁体字中国語をサポートしており、今後さらに多くの言語が追加される予定です！",
+                    faqQ4: "Gummelyは現在、英語、ドイツ語、スペイン語、フランス語、イタリア語、ポルトガル語、ロシア語、韓国語、日本語、簡体字中国語、繁体字中国語をサポートしており、今後さらに多くの言語が追加される予定です！",
                     ctaTitle: "自然に学ぶ準備はできましたか？",
                     ctaDesc: "Gummelyで理解可能なインプットの力を発見する何千人もの人々に加わりましょう。",
                     footerContact: "お問い合わせ",
@@ -1768,6 +1525,10 @@
                     heroSubtitle: "通过AI驱动的可理解输入自然掌握任何语言——无需语法练习，无需死记硬背。自信地开口说。",
                     downloadIos: "下载iOS版",
                     downloadAndroid: "下载Android版",
+                    navFeatures: "功能",
+                    navReviews: "评价",
+                    navPricing: "定价",
+                    navFaq: "常见问题",
                     socialProofTitle: "全球语言学习者信赖",
                     testimonial1: "我尝试过无数的应用程序，但Gummely让学习西班牙语变得毫不费力。个性化的文本让我保持投入，我惊讶于我的词汇量增长如此之快！",
                     user1: "杰米·L。",
@@ -1840,6 +1601,10 @@
                     heroSubtitle: "透過AI驅動的可理解輸入自然掌握任何語言——無需語法練習，無需死記硬背。自信地開口說。",
                     downloadIos: "下載iOS版",
                     downloadAndroid: "下載Android版",
+                    navFeatures: "功能",
+                    navReviews: "評價",
+                    navPricing: "定價",
+                    navFaq: "常見問題",
                     socialProofTitle: "全球語言學習者信賴",
                     testimonial1: "我嘗試過無數的應用程式，但Gummely讓學習西班牙語變得毫不費力。個性化的文本讓我保持投入，我驚訝於我的詞彙量增長如此之快！",
                     user1: "傑米·L。",
