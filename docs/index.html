@@ -124,12 +124,12 @@
         /* --- Hero Section with CSS Parallax --- */
         .hero {
             position: relative;
-            height: 100vh;
+            min-height: 100vh; /* Allow height to expand if content grows */
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 0 20px;
+            padding: 100px 20px 50px; /* Added padding-top for fixed header, padding-bottom for mobile spacing */
             overflow: hidden;
             background: linear-gradient(135deg, var(--delft-blue) 0%, var(--royal-purple) 100%);
         }
@@ -176,13 +176,15 @@
 
         .hero-inner { /* New container for hero content and image */
             display: flex;
-            flex-direction: column; /* Stack vertically on small screens */
+            flex-direction: column; /* Stack vertically on small screens by default */
             align-items: center;
             justify-content: center;
             gap: 40px; /* Space between content and image */
             position: relative;
             z-index: 2;
             width: 100%;
+            max-width: 1200px; /* Constrain the inner content */
+            margin: 0 auto; /* Center the inner content */
             animation: fade-in-up 1s ease-out; /* Apply reveal animation to the whole inner section */
         }
 
@@ -202,18 +204,20 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            max-width: 500px; /* Max width for the image container */
+            max-width: 350px; /* Max width for the image container - adjusted for better balance */
+            width: 80%; /* Responsive width for mobile */
             margin-top: 20px; /* Add some space on small screens */
         }
 
         .app-screenshot {
-            width: 100%;
+            width: 100%; /* Make image fill its container */
             height: auto;
             display: block;
             /* If your image asset itself isn't tilted, you can add a subtle 3D effect here */
             transform: rotateY(-10deg) rotateX(5deg) scale(1.05); /* Example tilt, adjust as needed */
             filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5)); /* Stronger shadow for 3D feel */
             transition: transform 0.5s ease; /* Smooth transition on hover */
+            transform-origin: center center; /* Ensure the transform origin is centered for tilt effects */
         }
 
         .app-screenshot:hover {
@@ -431,32 +435,72 @@
         .footer-section p, .footer-section a { color: var(--soft-lilac); text-decoration: none; line-height: 1.7; font-size: 1rem; }
         .footer-section a:hover { color: var(--golden-amber); text-decoration: underline; }
 
-        @media (min-width: 992px) { /* Adjust breakpoint as needed for side-by-side */
+        /* Media queries for responsiveness */
+        @media (min-width: 992px) { /* Desktop layout for hero section */
+            .hero {
+                padding-top: 0; /* Remove top padding for desktop, hero-inner handles vertical centering */
+                min-height: 100vh; /* Keep full viewport height on desktop */
+            }
             .hero-inner {
                 flex-direction: row; /* Side-by-side on larger screens */
                 text-align: left; /* Align text left when side-by-side */
+                justify-content: space-between; /* Space out content and image */
+                align-items: center; /* Vertically align items in the row */
+                /* Account for header height in inner section's min-height to ensure vertical centering */
+                min-height: calc(100vh - 100px); /* Adjust based on actual header height */
+                padding-bottom: 0; /* Remove mobile-specific padding */
             }
             .hero-content {
                 text-align: left;
+                flex: 1; /* Distribute space */
+                max-width: 50%; /* Content takes roughly half the width */
             }
             .download-buttons {
                 justify-content: flex-start; /* Align buttons left with text */
             }
             .hero-image {
                 margin-top: 0; /* Remove top margin when side-by-side */
-                justify-content: flex-end; /* Push image to the right */
+                flex: 1; /* Distribute space */
+                max-width: 450px; /* Adjusted for larger desktop image */
+                padding-left: 40px; /* Add some spacing between text and image */
             }
         }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 3rem; }
-            .hero p { font-size: 1.2rem; }
-            .section-title { font-size: 2.5rem; }
-            .cta-section h2 { font-size: 2.5rem; }
+        @media (max-width: 768px) { /* Mobile specific adjustments */
+            .hero {
+                padding-top: 80px; /* Ensure sufficient padding for header on smaller screens */
+                min-height: auto; /* Allow height to adapt to content, no fixed vh for mobile */
+                height: auto; /* Remove fixed height on small screens */
+            }
+            .hero-inner {
+                padding-bottom: 30px; /* Add some space below the image on mobile */
+                gap: 30px; /* Reduce gap on smaller screens */
+            }
+            .hero h1 { font-size: 2.5rem; margin-bottom: 15px; } /* Smaller font for mobile H1 */
+            .hero p { font-size: 1.1rem; margin-bottom: 30px; } /* Smaller font for mobile paragraph */
+            .download-buttons {
+                flex-direction: column; /* Stack buttons vertically on very small screens */
+                align-items: center;
+                gap: 15px;
+            }
+            .download-btn {
+                width: 90%; /* Make buttons wider on mobile */
+                max-width: 300px; /* But not too wide */
+            }
+            .hero-image {
+                max-width: 280px; /* Even smaller max-width for image on very small screens */
+                width: 90%; /* Still responsive to its container */
+            }
+            .app-screenshot {
+                transform: rotateY(-5deg) rotateX(2deg) scale(1.0); /* Less pronounced 3D effect on small screens, no extra scale */
+                filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4));
+            }
+            .section-title { font-size: 2rem; }
+            .cta-section h2 { font-size: 2rem; }
             .science-grid { grid-template-columns: 1fr; }
             .pricing-cards { grid-template-columns: 1fr; }
-            .faq-question { font-size: 1.2rem; }
-            .faq-answer { font-size: 1rem; }
+            .faq-question { font-size: 1rem; padding: 15px 20px; }
+            .faq-answer { font-size: 0.9rem; padding: 15px 20px; }
         }
     </style>
 </head>
@@ -855,7 +899,7 @@
                     langJapanese: "Japanisch",
                     langKorean: "Koreanisch",
                     langPortuguese: "Portugiesisch",
-                    langRussian: "Russisch",
+                    langRussian: "Русский",
                     langChineseSimp: "Chinesisch (Ver.)",
                     langChineseTrad: "Chinesisch (Trad.)",
                     whyTitle: "Warum Gummely wählen?",
@@ -908,7 +952,7 @@
                     user3: "Sam K.",
                     scienceTitle: "La Ciencia de la Adquisición Natural del Lenguaje",
                     science1Title: "La Hipótesis del Input de Krashen: Tu \"i+1\"",
-                    science1Desc: "Nuestro método se basa en la teoría del lingüista Stephen Krashen de que adquirimos el lenguaje mejor cuando recibimos \"input comprensible\" que está solo un paso más allá de nuestro nivel actual (i+1). La IA de Gummely asegura que siempre estés en esta zona de aprendizaje óptima—desafiado, pero nunca abrumado.",
+                    science1Desc: "Nuestro método se basa en la teoría del linguista Stephen Krashen de que adquirimos el lenguaje mejor cuando recibimos \"input comprensible\" que está solo un paso más allá de nuestro nivel actual (i+1). La IA de Gummely asegura que siempre estés en esta zona de aprendizaje óptima—desafiado, pero nunca abrumado.",
                     science2Title: "Cobertura Lexical Óptima para la Lectura",
                     science2Desc: "La investigación muestra que para leer y entender cómodamente un texto, necesitas conocer aproximadamente el 95-98% de las palabras. Nuestra IA personaliza el contenido para cumplir con este umbral, permitiéndote inferir el significado de nuevas palabras a partir del contexto, lo que mejora drásticamente la retención.",
                     howTitle: "Cómo Gummely funciona para ti",
