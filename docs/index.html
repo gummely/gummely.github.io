@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gummely - Master Languages Through Conversation</title>
-    <link rel="icon" href="icon.webp" type="image/webp">
+    <!-- Favicon - Ensure icon.webp exists at the root, or provide fallbacks for broader compatibility -->
+    <link rel="icon" href="icon.webp" type="image/webp"> 
+    <!-- Optional: Add other favicon formats for broader browser support -->
+    <!-- <link rel="icon" href="favicon.ico" sizes="any"> -->
+    <!-- <link rel="icon" href="icon.png" type="image/png"> -->
     <style>
         * {
             margin: 0;
@@ -450,21 +454,17 @@
         }
         .faq-answer {
             max-height: 0;
-            padding: 0 25px; /* Changed: Initial padding to 0 top/bottom */
-            padding-top: 0; /* Ensures no top padding when collapsed */
-            padding-bottom: 0; /* Ensures no bottom padding when collapsed */
             overflow: hidden;
-            transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Include padding in transition */
+            transition: max-height 0.4s ease-out; /* Only transition max-height here */
             color: var(--soft-lilac);
             font-size: 1.1rem;
             line-height: 1.6;
         }
+        .faq-answer-inner { /* NEW: Inner div for content and padding */
+            padding: 20px 25px; 
+        }
         .faq-answer.active {
-            max-height: 200px; /* Or a larger value depending on max content */
-            padding-top: 20px; /* Specific padding for active state */
-            padding-bottom: 20px; /* Specific padding for active state */
-            padding-left: 25px; /* Keep horizontal padding consistent */
-            padding-right: 25px; /* Keep horizontal padding consistent */
+            max-height: 500px; /* Use a value large enough to contain all possible answer content */
         }
 
         /* --- CTA Section --- */
@@ -550,15 +550,8 @@
             .science-grid { grid-template-columns: 1fr; }
             .pricing-cards { grid-template-columns: 1fr; }
             .faq-question { font-size: 1rem; padding: 15px 20px; }
-            .faq-answer { font-size: 0.9rem; /* Smaller font for mobile FAQ answer */
-                          padding: 15px 20px; /* Apply appropriate padding */
-            }
-            /* Override for mobile FAQ answer active state to match new padding */
-            .faq-answer.active {
-                padding-top: 15px;
-                padding-bottom: 15px;
-                padding-left: 20px;
-                padding-right: 20px;
+            .faq-answer-inner { /* Mobile specific padding for the inner content */
+                padding: 15px 20px;
             }
         }
     </style>
@@ -757,7 +750,9 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p data-translate-key="faqA1">Gummely is built on Stephen Krashen's Input Hypothesis, which suggests language acquisition happens best when learners receive 'comprehensible input' (i+1).</p>
+                        <div class="faq-answer-inner"> <!-- NEW: Inner wrapper -->
+                            <p data-translate-key="faqA1">Gummely is built on Stephen Krashen's Input Hypothesis, which suggests language acquisition happens best when learners receive 'comprehensible input' (i+1).</p>
+                        </div>
                     </div>
                 </div>
                 <div class="faq-item reveal">
@@ -766,7 +761,9 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p data-translate-key="faqA2">Our AI analyzes your vocabulary to deliver texts and chats where 90-98% of the words are already known to you, making new vocabulary acquisition intuitive.</p>
+                        <div class="faq-answer-inner"> <!-- NEW: Inner wrapper -->
+                            <p data-translate-key="faqA2">Our AI analyzes your vocabulary to deliver texts and chats where 90-98% of the words are already known to you, making new vocabulary acquisition intuitive.</p>
+                        </div>
                     </div>
                 </div>
                 <div class="faq-item reveal">
@@ -775,7 +772,9 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p data-translate-key="faqA3">Currently, Gummely requires an internet connection for most features, including AI chat and content generation. Offline modes for downloaded content are under development.</p>
+                        <div class="faq-answer-inner"> <!-- NEW: Inner wrapper -->
+                            <p data-translate-key="faqA3">Currently, Gummely requires an internet connection for most features, including AI chat and content generation. Offline modes for downloaded content are under development.</p>
+                        </div>
                     </div>
                 </div>
                  <div class="faq-item reveal">
@@ -784,7 +783,9 @@
                         <span class="icon">+</span>
                     </div>
                     <div class="faq-answer">
-                        <p data-translate-key="faqA4">Gummely currently supports English, German, Spanish, French, Italian, Portuguese, Russian, Korean, Japanese, Simplified Chinese, and Traditional Chinese, with more languages coming soon!</p>
+                        <div class="faq-answer-inner"> <!-- NEW: Inner wrapper -->
+                            <p data-translate-key="faqA4">Gummely currently supports English, German, Spanish, French, Italian, Portuguese, Russian, Korean, Japanese, Simplified Chinese, and Traditional Chinese, with more languages coming soon!</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -999,7 +1000,7 @@
                     faqQ1: "Worauf basiert Gummely?",
                     faqA1: "Gummely basiert auf Stephen Krashens Input-Hypothese, die besagt, dass der Spracherwerb am besten erfolgt, wenn Lernende 'verständlichen Input' (i+1) erhalten.",
                     faqQ2: "Wie personalisiert Gummely Inhalte?",
-                    faqA2: "Unsere KI analysiert deinen Wortschatz, um Texte und Chats zu liefern, bei denen 90-98% der Wörter bereits bekannt sind, was den Erwerb neuer Vokabeln intuitiv macht.",
+                    faqA2: "Unsere KI analysiert deinen Wortschatz und liefert Texte und Chats mit 90-98% bekannter Wörter, um die perfekte Lernumgebung zu schaffen.",
                     faqQ3: "Kann ich Gummely offline nutzen?",
                     faqA3: "Derzeit benötigt Gummely für die meisten Funktionen, einschließlich KI-Chat und Inhaltserstellung, eine Internetverbindung. Offline-Modi für heruntergeladene Inhalte sind in Entwicklung.",
                     faqQ4: "Welche Sprachen sind verfügbar?",
@@ -1179,7 +1180,7 @@
                     user1: "Jamie L.",
                     testimonial2: "La codifica a colori e le funzioni audio mi hanno aiutato a concentrarmi sulle parole nuove mentre mi godevo il contenuto. Ora mi sento più sicuro a leggere il francese!",
                     user2: "Alex M.",
-                    testimonial3: "Come persona facilmente intimidita dalle regole grammaticali, Gummely è stato un punto di svolta. Sto imparando il tedesco in un modo che sembra naturale e divertente.",
+                    testimonial3: "Come persona facilmente intimidata dalle regole grammaticali, Gummely è stato un punto di svolta. Sto imparando il tedesco in un modo che sembra naturale e divertente.",
                     user3: "Sam K.",
                     scienceTitle: "La Scienza dell'Acquisizione Naturale del Linguaggio",
                     science1Title: "L'Ipotesi dell'Input di Krashen: il tuo \"i+1\"",
